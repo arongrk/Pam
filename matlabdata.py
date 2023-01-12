@@ -15,6 +15,7 @@ line1, = ax.plot(x, list_data)
 
 plt.yticks([i * 20000 for i in range(5)])
 '''
+
 st = time.time()
 for i in range(100):
     n = random.randint(0, 1000)
