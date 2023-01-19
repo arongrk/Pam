@@ -11,8 +11,7 @@ def load_ABC():
     data = file.read()
     list_data = data.split("\n")
     int_data = [int(i) for i in list_data]
-    numpy_data = np.ndarray(shape=(len(int_data),), dtype=np.float64)
-    numpy_data[:] = int_data[:]
+    numpy_data = np.array(int_data)
     return numpy_data
 
 
@@ -20,7 +19,7 @@ if __name__ == '__main__':
     plt.ion()
 
     figure, ax = plt.subplots(figsize=(10, 10))
-    line1, = ax.plot(x, list_data)
+    line1, = ax.plot(numpy_data, list_data)
 
     plt.yticks([i * 20000 for i in range(5)])
 
