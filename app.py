@@ -20,7 +20,6 @@ split_array = matlabdata.split_data(long_data, -1426063361)
 package_list = matlabdata.split_350(long_data)
 
 
-
 class Worker(QRunnable):
     def __init__(self, fn, *args, **kwargs):
         super().__init__()
@@ -40,10 +39,21 @@ class MainWindow(QMainWindow):
         self.graph = PlotWidget()
         self.data_line = self.graph.plot(data[1], data[0])
 
-
         self.threadpool = QThreadPool()
         print(self.threadpool.maxThreadCount())
 
+        self.load_data = bool
+
+        self.start_plot = QPushButton('Start Plotting')
+        self.start_plot.clicked.connect(self.run)
+
+        layout = QGridLayout()
+        layout.addWidget(self.graph)
+        widget = QWidget()
+        widget.setLayout(layout)
+        self.setCentralWidget(widget)
+
+    '''
         self.multi_input = QLineEdit()
         self.multi_input.setPlaceholderText('Enter an integer to test the plotting speed')
         self.multi_input.returnPressed.connect(self.update_multi)
@@ -51,17 +61,19 @@ class MainWindow(QMainWindow):
 
         self.updateTimer = QCheckBox()
         self.updateTimer.stateChanged.connect(self.update_data)
+'''
 
-        self.button = QPushButton()
-        self.button.clicked.connect(self.update_fpga_data)
+    def run(self):
+        # Insert the start of a separate thread here:
+        # Method for receiving the UDP-packages and inserting them to package_list
 
-        layout = QGridLayout()
-        layout.addWidget(self.graph)
-        layout.addWidget(self.multi_input)
-        layout.addWidget(self.button)
-        widget = QWidget()
-        widget.setLayout(layout)
-        self.setCentralWidget(widget)
+        self.load_data = True
+        update = Worker(self.update_fpga_data)
+        self.threadpool.start(update)
+        while True:                                 # This condition is to be bound to a user input of some form
+            plotter = Worker(self.update_plot)
+            self.threadpool.start(plotter)
+            QApplication.processEvents()
 
     def update_data(self):
         while self.load_data:
@@ -87,11 +99,17 @@ class MainWindow(QMainWindow):
                     data_array = np.array([])
                     for i in split350[1]:
                         data_array = np.append(data_array, i)
-            else:
-                break
 
     def update_plot(self):
         self.data_line.setData(data[1], data[0])
+
+    def time_dialogue(self, start, end, runs=1):
+        time = end - start
+        avgtime = time / runs
+        dlg = QMessageBox(self)
+        dlg.setWindowTitle('Time taken')
+        dlg.setText(f'Time:         {time.__round__(3)} seconds\nAvg. Time: {avgtime.__round__(5)} seconds')
+        dlg.exec()
 
     def update_multi(self):
         self.load_data = True
@@ -106,14 +124,6 @@ class MainWindow(QMainWindow):
         et = t.time()
         self.load_data = False
         self.time_dialogue(st, et, times)
-
-    def time_dialogue(self, start, end, runs=1):
-        time = end - start
-        avgtime = time / runs
-        dlg = QMessageBox(self)
-        dlg.setWindowTitle('Time taken')
-        dlg.setText(f'Time:         {time.__round__(3)} seconds\nAvg. Time: {avgtime.__round__(5)} seconds')
-        dlg.exec()
 
 
 def main():
