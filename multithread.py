@@ -6,6 +6,5 @@ import random as rnd
 
 import matlabdata
 
-start_data = matlabdata.load_ABC()
+start_data = matlabdata.load_adc()
 shm = shared_memory.SharedMemory(name='storage', create=True, size=start_data.nbytes)
-

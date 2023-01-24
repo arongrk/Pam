@@ -5,12 +5,20 @@ from PyQt5.QtWidgets import *
 import numpy as np
 import random as rnd
 import time as t
+import ctypes
 import functools
 
 import matlabdata
 
-data = matlabdata.load_ABC()
+
+data = matlabdata.load_adc()
 data = np.append([data], [[i for i in range(1, 40961)]], axis=0)
+
+long_data = matlabdata.load_fpga()
+split_array = matlabdata.split_data(long_data, -1426063361)
+
+package_list = matlabdata.split_350(long_data)
+
 
 
 class Worker(QRunnable):
@@ -32,20 +40,25 @@ class MainWindow(QMainWindow):
         self.graph = PlotWidget()
         self.data_line = self.graph.plot(data[1], data[0])
 
-        self.button = QPushButton('Assign random numbers')
-        self.button.setFixedSize(QSize(200, 50))
-        self.button.clicked.connect(functools.partial(self.update_plot, True))
 
         self.threadpool = QThreadPool()
         print(self.threadpool.maxThreadCount())
+
         self.multi_input = QLineEdit()
+        self.multi_input.setPlaceholderText('Enter an integer to test the plotting speed')
         self.multi_input.returnPressed.connect(self.update_multi)
         self.load_data = True
 
+        self.updateTimer = QCheckBox()
+        self.updateTimer.stateChanged.connect(self.update_data)
+
+        self.button = QPushButton()
+        self.button.clicked.connect(self.update_fpga_data)
+
         layout = QGridLayout()
         layout.addWidget(self.graph)
-        layout.addWidget(self.button)
         layout.addWidget(self.multi_input)
+        layout.addWidget(self.button)
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
@@ -54,6 +67,28 @@ class MainWindow(QMainWindow):
         while self.load_data:
             data[0] += rnd.randint(-4000, 5000)
             t.sleep(0.008)
+
+    def update_fpga_data(self):
+        data_array = np.array([])
+
+        while self.load_data:
+            if len(package_list) != 0:
+                array350 = package_list[0]
+                package_list.pop(0)
+                split350 = matlabdata.split_data(array350, ctypes.c_int32(0xaaffffff).value)
+                if sum(len(i) for i in split350) == 350:
+                    for i in split350[0]:
+                        data_array = np.append(data_array, i)
+                else:
+                    for i in split350[0]:
+                        data_array = np.append(data_array, i)
+                    if len(data_array) == 40960:
+                        data[0] = data_array
+                    data_array = np.array([])
+                    for i in split350[1]:
+                        data_array = np.append(data_array, i)
+            else:
+                break
 
     def update_plot(self):
         self.data_line.setData(data[1], data[0])
@@ -70,9 +105,9 @@ class MainWindow(QMainWindow):
             QApplication.processEvents()
         et = t.time()
         self.load_data = False
-        self.time_taken(st, et, times)
+        self.time_dialogue(st, et, times)
 
-    def time_taken(self, start, end, runs):
+    def time_dialogue(self, start, end, runs=1):
         time = end - start
         avgtime = time / runs
         dlg = QMessageBox(self)

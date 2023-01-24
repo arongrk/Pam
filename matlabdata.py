@@ -1,12 +1,10 @@
 import numpy as np
-
-import matplotlib.pyplot as plt
-import random
-import time
+import random as rnd
+import time as t
 import numpy as np
 
 
-def load_ABC():
+def load_adc():
     file = open('resources/ADCdata.txt')
     data = file.read()
     list_data = data.split("\n")
@@ -15,27 +13,31 @@ def load_ABC():
     return numpy_data
 
 
-if __name__ == '__main__':
-    plt.ion()
+def load_fpga():
+    file = open('resources/FPGAdata.txt')
+    data = file.read()
+    list_data = data.split("\n")
+    int_data = [int(i) for i in list_data]
+    numpy_data = np.array(int_data)
+    return numpy_data
 
-    figure, ax = plt.subplots(figsize=(10, 10))
-    line1, = ax.plot(numpy_data, list_data)
 
-    plt.yticks([i * 20000 for i in range(5)])
+def split_data(array, split_value):
+    value = np.where(array == split_value)[0]
+    arrays = np.hsplit(array, value)
+    for i in range(len(arrays)):
+        if arrays[i][0] == split_value:
+            arrays[i] = np.delete(arrays[i], 0)
+    return arrays
 
 
-    st = time.time()
-    for i in range(100):
-        n = random.randint(0, 1000)
-        new_data = [numpy_data[i] + n for i in range(len(numpy_data))]
+def split_350(array, delete_non_complete=True):
+    array_list = np.split(array, [i * 350 for i in range(1, int(len(array) / 350))])
+    if not len(array_list[-1]) == 350 and delete_non_complete:
+        array_list.pop(-1)
+    return array_list
 
-        # line1.set_xdata(x)
-        #line1.set_ydata(new_data)
-        #figure.canvas.draw()
-        #figure.canvas.flush_events()
 
-    et = time.time()
 
-    t = et - st
-
-    print(t)
+def check_length(array, ref_length):
+    pass
