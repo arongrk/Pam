@@ -6,6 +6,9 @@ import numpy as np
 import random as rnd
 import time as t
 import ctypes
+import threading
+import logging.config
+import asyncio
 import functools
 
 import matlabdata
@@ -18,6 +21,52 @@ long_data = matlabdata.load_fpga()
 split_array = matlabdata.split_data(long_data, -1426063361)
 
 package_list = matlabdata.split_350(long_data)
+
+
+UDP_PORT = 61111
+
+logger = logging.getLogger(__name__)
+
+
+class Server(asyncio.DatagramProtocol, QThread):
+    """
+    UDP Server that listens on a given port and handles UDP Datagrams
+    with arrays of floating point numbers.
+    """
+
+    dataReceived = pyqtSignal(object)
+
+    def __init__(self, port: int):
+        super().__init__()
+        self.loop = asyncio.new_event_loop()
+        self.port = port
+        self.server = None
+        self.transport = None
+        self.start()
+
+    def connection_made(self, transport):
+        self.transport = transport
+
+    def datagram_received(self, data, addr):
+        logger.debug("received a datagram package")
+        numbers = numpy.frombuffer(data)
+        self.dataReceived.emit(numbers)
+
+    def run(self):
+        asyncio.set_event_loop(self.loop)
+        print(f"creating datagram endpoint on port {self.port}")
+        co_endp = self.loop.create_datagram_endpoint(lambda: self, local_addr=('127.0.0.1', self.port))
+        self.transport, protocol = self.loop.run_until_complete(co_endp)
+        print(f"datagram endpoint ready, switching to loop now")
+        print(f"starting loop run_forever (thread: {threading.get_ident()})")
+        self.loop.run_forever()
+        self.transport.close()
+        self.loop.close()
+        print("Loop finished graceful")
+
+    def stop(self):
+        """Call loops stop method. Thread safe"""
+        self.loop.call_soon_threadsafe(self.loop.stop)
 
 
 class Worker(QRunnable):
@@ -33,7 +82,7 @@ class Worker(QRunnable):
 
 class MainWindow(QMainWindow):
 
-    def __init__(self):
+    def __init__(self, app):
         super().__init__()
 
         self.graph = PlotWidget()
@@ -52,6 +101,11 @@ class MainWindow(QMainWindow):
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
+
+        self.app = app
+
+        self.server = Server(UDP_PORT)
+        self.server.dataReceived.connect(self.update_package_list)
 
     '''
         self.multi_input = QLineEdit()
@@ -74,6 +128,9 @@ class MainWindow(QMainWindow):
             plotter = Worker(self.update_plot)
             self.threadpool.start(plotter)
             QApplication.processEvents()
+
+    def update_package_list(self, package):
+        package_list.append(package)
 
     def update_data(self):
         while self.load_data:
@@ -128,7 +185,7 @@ class MainWindow(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    window = MainWindow()
+    window = MainWindow(app)
     window.show()
     sys.exit(app.exec())
 
