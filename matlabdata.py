@@ -24,6 +24,7 @@ def load_fpga():
 
 def split_data(array, split_value):
     value = np.where(array == split_value)[0]
+    print(value)
     arrays = np.hsplit(array, value)
     for i in range(len(arrays)):
         if arrays[i][0] == split_value:

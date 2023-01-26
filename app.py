@@ -17,13 +17,10 @@ import matlabdata
 data = matlabdata.load_adc()
 data = np.append([data], [[i for i in range(1, 40961)]], axis=0)
 
-long_data = matlabdata.load_fpga()
-split_array = matlabdata.split_data(long_data, -1426063361)
-
-package_list = matlabdata.split_350(long_data)
+package_list = list()
 
 
-UDP_PORT = 61111
+UDP_PORT = 9090
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +52,7 @@ class Server(asyncio.DatagramProtocol, QThread):
     def run(self):
         asyncio.set_event_loop(self.loop)
         print(f"creating datagram endpoint on port {self.port}")
-        co_endp = self.loop.create_datagram_endpoint(lambda: self, local_addr=('127.0.0.1', self.port))
+        co_endp = self.loop.create_datagram_endpoint(lambda: self, local_addr=('192.168.1.1', self.port))
         self.transport, protocol = self.loop.run_until_complete(co_endp)
         print(f"datagram endpoint ready, switching to loop now")
         print(f"starting loop run_forever (thread: {threading.get_ident()})")
@@ -98,6 +95,7 @@ class MainWindow(QMainWindow):
 
         layout = QGridLayout()
         layout.addWidget(self.graph)
+        layout.addWidget(self.start_plot)
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
@@ -118,9 +116,6 @@ class MainWindow(QMainWindow):
 '''
 
     def run(self):
-        # Insert the start of a separate thread here:
-        # Method for receiving the UDP-packages and inserting them to package_list
-
         self.load_data = True
         update = Worker(self.update_fpga_data)
         self.threadpool.start(update)
@@ -131,6 +126,7 @@ class MainWindow(QMainWindow):
 
     def update_package_list(self, package):
         package_list.append(package)
+        print(len(package))
 
     def update_data(self):
         while self.load_data:
@@ -142,19 +138,19 @@ class MainWindow(QMainWindow):
 
         while self.load_data:
             if len(package_list) != 0:
-                array350 = package_list[0]
+                udp_package = package_list[0]
                 package_list.pop(0)
-                split350 = matlabdata.split_data(array350, ctypes.c_int32(0xaaffffff).value)
-                if sum(len(i) for i in split350) == 350:
-                    for i in split350[0]:
+                split_package = matlabdata.split_data(udp_package, ctypes.c_int32(0xaaffffff).value)
+                if sum(len(i) for i in split_package) == 350:
+                    for i in split_package[0]:
                         data_array = np.append(data_array, i)
                 else:
-                    for i in split350[0]:
+                    for i in split_package[0]:
                         data_array = np.append(data_array, i)
                     if len(data_array) == 40960:
                         data[0] = data_array
                     data_array = np.array([])
-                    for i in split350[1]:
+                    for i in split_package[1]:
                         data_array = np.append(data_array, i)
 
     def update_plot(self):

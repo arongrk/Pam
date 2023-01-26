@@ -1,0 +1,6 @@
+FPGAIP = '192.168.1.111';
+FPGAParamPort = 9091;
+FPGADataPort = 9090;
+
+EthSamplesPerFrame = 350;
+EthBytesPerSample = 4;
