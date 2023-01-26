@@ -46,13 +46,13 @@ class Server(asyncio.DatagramProtocol, QThread):
 
     def datagram_received(self, data, addr):
         logger.debug("received a datagram package")
-        numbers = numpy.frombuffer(data)
+        numbers = numpy.frombuffer(data, dtype=np.int_)
         self.dataReceived.emit(numbers)
 
     def run(self):
         asyncio.set_event_loop(self.loop)
         print(f"creating datagram endpoint on port {self.port}")
-        co_endp = self.loop.create_datagram_endpoint(lambda: self, local_addr=('0.0.0.0', self.port))
+        co_endp = self.loop.create_datagram_endpoint(lambda: self, local_addr=('192.168.1.1', self.port))
         self.transport, protocol = self.loop.run_until_complete(co_endp)
         print(f"datagram endpoint ready, switching to loop now")
         print(f"starting loop run_forever (thread: {threading.get_ident()})")
