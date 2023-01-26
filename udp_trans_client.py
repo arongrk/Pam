@@ -52,7 +52,7 @@ class DatagramThread(QObject):
                 s = s + 350 - len(numbers)
                 package = numpy.append(package, numbers[[i for i in range(s)]], axis=0)
             data = package.tobytes('C')
-            self.socket.sendto(data, ('192.168.1.1', UDP_PORT))
+            self.socket.sendto(data, ('169.254.177.104', UDP_PORT))
 
     @pyqtSlot()
     def cleanup(self):
