@@ -13,7 +13,7 @@ import matlabdata
 
 UDP_IP = '192.168.1.1'
 UDP_PORT = 9090
-plot_length = 40960
+plot_length = 40960 * 16
 marker = c_int32(0xaaffffff).value
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

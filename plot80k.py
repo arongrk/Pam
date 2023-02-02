@@ -14,7 +14,7 @@ sock.bind((UDP_IP, UDP_PORT))
 array = np.array([])
 package_list = list()
 
-for i in range(3000):
+for i in range(4000):
     encoded_package = sock.recvfrom(1400)
     package = np.frombuffer(encoded_package[0], dtype=np.int32)
     package_list.append(package)
@@ -23,12 +23,12 @@ print(f'Length of package list: {len(package_list)} arrays')
 
 for i in package_list:
     array = np.append(array, i, axis=0)
-
+'''
 with open('resources/test_data2.csv', 'w') as myfile:
     print('Starting export to test_data2.csv')
     np.savetxt(myfile, array)
     print('export complete')
-
+'''
 
 fig, ax = plt.subplots()
 ax.plot(np.arange(0, len(array)), array)
