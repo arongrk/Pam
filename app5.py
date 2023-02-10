@@ -41,17 +41,18 @@ class UdpReceiver(QThread):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind((self.address, self.port))
 
-        self.threadpool = QThreadPool()
+        # self.threadpool = QThreadPool()
 
     def run(self):
         global package_list
         while not self.stop_receive:
-            data, _ = self.sock.recvfrom(PACKAGE_LENGTH * 4)
+            # data, _ = self.sock.recvfrom(PACKAGE_LENGTH * 4)
+            data = self.sock.recv(PACKAGE_LENGTH * 4)
             package_list.append(np.frombuffer(data, dtype=np.int32))
+        self.sock.close()
 
     def stop(self):
         self.stop_receive = True
-        self.sock.close()
 
 
 class DataHandler(QThread):
