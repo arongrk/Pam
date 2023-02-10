@@ -1,4 +1,3 @@
-# import sys
 from PyQt5.QtCore import *
 from pyqtgraph import *
 from PyQt5.QtWidgets import *
@@ -65,6 +64,9 @@ class Server(asyncio.DatagramProtocol, QThread):
         """Call loops stop method. Thread safe"""
         self.loop.call_soon_threadsafe(self.loop.stop)
 
+long_data = matlabdata.load_dataFPGA()
+long_data = np.append([long_data], [[i for i in range(1, len(long_data) + 1)]], axis=0)
+
 
 class Worker(QRunnable):
     def __init__(self, fn, *args, **kwargs):
@@ -86,7 +88,8 @@ class MainWindow(QMainWindow):
         self.data_line = self.graph.plot(data[1], data[0])
 
         self.threadpool = QThreadPool()
-        print(self.threadpool.maxThreadCount())
+        print(f'Available threads: {self.threadpool.maxThreadCount()}')
+
 
         self.load_data = bool
 
