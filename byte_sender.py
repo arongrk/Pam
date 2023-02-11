@@ -1,9 +1,9 @@
 import os
 
 import definitions
-from hacker import Hacker
+from hacker2 import Hacker
 
-bytes_plot_len = definitions.PLOT_LENGTH
+bytes_plot_len = definitions.PLOT_LENGTH * 4
 marker = definitions.MARKER_BYTES
 byte_package_len = definitions.PACKAGE_LENGTH * 4
 
@@ -11,7 +11,7 @@ byte_package_len = definitions.PACKAGE_LENGTH * 4
 def sender():
     plot = bytearray()
     while True:
-        plot += bytearray(os.urandom(bytes_plot_len * 4))
+        plot += bytearray(os.urandom(bytes_plot_len))
         plot += marker
         while len(plot) >= byte_package_len:
             yield plot[:byte_package_len]
@@ -40,7 +40,7 @@ def test_hacker():
     g = hacker.hack()
     for i in range(15):
         r = next(g)
-        print(len(r))
+        print(len(r)/4)
 
 
 if __name__ == '__main__':
