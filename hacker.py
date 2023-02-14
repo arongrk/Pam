@@ -16,7 +16,7 @@ class Hacker:
         total_len = self.total_len
         marker_len = len(marker)
         while True:
-            data = receive(package_len)
+            data = receive()
             pos = data.find(marker)
             # your hacker version is actually better than mine because it is simpler
             # marker is here like a command saying:
