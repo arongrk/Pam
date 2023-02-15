@@ -30,7 +30,7 @@ class Hacker:
                 buffer += data[:pos]
                 if len(buffer) == total_len:
                     yield buffer
-                buffer.clear()
+                buffer = bytearray()
                 buffer += data[pos + marker_len:]
 
             # The counter is not really needed anymore as len(buffer) does the job

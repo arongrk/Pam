@@ -1,7 +1,9 @@
+import csv
 import os
+import numpy as np
 
 import definitions
-from hacker2 import Hacker
+from hacker import Hacker
 
 bytes_plot_len = definitions.PLOT_LENGTH * 4
 marker = definitions.MARKER_BYTES
@@ -18,9 +20,26 @@ def sender():
             plot = plot[byte_package_len:]
 
 
+def real_sender():
+    file = open('resources/test_data.csv', newline='')
+    data_reader = csv.reader(file, delimiter=' ')
+    array = b''
+    for i in range(100000):
+        array += np.array(float(data_reader.__next__()[0])).tobytes()
+    print('array created, markers found at: ', array.find(marker))
+    safe = array
+    print('array copied')
+    while True:
+        array += safe
+        while len(array) >= byte_package_len:
+            yield array[:byte_package_len]
+            print('array yielded')
+            array = array[byte_package_len:]
+
+
 def tester():
-    g = sender()
-    for i in range(10):
+    g = real_sender()
+    for i in range(2000000):
         b = next(g)
         print(len(b))
 
@@ -35,8 +54,18 @@ def create_receive():
     return receive
 
 
+def create_real_receive():
+    g = real_sender()
+
+    def receive(*_):
+        b = next(g)
+        return b
+
+    return receive
+
+
 def test_hacker():
-    hacker = Hacker(create_receive(), byte_package_len, bytes_plot_len)
+    hacker = Hacker(create_real_receive(), byte_package_len, bytes_plot_len)
     g = hacker.hack()
     for i in range(15):
         r = next(g)
