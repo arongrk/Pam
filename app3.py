@@ -29,6 +29,7 @@ def update_package_list():
         encoded_package, addr = sock.recvfrom(1400)
         package = np.frombuffer(encoded_package, dtype=np.int32)
         package_list.append(package)
+        print('1')
 
 
 class Worker(QRunnable):

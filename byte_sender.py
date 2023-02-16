@@ -1,5 +1,7 @@
 import csv
 import os
+import socket
+
 import numpy as np
 
 import definitions
@@ -20,21 +22,10 @@ def sender():
             plot = plot[byte_package_len:]
 
 
-def real_sender():
-    file = open('resources/test_data.csv', newline='')
-    data_reader = csv.reader(file, delimiter=' ')
-    array = b''
-    for i in range(100000):
-        array += np.array(float(data_reader.__next__()[0])).tobytes()
-    print('array created, markers found at: ', array.find(marker))
-    safe = array
-    print('array copied')
+def real_sender(sock):
     while True:
-        array += safe
-        while len(array) >= byte_package_len:
-            yield array[:byte_package_len]
-            print('array yielded')
-            array = array[byte_package_len:]
+        data = sock.recv(1400)
+        yield data
 
 
 def tester():
@@ -44,8 +35,8 @@ def tester():
         print(len(b))
 
 
-def create_receive():
-    g = sender()
+def create_receive(sender):
+    g = sender
 
     def receive(*_):
         b = next(g)
