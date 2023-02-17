@@ -11,7 +11,7 @@ import numpy.random
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QObject, QThread, QTimer
 from PyQt5.QtWidgets import QMainWindow, QApplication, QVBoxLayout, QPushButton, QWidget
 
-UDP_PORT = 9090
+from app import UDP_PORT
 
 logger = logging.getLogger(__name__)
 
