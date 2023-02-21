@@ -17,14 +17,14 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>-4</x>
-      <y>-1</y>
+      <x>0</x>
+      <y>0</y>
       <width>801</width>
       <height>581</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -41,18 +41,101 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,6,6" columnstretch="8,0">
        <item row="1" column="0">
-        <widget class="PlotWidget" name="graph1" native="true"/>
+        <widget class="PlotWidget" name="graph1" native="true">
+         <widget class="QWidget" name="gridLayoutWidget_4">
+          <property name="geometry">
+           <rect>
+            <x>190</x>
+            <y>50</y>
+            <width>160</width>
+            <height>80</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_7"/>
+         </widget>
+        </widget>
        </item>
-       <item row="2" column="1">
-        <layout class="QGridLayout" name="gridLayout_5">
+       <item row="1" column="1">
+        <layout class="QGridLayout" name="gridLayout_4">
          <item row="3" column="0">
-          <widget class="QPushButton" name="stop_plot2">
+          <widget class="QLabel" name="label_13">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QPushButton" name="stop_plot1">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Stop</string>
            </property>
           </widget>
          </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_12">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
          <item row="1" column="0">
+          <widget class="QLabel" name="label_15">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QPushButton" name="start_plot1">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Start</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_16">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QComboBox" name="plot1_2">
+           <item>
+            <property name="text">
+             <string>Raw data</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="0">
+        <widget class="PlotWidget" name="graph2" native="true"/>
+       </item>
+       <item row="2" column="1">
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_19">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
           <widget class="QComboBox" name="plot2">
            <item>
             <property name="text">
@@ -71,50 +154,52 @@
            </item>
           </widget>
          </item>
-         <item row="2" column="0">
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_17">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QPushButton" name="stop_plot2">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Stop</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="plots2">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
           <widget class="QPushButton" name="start_plot2">
            <property name="text">
             <string>Start</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="0">
-          <widget class="QWidget" name="widget_3" native="true"/>
-         </item>
-        </layout>
-       </item>
-       <item row="1" column="1">
-        <layout class="QGridLayout" name="gridLayout_4">
-         <item row="3" column="0">
-          <widget class="QPushButton" name="stop_plot1">
-           <property name="text">
-            <string>Stop</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QComboBox" name="plot1_2">
-           <item>
-            <property name="text">
-             <string>Raw data</string>
-            </property>
-           </item>
-          </widget>
-         </item>
          <item row="2" column="0">
-          <widget class="QPushButton" name="start_plot1">
+          <widget class="QLabel" name="label_18">
            <property name="text">
-            <string>Start</string>
+            <string>TextLabel</string>
            </property>
           </widget>
          </item>
          <item row="0" column="0">
-          <widget class="QWidget" name="widget_4" native="true"/>
+          <widget class="QLabel" name="label_20">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
          </item>
         </layout>
-       </item>
-       <item row="2" column="0">
-        <widget class="PlotWidget" name="graph2" native="true"/>
        </item>
        <item row="0" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,8">
@@ -130,14 +215,14 @@
            <item>
             <widget class="QLabel" name="ip_label">
              <property name="text">
-              <string>IP:</string>
+              <string> IP:</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QLabel" name="port_label">
              <property name="text">
-              <string>Port:</string>
+              <string> Port:</string>
              </property>
             </widget>
            </item>
@@ -146,13 +231,34 @@
          <item>
           <layout class="QGridLayout" name="gridLayout_6">
            <item row="0" column="0">
-            <widget class="QLabel" name="label_13">
+            <widget class="QLabel" name="con_status">
              <property name="text">
-              <string>TextLabel</string>
+              <string>Not connected</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
           </layout>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="1">
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QPushButton" name="start_receive">
+           <property name="text">
+            <string>Start</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="stop_receive">
+           <property name="text">
+            <string>Stop</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -225,7 +331,7 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>349</width>
+        <width>365</width>
         <height>111</height>
        </rect>
       </property>

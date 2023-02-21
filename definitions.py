@@ -5,6 +5,7 @@ MARKER = c_int32(0xaaffffff).value
 PACKAGE_LENGTH = 350
 IP_Address = '192.168.1.1'
 PORT = 9090
+SENDER_PORT = 9091
 LENGTH = 16080
 SamplesPerSequence = 16
 SequenceReps = 2
