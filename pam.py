@@ -8,6 +8,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5 import uic
+from PyQt5.QtNetwork import *
 from pyqtgraph import *
 
 # from hacker import Hacker
@@ -17,28 +18,40 @@ from byte_sender import create_receive, real_sender
 # import funtions
 
 
-class Receiver(QThread):
+class Receiver(QObject):
     packageReady = pyqtSignal(bytearray)
-    connectionStatus = pyqtSignal(bool)
+    connecting = pyqtSignal()
+    connected = pyqtSignal()
+    connect_failed = pyqtSignal()
+    no_connect = pyqtSignal()
 
     def __init__(self, ip_address='192.168.1.1', port=9090):
-        QThread.__init__(self)
+        QObject.__init__(self)
 
         self.ip = ip_address
         self.port = port
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        # self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         # self.socket.bind(('192.168.1.1', port))
 
+        self.socket = QUdpSocket(self)
         self.stop_receive = False
 
+    def run(self):
+        pass
+
     def connect(self):
+        print('trying')
         try:
+            self.connecting.emit()
             self.socket.bind((self.ip, self.port))
-            self.connectionStatus.emit(False)
+            self.connected.emit()
         except OSError:
-            self.connectionStatus.emit(True)
+            self.connect_failed.emit()
+        except TypeError:
+            self.no_connect.emit()
 
     def run(self):
+        self.connect()
         pack_size = definitions.PACKAGE_SIZE
         plot_size = definitions.PLOT_SIZE
         marker = definitions.MARKER_BYTES
@@ -103,18 +116,25 @@ class UI(QMainWindow):
         self.line2 = self.graph2.plot(self.yData2, np.zeros(len(self.yData2)), pen=pen)
 
         # Setting up the Receiver class
+        self.receiver_thread = QThread()
         self.receiver = Receiver(definitions.IP_Address, definitions.PORT)
-        self.receiver.start()
+        self.receiver.moveToThread(self.receiver_thread)
+        self.receiver_thread.start()
+        self.receiver.run()
         self.receiver.packageReady.connect(self.plot)
-        self.connect_button.clicked.connect(self.receiver.connect)
+        self.receiver.connected.connect(self.status_connected)
+        self.receiver.connecting.connect(self.status_connecting)
+        self.receiver.connect_failed.connect(self.status_con_failed)
+        self.receiver.no_connect.connect(self.status_no_connect)
+        # self.connect_button.clicked.connect(self.receiver.connect)
         # self.receiver.connectionStatus.connect(self.connect_checker)
 
         # Setting up the ip and port changer:
         self.refresh.clicked.connect(self.refresh_connect)
 
         # Start and stop Plot 1
-        self.start_plot1.clicked.connect(self.start_receiver)
-        self.stop_plot1.clicked.connect(self.stop_receiver)
+        # self.start_plot1.clicked.connect(self.start_receiver)
+        # self.stop_plot1.clicked.connect(self.stop_receiver)
 
         # Setting up the SecondData class
         self.second_thread = QThread()
@@ -133,13 +153,34 @@ class UI(QMainWindow):
         data = data
         self.line2.setData(self.yData2, data)
 
-    def stop_receiver(self):
+    def refresh_receiver(self):
+        ip = self.ip1.text() + '.' + self.ip2.text() + '.' + self.ip3.text() + '.' + self.ip4.text()
+        port = int(self.recport.text())
+        sender_port = int(self.senport.text())
+        self.stop_receiver()
+        self.receiver.connect()
         self.receiver.stop()
         self.receiver.quit()
         self.receiver.wait()
         self.receiver = Receiver(definitions.IP_Address, definitions.PORT)
         self.receiver.start()
         self.receiver.packageReady.connect(self.plot)
+
+    def status_connected(self):
+        self.con_status.setStyleSheet('color : green')
+        self.con_status.setText('Connected to server')
+
+    def status_connecting(self):
+        self.con_status.setStyleSheet('Color : black')
+        self.con_Status.setText('Connecting...')
+
+    def status_con_failed(self):
+        self.con_status.setStyleSheet('Color : red')
+        self.con_Status.setText('Connection failed...\nrefresh to retry!')
+
+    def no_connect(self):
+        self.con_status.setStyleSheet('Color : red')
+        self.con_Status.setText('Connection failed...\nCheck connection data and retry!')
 
     def start_second(self):
         self.second_thread.start()
@@ -148,11 +189,8 @@ class UI(QMainWindow):
         self.second_data.package2Ready.connect(self.startplot2)
 
     def refresh_connect(self):
-        ip = self.ip1.text() + '.' + self.ip2.text() + '.' + self.ip3.text() + '.' + self.ip4.text()
-        port = int(self.recport.text())
-        sender_port = int(self.senport.text())
-        self.stop_receiver()
-        self.receiver.connect()
+        pass
+
 
 
 def main():
