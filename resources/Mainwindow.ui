@@ -40,21 +40,6 @@
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,6,6" columnstretch="8,0">
-       <item row="1" column="0">
-        <widget class="PlotWidget" name="graph1" native="true">
-         <widget class="QWidget" name="gridLayoutWidget_4">
-          <property name="geometry">
-           <rect>
-            <x>190</x>
-            <y>50</y>
-            <width>160</width>
-            <height>80</height>
-           </rect>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_7"/>
-         </widget>
-        </widget>
-       </item>
        <item row="1" column="1">
         <layout class="QGridLayout" name="gridLayout_4">
          <item row="3" column="0">
@@ -201,8 +186,11 @@
          </item>
         </layout>
        </item>
+       <item row="1" column="0">
+        <widget class="PlotWidget" name="graph1" native="true"/>
+       </item>
        <item row="0" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,8">
+        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1,5,1">
          <item>
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
@@ -229,8 +217,8 @@
           </layout>
          </item>
          <item>
-          <layout class="QGridLayout" name="gridLayout_6">
-           <item row="0" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
             <widget class="QLabel" name="con_status">
              <property name="text">
               <string>Not connected</string>
@@ -240,23 +228,51 @@
              </property>
             </widget>
            </item>
+           <item>
+            <widget class="QWidget" name="widget" native="true"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QWidget" name="widget_2" native="true"/>
+         </item>
+         <item>
+          <layout class="QGridLayout" name="gridLayout_6">
+           <item row="0" column="1">
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="QPushButton" name="start_receive">
+               <property name="text">
+                <string>Start</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="stop_receive">
+               <property name="text">
+                <string>Stop</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
           </layout>
          </item>
         </layout>
        </item>
        <item row="0" column="1">
-        <layout class="QVBoxLayout" name="verticalLayout_4">
+        <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <widget class="QPushButton" name="start_receive">
+          <widget class="QLabel" name="label_11">
            <property name="text">
-            <string>Start</string>
+            <string>Receiving?</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="stop_receive">
+          <widget class="QLabel" name="label_21">
            <property name="text">
-            <string>Stop</string>
+            <string>Lost Packs:</string>
            </property>
           </widget>
          </item>

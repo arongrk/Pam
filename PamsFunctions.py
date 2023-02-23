@@ -36,7 +36,7 @@ class Handler:
                 if len(buffer) == byte_raw_len:
                     yield buffer
                 else:
-                    print(len(buffer))
+                    yield
                 buffer = bytearray()
                 buffer += data[pos + marker_len:]
 
@@ -46,22 +46,33 @@ class Handler:
         byte_raw_len = self.raw_len * 4
         marker = self.marker
         marker_len = len(marker)
-        buf = bytearray()
-        buffer = memoryview(buf)
-        t0 = time.time()
+        buffer = bytearray(200000)
+        mem_buffer = memoryview(buffer)
         pointer = 0
+        pos0 = 0
         while True:
-            length = sock.recv_into(buffer[pointer:])
-            if length != 1400:
-                print('False Package!')
+            sock.recv_into(mem_buffer[pointer:])
+            # if length != byte_pack_len:
+            #     print('False Package!')
+            pos = buffer[pointer:pointer + byte_pack_len].find(marker)
             pointer += byte_pack_len
-            pos = buf[pointer:pointer+byte_pack_len].find(marker)
             if pos != -1:
-                expected_pos = pos + byte_raw_len + 4
+                print(pointer)
+                if len(buffer[pos0:pointer + pos]) == byte_raw_len:
+                    yield buffer[pos0:pointer + pos]
+                else:
+                    yield
+                mem_buffer[0:byte_pack_len - 1] = buffer[pointer:pointer + byte_pack_len - 1]
+                pos0 = pos + 4
+                pointer = 1400
 
 
-def averager(data_set: bytes):
-    data = np.average(np.frombuffer(data_set, np.int32).reshape((2560, 16))[1::2], axis=1)
+
+def averager(data_set: bytes, shifts, samples_per_sequence, sequence_reps):
+    s = shifts
+    t = samples_per_sequence
+    u = sequence_reps
+    data = np.average(np.frombuffer(data_set, np.int32).reshape((s*u, t))[1::u], axis=1)
     return data
 
 

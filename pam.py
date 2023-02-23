@@ -22,6 +22,7 @@ class Receiver(QThread):
     st_connecting = pyqtSignal()
     st_connected = pyqtSignal()
     st_connect_failed = pyqtSignal(str)
+    packageLost = pyqtSignal()
 
     def __init__(self, ip_address='192.168.1.1', port=9090):
         QThread.__init__(self)
@@ -50,15 +51,20 @@ class Receiver(QThread):
         # hacker = Hacker(create_receive(real_sender(self.socket)), pack_size, plot_size, marker)
         # g = hacker.hack()
         handler = Handler(self.socket)
-        g = handler.assembler()
+        g = handler.assembler_2()
         # t0 = time.time()
         while not self.stop_receive:
             r = next(g)
-            self.packageReady.emit(r)
+            if not r:
+                self.packageLost.emit()
+            else:
+                self.packageReady.emit(r)
         self.socket.close()
 
     def stop(self):
         self.stop_receive = True
+        # self.quit()
+        # self.wait()
 
 
 class SecondData(QObject):
@@ -75,9 +81,8 @@ class SecondData(QObject):
 
     def data_acceptor(self, data):
         data = data
-        data = averager(data)
+        data = averager(data, 1280, 16, 2)
         self.package2Ready.emit(data)
-
 
 
 class UI(QMainWindow):
@@ -115,7 +120,9 @@ class UI(QMainWindow):
         self.receiver.st_connecting.connect(self.rec_connected)
         self.receiver.st_connect_failed.connect(self.rec_failed)
         self.start_receive.clicked.connect(self.start_receiver)
-        self.stop_receive.clicked.connect(self.restart_receiver)
+        self.stop_receive.clicked.connect(self.reconnect_receiver)
+        self.start_receive.setEnabled(False)
+        self.stop_receive.setEnabled(False)
 
         # Setting up the ip and port changer:
         self.refresh.clicked.connect(self.refresh_connect)
@@ -132,6 +139,14 @@ class UI(QMainWindow):
         # Getting the way the data should be edited
         self.plot2.currentTextChanged.connect(self.second_data.selector)
 
+        # Setting up the plot timer:
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.plot1_timer)
+        self.timer.timeout.connect(self.receiver_timer)
+        self.timer.start(1000)
+        self.counter1 = 0
+        self.counter_lost = 0
+
     def plot_starter(self):
         self.receiver.packageReady.connect(self.plot)
         self.start_plot1.setEnabled(False)
@@ -139,11 +154,13 @@ class UI(QMainWindow):
 
     def plot_breaker(self):
         self.receiver.packageReady.disconnect(self.plot)
+        self.start_plot1.setEnabled(True)
+        self.stop_plot1.setEnabled(False)
 
     def plot(self, data):
         data = np.frombuffer(data, dtype=np.int32) * 8.192 / pow(2, 18)
-
         self.line1.setData(self.yData, data)
+        self.counter1 += 1
 
     def plot_2(self, data):
         data = data
@@ -151,17 +168,28 @@ class UI(QMainWindow):
 
     def start_receiver(self):
         self.receiver.start()
+        self.receiver.packageLost.connect(self.lost_counter)
+        self.start_plot1.setEnabled(True)
+        self.start_receive.setEnabled(False)
+        self.stop_receive.setEnabled(True)
+        self.label_11.setStyleSheet('color: green')
+        self.label_11.setText('Receiving data')
 
-    def restart_receiver(self):
+    def reconnect_receiver(self):
         self.receiver.stop()
         self.receiver.quit()
         self.receiver.wait()
         self.receiver = Receiver(self.ip, self.port)
-        self.receiver.packageReady.connect(self.plot)
+        # self.receiver.packageReady.connect(self.plot)
         self.receiver.st_connecting.connect(self.rec_connecting)
         self.receiver.st_connecting.connect(self.rec_connected)
         self.receiver.st_connect_failed.connect(self.rec_failed)
         self.receiver.connect()
+        self.start_receive.setEnabled(True)
+        self.stop_receive.setEnabled(False)
+        self.start_plot1.setEnabled(False)
+        self.label_11.setText('Not receiving')
+        self.label_11.setStyleSheet('color: black')
 
     def start_second(self):
         self.second_thread.start()
@@ -174,7 +202,7 @@ class UI(QMainWindow):
         self.sender_port = int(self.senport.text())
         self.ip_label.setText(f' IP:   {self.ip}')
         self.port_label.setText(f' Port: {self.port}')
-        self.restart_receiver()
+        self.reconnect_receiver()
 
     def rec_connecting(self):
         self.con_status.setStyleSheet('color: black')
@@ -183,17 +211,29 @@ class UI(QMainWindow):
     def rec_connected(self):
         self.con_status.setStyleSheet('color: green')
         self.con_status.setText('Connected.')
-        self.start_plot1.setEnabled(True)
+        self.start_receive.setEnabled(True)
 
     def rec_failed(self, error):
         self.con_status.setStyleSheet('color: red')
         self.con_status.setText('Connection failed: Resetting receiver.')
-        self.restart_receiver()
+        self.reconnect_receiver()
         if error == 'os':
             self.con_status.setText('Connection failed: Retry later.')
         if error == 'type':
             self.con_status.setText('Connection failed: Check inputs and try again.')
         self.start_plot1.setEnabled(False)
+
+    def lost_counter(self):
+        self.counter_lost +=1
+
+    def plot1_timer(self):
+        self.label_12.setText(f'Plot 1: {self.counter1} P/s')
+        self.counter1 = 0
+
+    def receiver_timer(self):
+        self.label_21.setText(f'Lost: {self.counter_lost} p/s')
+        self.counter_lost = 0
+
 
 def main():
     app = QApplication(sys.argv)
