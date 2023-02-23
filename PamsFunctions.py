@@ -57,22 +57,20 @@ class Handler:
             pos = buffer[pointer:pointer + byte_pack_len].find(marker)
             pointer += byte_pack_len
             if pos != -1:
-                print(pointer)
                 if len(buffer[pos0:pointer + pos]) == byte_raw_len:
                     yield buffer[pos0:pointer + pos]
-                else:
-                    yield
+                # else:
+                #     yield
                 mem_buffer[0:byte_pack_len - 1] = buffer[pointer:pointer + byte_pack_len - 1]
                 pos0 = pos + 4
                 pointer = 1400
-
 
 
 def averager(data_set: bytes, shifts, samples_per_sequence, sequence_reps):
     s = shifts
     t = samples_per_sequence
     u = sequence_reps
-    data = np.average(np.frombuffer(data_set, np.int32).reshape((s*u, t))[1::u], axis=1)
+    data = np.average(data_set.reshape((s*u, t))[1::u], axis=1)
     return data
 
 
