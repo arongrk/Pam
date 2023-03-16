@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.fft import fft, ifft, fftfreq
 import time
 import struct
 import socket
@@ -8,10 +9,11 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5 import uic
 from pyqtgraph import *
+from collections import deque
 
 # from hacker import Hacker
 import definitions
-from PamsFunctions import Handler, averager
+from PamsFunctions import Handler, averager, unconnect
 
 
 class Receiver(QThread):
@@ -21,13 +23,17 @@ class Receiver(QThread):
     st_connect_failed = pyqtSignal(str)
     packageLost = pyqtSignal()
 
-    def __init__(self, ip_address='192.168.1.1', port=9090):
+    def __init__(self, shifts, sequence_repetitions, samples_per_sequence, port=9090, ip_address='192.168.1.1', ):
         QThread.__init__(self)
 
         self.ip = ip_address
         self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        # self.socket.bind(('192.168.1.1', port))
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 2**18)
+
+        self.shifts = shifts
+        self.s_reps = sequence_repetitions
+        self.sps = samples_per_sequence
 
         self.stop_receive = False
 
@@ -42,14 +48,8 @@ class Receiver(QThread):
             self.st_connect_failed.emit('type')
 
     def run(self):
-        # pack_size = definitions.PACKAGE_SIZE
-        # plot_size = definitions.PLOT_SIZE
-        # marker = definitions.MARKER_BYTES
-        # hacker = Hacker(create_receive(real_sender(self.socket)), pack_size, plot_size, marker)
-        # g = hacker.hack()
-        handler = Handler(self.socket)
-        g = handler.assembler()
-        # t0 = time.time()
+        handler = Handler(self.socket, shifts=self.shifts, sequence_reps=self.s_reps, samples_per_sequence=self.sps)
+        g = handler.assembler_2()
         while not self.stop_receive:
             r = next(g)
             if not r:
@@ -66,21 +66,25 @@ class Receiver(QThread):
 
 
 class SecondData(QObject):
-    package2Ready = pyqtSignal(np.ndarray)
+    package2Ready = pyqtSignal(object)
+    package3Ready = pyqtSignal(object)
 
-    def __init__(self):
+    def __init__(self, samples_per_sequence, shifts, sequence_reps):
         QObject.__init__(self)
-        self.sps = definitions.SamplesPerSequence
-        self.shifts = definitions.SHIFTS
-        self.sr = definitions.SequenceReps
+        self.sps = samples_per_sequence
+        self.shifts = shifts
+        self.sr = sequence_reps
+        self.maxima = deque(np.zeros(10000), maxlen=1000)
 
     def step_averager(self, data):
-        data = averager(data, 1280, 16, 2)
-        data = data - np.average(data[1180:])
+        data = averager(data, self.shifts, self.sps, self.sr)
+        data = data - np.average(data[len(data)-100:])
         self.package2Ready.emit(data)
 
-    def option_2(self, data):
-        pass
+    def distance(self, data):
+        self.maxima.append(data.argmax())
+        self.package2Ready.emit(self.maxima)
+
 
     def option_3(self, data):
         pass
@@ -92,16 +96,22 @@ class UI(QMainWindow):
 
         # Load the ui file
         uic.loadUi('resources/Mainwindow.ui', self)
-        self.yData = np.arange(1, definitions.PLOT_LENGTH + 1)
-        self.yData2 = np.arange(0, 1280) / (5 * pow(10, 9))
+
+        # Getting the parameters for data interpreting
+        self.samples_per_sequence = int(self.sps_edit.text())
+        self.sequence_reps = int(self.sr_edit.text())
+        self.shifts = int(self.shifts_edit.text())
+        self.refresh_config.clicked.connect(self.refresh_configuration)
+        self.xData = np.arange(1, self.shifts * self.sequence_reps * self.samples_per_sequence + 1) / 5 * 10 ** 9
+        self.xData2 = np.arange(0, 1280) / 5 * 10 ** 9
 
         # Configuring both plot-widgets
         pen = mkPen(color=(0, 0, 0), width=1)
         self.graph1.setBackground('w')
-        self.line1 = self.graph1.plot(self.yData, np.zeros(len(self.yData)), pen=pen)
+        self.line1 = self.graph1.plot(self.xData, np.zeros(len(self.xData)), pen=pen)
 
         self.graph2.setBackground('w')
-        self.line2 = self.graph2.plot(self.yData2, np.zeros(len(self.yData2)), pen=pen)
+        self.line2 = self.graph2.plot(self.xData2, np.zeros(len(self.xData2)), pen=pen)
 
         # Setting up the IP and Port inputs and values:
         self.ip, self.port, self.sender_port = definitions.IP_Address, definitions.PORT, definitions.SENDER_PORT
@@ -115,7 +125,7 @@ class UI(QMainWindow):
         self.port_label.setText(f' Port: {self.port}')
 
         # Setting up the Receiver class
-        self.receiver = Receiver(self.ip, self.port)
+        self.receiver = Receiver(self.shifts, self.sequence_reps, self.samples_per_sequence, self.port, self.ip)
         self.connect_button.clicked.connect(self.receiver.connect)
         self.receiver.st_connecting.connect(self.rec_connecting)
         self.receiver.st_connecting.connect(self.rec_connected)
@@ -134,7 +144,7 @@ class UI(QMainWindow):
 
         # Setting up the SecondData class
         self.second_thread = QThread()
-        self.second_data = SecondData()
+        self.second_data = SecondData(self.samples_per_sequence, self.shifts, self.sequence_reps)
         self.second_data.moveToThread(self.second_thread)
         self.second_thread.start()
         self.start_plot2.clicked.connect(self.plot2_starter)
@@ -143,6 +153,8 @@ class UI(QMainWindow):
         # Getting the way the data should be edited
         self.QComboBox_1.currentTextChanged.connect(self.plot1_chooser)
         self.QComboBox_2.currentTextChanged.connect(self.plot2_chooser)
+        self.QComboBox_1.currentTextChanged.connect(self.xdata_refresher)
+        self.QComboBox_2.currentTextChanged.connect(self.xdata_refresher)
 
         # Setting up the plot timer:
         self.timer = QTimer()
@@ -157,8 +169,7 @@ class UI(QMainWindow):
     def plot1_starter(self):
         self.receiver.packageReady.connect(self.plot)
         self.start_plot1.setEnabled(False)
-        self.stop_plot1.setEnabled(True)
-
+    
     def plot1_breaker(self):
         self.receiver.packageReady.disconnect(self.plot)
         self.start_plot1.setEnabled(True)
@@ -168,9 +179,9 @@ class UI(QMainWindow):
         self.second_data.package2Ready.connect(self.plot_2)
         if self.QComboBox_2.currentText() == 'average':
             self.receiver.packageReady.connect(self.second_data.step_averager)
-        if self.QComboBox_2.currentText == 'option 2':
-            self.receiver.packageReady.connect(self.second_data.option_2)
-        if self.QComboBox_2.currentText == 'option 3':
+        if self.QComboBox_2.currentText() == 'option 2':
+            self.receiver.packageReady.connect(self.second_data.distance)
+        if self.QComboBox_2.currentText() == 'option 3':
             self.receiver.packageReady.connect(self.second_data.option_3)
         self.start_plot2.setEnabled(False)
         self.stop_plot2.setEnabled(True)
@@ -181,7 +192,7 @@ class UI(QMainWindow):
         except TypeError:
             pass
         try:
-            self.receiver.packageReady.disconnect(self.second_data.option_2)
+            self.receiver.packageReady.disconnect(self.second_data.distance)
         except TypeError:
             pass
         try:
@@ -192,13 +203,13 @@ class UI(QMainWindow):
         self.start_plot2.setEnabled(True)
 
     def plot(self, data):
-        data = data
-        self.line1.setData(self.yData, data)
+        self.line1.setData(self.xData, data)
         self.counter1 += 1
 
     def plot_2(self, data):
         data = data
-        self.line2.setData(self.yData2, data)
+        print(f'len(data): {len(data)}, len(xData2): {len(self.xData2)}')
+        self.line2.setData(self.xData2, data)
         self.counter2 += 1
 
     def start_receiver(self):
@@ -214,7 +225,7 @@ class UI(QMainWindow):
         self.receiver.stop()
         self.receiver.quit()
         self.receiver.wait()
-        self.receiver = Receiver(self.ip, self.port)
+        self.receiver = Receiver(self.shifts, self.sequence_reps, self.samples_per_sequence, self.port, self.ip)
         # self.receiver.packageReady.connect(self.plot)
         self.receiver.st_connecting.connect(self.rec_connecting)
         self.receiver.st_connecting.connect(self.rec_connected)
@@ -234,14 +245,26 @@ class UI(QMainWindow):
         self.port_label.setText(f' Port: {self.port}')
         self.reconnect_receiver()
 
+    def refresh_configuration(self):
+        self.samples_per_sequence = int(self.sps_edit.text())
+        self.sequence_reps = int(self.sr_edit.text())
+        self.shifts = int(self.shifts_edit.text())
+        self.xData = np.arange(1, self.shifts * self.sequence_reps * self.samples_per_sequence + 1)
+        self.plot2_breaker()
+        self.second_data.sps = self.samples_per_sequence
+        self.second_data.sr = self.sequence_reps
+        self.second_data.shifts = self.shifts
+        self.xdata_refresher()
+        self.reconnect_receiver()
+
     def plot1_chooser(self):
         pass
 
     def plot2_chooser(self):
         text = self.QComboBox_2.currentText()
-        if text == 'average':
+        if text == 'Averaged':
             try:
-                self.receiver.packageReady.disconnect(self.second_data.option_2)
+                self.receiver.packageReady.disconnect(self.second_data.distance)
             except TypeError:
                 pass
             try:
@@ -258,17 +281,31 @@ class UI(QMainWindow):
                 self.receiver.packageReady.disconnect(self.second_data.option_3)
             except TypeError:
                 pass
-            self.receiver.packageReady.connect(self.second_data.option_2)
-        if text == 'option 2':
+            self.receiver.packageReady.connect(self.second_data.distance)
+        if text == 'option 3':
             try:
                 self.receiver.packageReady.disconnect(self.second_data.step_averager)
             except TypeError:
                 pass
             try:
-                self.receiver.packageReady.disconnect(self.second_data.option_2)
+                self.receiver.packageReady.disconnect(self.second_data.distance)
             except TypeError:
                 pass
             self.receiver.packageReady.connect(self.second_data.option_3)
+
+    def xdata_refresher(self):
+        if self.QComboBox_1.currentText() == 'Raw data':
+            self.xData = np.arange(1, self.samples_per_sequence * self.shifts * self.sequence_reps + 1) / (5 * (10 ** 9))
+        if self.QComboBox_1.currentText() == 'Averaged':
+            self.xData = np.arange(1, self.shifts + 1) / (5 * (10 ** 9))
+        if self.QComboBox_1.currentText() == 'Distance':
+            self.xData = np.arange(-999, 1)                                     # Not finished!
+        if self.QComboBox_1.currentText() == 'Raw data':
+            self.xData2 = np.arange(1, self.samples_per_sequence * self.shifts * self.sequence_reps + 1) / (5 * (10 ** 9))
+        if self.QComboBox_1.currentText() == 'Averaged':
+            self.xData2 = np.arange(1, self.shifts + 1) / (5 * (10 ** 9))
+        if self.QComboBox_1.currentText() == 'Distance':
+            self.xData2 = np.arange(-999, 1)                                    # Not finished!
 
     def rec_connecting(self):
         self.con_status.setStyleSheet('color: black')
@@ -290,7 +327,7 @@ class UI(QMainWindow):
         self.start_plot1.setEnabled(False)
 
     def lost_counter(self):
-        self.counter_lost +=1
+        self.counter_lost += 1
 
     def plot1_timer(self):
         self.label_12.setText(f'Plot 1: {self.counter1} P/s')
