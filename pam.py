@@ -1,7 +1,7 @@
 import sys
 
 import numpy as np
-from scipy.fft import fft, ifft, fftfreq
+from scipy.fft import fft, ifft, fftfreq, next_fast_len
 import time
 import struct
 import socket
@@ -15,7 +15,7 @@ from collections import deque
 
 # from hacker import Hacker
 import definitions
-from PamsFunctions import Handler, averager, unconnect
+from PamsFunctions import Handler, averager, unconnect, zero_padding
 
 
 class Receiver(QThread):
@@ -81,10 +81,12 @@ class SecondData(QObject):
     def step_averager(self, data):
         data = averager(data, self.shifts, self.sps, self.sr)
         data = data - np.average(data[len(data)-100:])
+        # data = np.real(fft(data, next_fast_len(len(data))))
+        data = zero_padding(np.arange(1, self.shifts + 1) / 5e+09, data, 2.4e+09, 16080)
         self.package2Ready.emit(data)
 
     def distance(self, data):
-        self.maxima.append(data.argmax())
+        self.maxima.append(data[0].argmax())
         self.package3Ready.emit(self.maxima)
 
     def option_3(self, data):
@@ -319,7 +321,7 @@ class UI(QMainWindow):
     '''
 
     def plot(self, data):
-        self.line1.setData(self.xData, data)
+        self.line1.setData(data[1], data[0])
         self.counter1 += 1
 
     def plot_2(self, data):
@@ -412,15 +414,15 @@ class UI(QMainWindow):
 
     def xdata_refresher(self):
         if self.QComboBox_1.currentText() == 'Raw data':
-            self.xData = np.arange(1, self.samples_per_sequence * self.shifts * self.sequence_reps + 1) / (5 * (10 ** 9))
+            self.xData = np.arange(1, self.samples_per_sequence * self.shifts * self.sequence_reps + 1) / 5e+09
         if self.QComboBox_1.currentText() == 'IRF':
-            self.xData = np.arange(1, self.shifts + 1) / (5 * (10 ** 9))
+            self.xData = np.arange(1, self.shifts + 1) / 5e+09
         if self.QComboBox_1.currentText() == 'Distance':
             self.xData = np.arange(-999, 1)                                     # Not finished!
         if self.QComboBox_2.currentText() == 'Raw data':
-            self.xData2 = np.arange(1, self.samples_per_sequence * self.shifts * self.sequence_reps + 1) / (5 * (10 ** 9))
+            self.xData2 = np.arange(1, self.samples_per_sequence * self.shifts * self.sequence_reps + 1) / 5e+09
         if self.QComboBox_2.currentText() == 'IRF':
-            self.xData2 = np.arange(1, self.shifts + 1) / (5 * (10 ** 9))
+            self.xData2 = np.arange(1, self.shifts + 1) / 5e+09
         if self.QComboBox_2.currentText() == 'Distance':
             self.xData2 = np.arange(-999, 1)                                    # Not finished!
 

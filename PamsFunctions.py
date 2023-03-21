@@ -1,6 +1,8 @@
 import time
 from socket import *
 import numpy as np
+from math import trunc
+from scipy.fft import fft, ifft
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
@@ -99,3 +101,31 @@ def unconnect(signal, old_slot):
             signal.disconnect(old_slot)
     except TypeError:
         pass
+
+
+def zero_padding(t, y, fLim, NZP):
+    Ly = len(y)
+    fs = 1/(t[1]-t[0])
+    df = fs/Ly
+    f = np.arange(0, trunc(Ly/2))*df
+    LidxLim = sum(f <= fLim)
+    idxLim = np.arange(0, LidxLim)
+    fWindCal = f[idxLim]
+
+    # Tp = 1/(2*(LidxLim-1))/df
+
+
+    Ytemp = np.real(fft(y, Ly))/Ly
+    YPos = Ytemp[0:trunc(Ly/2)+1]
+
+    YZP = np.zeros(np.real(NZP))
+    YPos[1:-1] = 2 * YPos[1:-1]
+    YZP[idxLim] = YPos[idxLim]
+
+    yData = np.real(ifft(YZP)*NZP)
+    tData = (np.arange(0, NZP) / fs * Ly/NZP + t[1])
+
+    return yData, tData
+
+
+# def my_zero_padding(data, +)
