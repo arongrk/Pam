@@ -86,6 +86,11 @@
            </item>
            <item>
             <property name="text">
+             <string>Transformed IRF</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
              <string>IRF</string>
             </property>
            </item>
@@ -146,6 +151,11 @@
            <item>
             <property name="text">
              <string>Raw data</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Transformed IRF</string>
             </property>
            </item>
            <item>
