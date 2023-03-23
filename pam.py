@@ -1,21 +1,23 @@
 import sys
 
 import numpy as np
-from scipy.fft import fft, ifft, fftfreq, next_fast_len
+from scipy.signal import find_peaks
 import time
 import struct
 import socket
+import tomllib
+import tomlkit
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5 import uic
-from pyqtgraph import mkPen
+from pyqtgraph import mkPen, PlotWidget, DateAxisItem
 from collections import deque
 
 # from hacker import Hacker
 import definitions
-from PamsFunctions import Handler, averager, unconnect, zero_padding
+from PamsFunctions import Handler, averager, unconnect, zero_padding, polynom_interp_max
 
 
 class Receiver(QThread):
@@ -71,27 +73,46 @@ class Receiver(QThread):
 
 class SecondData(QObject):
     package2Ready = pyqtSignal(tuple)
-    package3Ready = pyqtSignal(tuple)
+    package3aReady = pyqtSignal(tuple)
+    package3bReady = pyqtSignal(tuple)
 
     def __init__(self, samples_per_sequence, shifts, sequence_reps):
         QObject.__init__(self)
         self.sps = samples_per_sequence
         self.shifts = shifts
         self.sr = sequence_reps
-        self.maxima = deque(np.zeros(10000), maxlen=1000)
+        self.refresh_x1 = False
+        self.refresh_x2 = False
+        self.t0 = time.time()
+        self.maxima, self.time_stamps = list(), list()
 
     def irf(self, data):
         yData = averager(data[1], self.shifts, self.sps, self.sr)
         yData = yData - np.average(yData[len(yData)-100:])
         xData = np.arange(1, self.shifts + 1) / 5e+09
-        # data = zero_padding(np.arange(1, self.shifts + 1) / 5e+09, data, 2.4e+09, 16080)
+        # data = zero_padding(xData, yData, 2.4e+09, 16080)
+        # print(find_peaks(data[1], height=0.05))
+        # self.package2Ready.emit((data[0], data[1]))
         self.package2Ready.emit((xData, yData))
 
     def distance(self, data):
-        self.maxima.append(data[0].argmax())
-        self.package3Ready.emit(self.maxima)
+        data = zero_padding(data[0], data[1], 2.4e+09, 16080)
+        # print(find_peaks(data[1]))
+        # print(np.argsort(data[1][:5000])[-3:])
+        # self.maxima.append(data[0][data[1].argmax()])
+        self.maxima.append(polynom_interp_max(data[0][:int(len(data[0])/2)], data[1][:int(len(data[0])/2)], 50))
+        self.time_stamps.append(round(time.time() - self.t0, 5))
+        if self.refresh_x1:
+            self.package3aReady.emit((self.time_stamps[-1000:], self.maxima[-1000:]))
+        else:
+            self.package3aReady.emit((self.time_stamps, self.maxima))
+        if self.refresh_x2:
+            self.package3bReady.emit((self.time_stamps[-1000:], self.maxima[-1000:]))
+        else:
+            self.package3bReady.emit((self.time_stamps, self.maxima))
 
-    def trans_irf(self, data):
+
+    def option_3(self, data):
         pass
 
     def option_4(self, data):
@@ -158,9 +179,13 @@ class UI(QMainWindow):
         self.start_plot2.clicked.connect(self.plot_starter2)
         self.stop_plot2.clicked.connect(self.plot_breaker2)
 
-        # Getting the way the data should be edited
+        # Refreshing the chosen plot option
         self.QComboBox_1.currentTextChanged.connect(self.running_refresher1)
         self.QComboBox_2.currentTextChanged.connect(self.running_refresher2)
+
+        # Refreshing weather x should be refreshed or not
+        self.refresh_x1.stateChanged.connect(self.refresh_x1_refresher)
+        self.refresh_x2.stateChanged.connect(self.refresh_x2_refresher)
 
         # Setting up the plot timer:
         self.timer = QTimer()
@@ -172,9 +197,6 @@ class UI(QMainWindow):
         self.counter2 = 0
         self.counter_lost = 0
 
-        # Control Center Set-Up
-        # self.QComboBox_1.currentTextChanged.connect(self.control_center)
-        # self.QComboBox_2.currentTextChanged.connect(self.control_center)
 
         self.request1 = 0
         self.request2 = 0
@@ -184,7 +206,7 @@ class UI(QMainWindow):
         self.counter1 += 1
 
     def plot_2(self, data):
-        self.line2.setData(self.xData2, data)
+        self.line2.setData(data[0], data[1])
         self.counter2 += 1
 
     def plot_starter1(self):
@@ -211,7 +233,6 @@ class UI(QMainWindow):
         if box == 'Distance':
             self.request2 = 3
         self.data_connector()
-        # self.xdata_refresher()
         self.plot_connector2()
         self.stop_plot2.setEnabled(True)
 
@@ -235,7 +256,7 @@ class UI(QMainWindow):
         if self.request1 == 2:
             self.second_data.package2Ready.connect(self.plot)
         if self.request1 == 3:
-            self.second_data.package3Ready.connect(self.plot)
+            self.second_data.package3aReady.connect(self.plot)
 
     def plot_connector2(self):
         if self.request2 == 1:
@@ -243,24 +264,42 @@ class UI(QMainWindow):
         if self.request2 == 2:
             self.second_data.package2Ready.connect(self.plot_2)
         if self.request2 == 3:
-            self.second_data.package3Ready.connect(self.plot_2)
+            self.second_data.package3bReady.connect(self.plot_2)
 
     def plot_disconnector1(self):
         unconnect(self.receiver.packageReady, self.plot)
         unconnect(self.second_data.package2Ready, self.plot)
-        unconnect(self.second_data.package3Ready, self.plot)
+        unconnect(self.second_data.package3aReady, self.plot)
 
     def plot_disconnector2(self):
         unconnect(self.receiver.packageReady, self.plot_2)
         unconnect(self.second_data.package2Ready, self.plot_2)
-        unconnect(self.second_data.package3Ready, self.plot_2)
+        unconnect(self.second_data.package3bReady, self.plot_2)
 
     def running_refresher1(self):
         if not self.start_plot1.isEnabled():
             self.plot_breaker1()
             self.plot_starter1()
+        if self.QComboBox_1.currentText() == 'Distance':
+            self.refresh_x1.setEnabled(True)
+        else:
+            self.refresh_x1.setEnabled(False)
 
     def running_refresher2(self):
+        if not self.start_plot2.isEnabled():
+            self.plot_breaker2()
+            self.plot_starter2()
+        if self.QComboBox_2.currentText() == 'Distance':
+            self.refresh_x2.setEnabled(True)
+        else:
+            self.refresh_x2.setEnabled(False)
+
+    def refresh_x1_refresher(self):
+        if not self.start_plot1.isEnabled():
+            self.plot_breaker1()
+            self.plot_starter1()
+
+    def refresh_x2_refresher(self):
         if not self.start_plot2.isEnabled():
             self.plot_breaker2()
             self.plot_starter2()
@@ -272,6 +311,16 @@ class UI(QMainWindow):
         else:
             self.receiver.packageReady.connect(self.second_data.irf)
         if self.request1 == 3 or self.request2 == 3:
+            self.second_data.t0 = time.time()
+            self.second_data.time_stamps, self.second_data.maxima = list(), list()
+            if self.refresh_x1.isChecked():
+                self.second_data.refresh_x1 = True
+            else:
+                self.second_data.refresh_x1 = False
+            if self.refresh_x2.isChecked():
+                self.second_data.refresh_x2 = True
+            else:
+                self.second_data.refresh_x2 = False
             self.second_data.package2Ready.connect(self.second_data.distance)
         else:
             unconnect(self.second_data.package2Ready, self.second_data.distance)

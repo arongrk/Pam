@@ -3,6 +3,7 @@ from socket import *
 import numpy as np
 from math import trunc
 from scipy.fft import fft, ifft
+from scipy.interpolate import BarycentricInterpolator as bary
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
@@ -125,7 +126,13 @@ def zero_padding(t, y, fLim, NZP):
     yData = np.real(ifft(YZP)*NZP)
     tData = (np.arange(0, NZP) / fs * Ly/NZP + t[1])
 
-    return yData, tData
+    return tData, yData
 
 
-# def my_zero_padding(data, +)
+def polynom_interp_max(t, y, accuracy: int):
+    max_values_index = np.sort(np.argsort(y)[-3:])
+    interp = bary(t[max_values_index], y[max_values_index])
+    steps = np.arange(t[max_values_index[0]], t[max_values_index[2]], (t[2]-t[1])/accuracy)
+    exact_maximum = steps[interp(steps).argmax()]
+    return exact_maximum
+
