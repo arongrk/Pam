@@ -17,7 +17,7 @@ from collections import deque
 
 # from hacker import Hacker
 import definitions
-from PamsFunctions import Handler, averager, unconnect, zero_padding, polynom_interp_max
+from PamsFunctions import Handler, averager, unconnect, zero_padding, polynom_interp_max, exact_polynom_interp_max
 
 
 class Receiver(QThread):
@@ -99,8 +99,16 @@ class SecondData(QObject):
         data = zero_padding(data[0], data[1], 2.4e+09, 16080)
         # print(find_peaks(data[1]))
         # print(np.argsort(data[1][:5000])[-3:])
+
+        # Uncomment to use no polynomial interpolation:
         # self.maxima.append(data[0][data[1].argmax()])
-        self.maxima.append(polynom_interp_max(data[0][:int(len(data[0])/2)], data[1][:int(len(data[0])/2)], 50))
+
+        # Comment to use mathematics method
+        self.maxima.append(polynom_interp_max(data[0][:int(len(data[0])/2)], data[1][:int(len(data[0])/2)]), 50)
+
+        # Uncomment to use mathematics method:
+        # self.maxima.append(exact_polynom_interp_max(data[0][:int(len(data[0])/2)], data[1][:int(len(data[0])/2)]))
+
         self.time_stamps.append(round(time.time() - self.t0, 5))
         if self.refresh_x1:
             self.package3aReady.emit((self.time_stamps[-1000:], self.maxima[-1000:]))
@@ -110,7 +118,6 @@ class SecondData(QObject):
             self.package3bReady.emit((self.time_stamps[-1000:], self.maxima[-1000:]))
         else:
             self.package3bReady.emit((self.time_stamps, self.maxima))
-
 
     def option_3(self, data):
         pass

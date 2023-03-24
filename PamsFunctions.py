@@ -4,6 +4,8 @@ import numpy as np
 from math import trunc
 from scipy.fft import fft, ifft
 from scipy.interpolate import BarycentricInterpolator as bary
+from sympy.solvers import solve
+from sympy import Symbol
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
@@ -136,3 +138,36 @@ def polynom_interp_max(t, y, accuracy: int):
     exact_maximum = steps[interp(steps).argmax()]
     return exact_maximum
 
+
+def exact_polynom_interp_max(t_data, y_data):
+    if np.shape(t_data) != np.shape(y_data):
+        raise ValueError('t_data and y_data are not the same shape!')
+
+    t, y = t_data, y_data
+
+    # Get the sorted indexes of the three highest y-Values
+    m_i = np.sort(np.argsort(y)[-3:])
+
+    # load the x and y values into x_ and y_
+    x_ = [t[m_i[0]], t[m_i[1]], t[m_i[2]]]
+    y_ = [y[m_i[0]], y[m_i[1]], y[m_i[2]]]
+
+    # Create the numpy arrays as basis for the equations
+    x_array = np.array(([1, x_[0], x_[0]**2], [1, x_[1], x_[1]**2], [1, x_[2], x_[2]**2]))
+
+    # Solve for the prefactors for 1, x and x²
+    factors = np.linalg.solve(x_array, y_)
+
+    # Get the first differentiation
+    x = -factors[1]/(factors[2]*2)
+    return x
+
+
+if __name__ == '__main__':
+    # tries = 1000
+    # t0 = time.time()
+    # for i in range(tries):
+    #     maximum = polynomial_interpolation([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+    #                                        [1, 1, 1, 6, 8, 7, 1, 1, 1, 1])
+    # print((time.time()-t0) / tries * 1000, maximum)
+    pass
