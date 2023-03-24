@@ -11,7 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Pam</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>pam_logo.jpg</normaloff>pam_logo.jpg</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabWidget">
@@ -43,9 +47,9 @@
        <item row="1" column="1">
         <layout class="QGridLayout" name="gridLayout_4">
          <item row="3" column="0">
-          <widget class="QLabel" name="label_13">
+          <widget class="QLabel" name="label_12">
            <property name="text">
-            <string>TextLabel</string>
+            <string>Plot1</string>
            </property>
           </widget>
          </item>
@@ -66,17 +70,39 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_12">
-           <property name="text">
-            <string>Plot1</string>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_15">
            <property name="text">
             <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QComboBox" name="QComboBox_1">
+           <item>
+            <property name="text">
+             <string>Raw data</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>IRF</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Distance</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QCheckBox" name="refresh_x1">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Refresh X</string>
            </property>
           </widget>
          </item>
@@ -97,24 +123,19 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="0">
-          <widget class="QComboBox" name="QComboBox_1">
-           <item>
-            <property name="text">
-             <string>Raw data</string>
-            </property>
-           </item>
-          </widget>
-         </item>
         </layout>
-       </item>
-       <item row="2" column="0">
-        <widget class="PlotWidget" name="graph2" native="true"/>
        </item>
        <item row="2" column="1">
         <layout class="QGridLayout" name="gridLayout_5">
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_19">
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_22">
+           <property name="text">
+            <string>Plot2</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_18">
            <property name="text">
             <string>TextLabel</string>
            </property>
@@ -124,26 +145,19 @@
           <widget class="QComboBox" name="QComboBox_2">
            <item>
             <property name="text">
-             <string>average</string>
+             <string>Raw data</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>option 2</string>
+             <string>IRF</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>option 3</string>
+             <string>Distance</string>
             </property>
            </item>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_17">
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
           </widget>
          </item>
          <item row="7" column="0">
@@ -156,24 +170,20 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_22">
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_19">
            <property name="text">
-            <string>Plot2</string>
+            <string>TextLabel</string>
            </property>
           </widget>
          </item>
          <item row="6" column="0">
           <widget class="QPushButton" name="start_plot2">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Start</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_18">
-           <property name="text">
-            <string>TextLabel</string>
            </property>
           </widget>
          </item>
@@ -181,6 +191,16 @@
           <widget class="QLabel" name="label_20">
            <property name="text">
             <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QCheckBox" name="refresh_x2">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Refresh X</string>
            </property>
           </widget>
          </item>
@@ -278,6 +298,9 @@
          </item>
         </layout>
        </item>
+       <item row="2" column="0">
+        <widget class="PlotWidget" name="graph2" native="true"/>
+       </item>
       </layout>
      </widget>
     </widget>
@@ -291,51 +314,172 @@
         <x>10</x>
         <y>10</y>
         <width>311</width>
-        <height>119</height>
+        <height>191</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="lineEdit_6"/>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Sequence repititions:</string>
+         </property>
+        </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEdit_5"/>
+        <widget class="QLineEdit" name="shifts_edit">
+         <property name="inputMask">
+          <string>0000000</string>
+         </property>
+         <property name="text">
+          <string>1280</string>
+         </property>
+        </widget>
        </item>
-       <item row="3" column="0">
+       <item row="5" column="0">
         <widget class="QLabel" name="label_7">
          <property name="text">
           <string>Offset:</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="lineEdit_4"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_5">
+       <item row="6" column="1">
+        <widget class="QPushButton" name="refresh_config">
          <property name="text">
-          <string>Plot-Package Length:</string>
+          <string>Refresh Configuration</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_6">
+       <item row="5" column="1">
+        <widget class="QSpinBox" name="offset_edit"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_5">
          <property name="text">
-          <string>Intervall Size:</string>
+          <string>Samples per sequence:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="sr_edit">
+         <property name="inputMask">
+          <string>000000</string>
+         </property>
+         <property name="text">
+          <string>2</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_23">
+         <property name="text">
+          <string>Shifts:</string>
          </property>
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QSpinBox" name="spinBox"/>
+        <widget class="QLineEdit" name="sps_edit">
+         <property name="inputMask">
+          <string>00000000</string>
+         </property>
+         <property name="text">
+          <string>16</string>
+         </property>
+        </widget>
        </item>
-       <item row="0" column="0">
+       <item row="0" column="1">
         <widget class="QLabel" name="label_4">
          <property name="text">
-          <string>UDP-Package Length:</string>
+          <string>Configure Interpretation</string>
          </property>
         </widget>
        </item>
       </layout>
+     </widget>
+     <widget class="QWidget" name="gridLayoutWidget_4">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>10</y>
+        <width>311</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="5" column="1">
+        <widget class="QPushButton" name="pushButton_2">
+         <property name="text">
+          <string>Update FPGA</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_24">
+         <property name="text">
+          <string>Samples per sequence:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lineEdit_9"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_28">
+         <property name="text">
+          <string>Shifts:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="lineEdit_7"/>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="lineEdit_2"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_26">
+         <property name="text">
+          <string>Offset:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QSpinBox" name="spinBox_2"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_27">
+         <property name="text">
+          <string>Sequence repititions:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QWidget" name="widget_3" native="true"/>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="label_25">
+         <property name="styleSheet">
+          <string notr="true">color: red
+</string>
+         </property>
+         <property name="text">
+          <string>In the making!</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="Line" name="line">
+      <property name="geometry">
+       <rect>
+        <x>390</x>
+        <y>20</y>
+        <width>20</width>
+        <height>181</height>
+       </rect>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_3">
@@ -494,10 +638,9 @@
   <tabstop>QComboBox_2</tabstop>
   <tabstop>start_plot2</tabstop>
   <tabstop>stop_plot2</tabstop>
-  <tabstop>lineEdit_4</tabstop>
-  <tabstop>lineEdit_5</tabstop>
-  <tabstop>lineEdit_6</tabstop>
-  <tabstop>spinBox</tabstop>
+  <tabstop>shifts_edit</tabstop>
+  <tabstop>sps_edit</tabstop>
+  <tabstop>offset_edit</tabstop>
   <tabstop>tabWidget</tabstop>
  </tabstops>
  <resources/>
