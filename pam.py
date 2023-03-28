@@ -61,6 +61,7 @@ class Receiver(QThread):
                 self.packageLost.emit()
             else:
                 yData = np.absolute(np.frombuffer(r, dtype=np.int32)) * 8.192 / pow(2, 18)
+                # yData = np.frombuffer(r, dtype=np.int32) * 8.192 / pow(2, 18)
                 xData = np.arange(0, (1000 * self.set_len)/4.9e+06, 1000/4.9e+06)
                 self.packageReady.emit((xData, yData))
         self.socket.close()
@@ -89,26 +90,19 @@ class SecondData(QObject):
     def irf(self, data):
         yData = averager(data[1], self.shifts, self.sps, self.sr)
         yData = yData - np.average(yData[len(yData)-100:])
-        xData = np.arange(1, self.shifts + 1) / 5e+09
+        xData = np.arange(1, self.shifts+1) / 5e+09
         # data = zero_padding(xData, yData, 2.4e+09, 16080)
         # print(find_peaks(data[1], height=0.05))
         # self.package2Ready.emit((data[0], data[1]))
         self.package2Ready.emit((xData, yData))
 
     def distance(self, data):
-        data = zero_padding(data[0], data[1], 2.4e+09, 16080)
+        data = zero_padding(data[0], data[1], 2.4e+09, 8160)
         # print(find_peaks(data[1]))
         # print(np.argsort(data[1][:5000])[-3:])
-
-        # Uncomment to use no polynomial interpolation:
         # self.maxima.append(data[0][data[1].argmax()])
-
-        # Comment to use mathematics method
-        self.maxima.append(polynom_interp_max(data[0][:int(len(data[0])/2)], data[1][:int(len(data[0])/2)]), 50)
-
-        # Uncomment to use mathematics method:
-        # self.maxima.append(exact_polynom_interp_max(data[0][:int(len(data[0])/2)], data[1][:int(len(data[0])/2)]))
-
+        # self.maxima.append(polynom_interp_max(data[0][:int(len(data[0])/2)], data[1][:int(len(data[0])/2)], 50))
+        self.maxima.append(exact_polynom_interp_max(data[0][:int(len(data[0])/2)], data[1][:int(len(data[0])/2)]))
         self.time_stamps.append(round(time.time() - self.t0, 5))
         if self.refresh_x1:
             self.package3aReady.emit((self.time_stamps[-1000:], self.maxima[-1000:]))
@@ -118,6 +112,7 @@ class SecondData(QObject):
             self.package3bReady.emit((self.time_stamps[-1000:], self.maxima[-1000:]))
         else:
             self.package3bReady.emit((self.time_stamps, self.maxima))
+
 
     def option_3(self, data):
         pass
