@@ -314,69 +314,28 @@
         <x>10</x>
         <y>10</y>
         <width>311</width>
-        <height>191</height>
+        <height>225</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>Sequence repititions:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="shifts_edit">
-         <property name="inputMask">
-          <string>0000000</string>
-         </property>
-         <property name="text">
-          <string>1280</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_7">
-         <property name="text">
-          <string>Offset:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
+       <item row="7" column="1">
         <widget class="QPushButton" name="refresh_config">
          <property name="text">
           <string>Refresh Configuration</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
-        <widget class="QSpinBox" name="offset_edit"/>
-       </item>
-       <item row="3" column="0">
+       <item row="4" column="0">
         <widget class="QLabel" name="label_5">
          <property name="text">
           <string>Samples per sequence:</string>
          </property>
         </widget>
        </item>
+       <item row="6" column="1">
+        <widget class="QSpinBox" name="offset_edit"/>
+       </item>
        <item row="4" column="1">
-        <widget class="QLineEdit" name="sr_edit">
-         <property name="inputMask">
-          <string>000000</string>
-         </property>
-         <property name="text">
-          <string>2</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_23">
-         <property name="text">
-          <string>Shifts:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
         <widget class="QLineEdit" name="sps_edit">
          <property name="inputMask">
           <string>00000000</string>
@@ -386,11 +345,88 @@
          </property>
         </widget>
        </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Sequence repititions:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="shifts_edit">
+         <property name="inputMask">
+          <string>0000000</string>
+         </property>
+         <property name="text">
+          <string>1280</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLineEdit" name="sr_edit">
+         <property name="inputMask">
+          <string>000000</string>
+         </property>
+         <property name="text">
+          <string>2</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Offset:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_23">
+         <property name="text">
+          <string>Shifts:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_13">
+         <property name="text">
+          <string>Length:</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="1">
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string>Configure Interpretation</string>
          </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="length_edit">
+         <item>
+          <property name="text">
+           <string>8160</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>16080</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>32640</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>64320</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>92460</string>
+          </property>
+         </item>
         </widget>
        </item>
       </layout>

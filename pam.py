@@ -1,10 +1,10 @@
+import socket
+import pickle
 import sys
-
 import numpy as np
 from scipy.signal import find_peaks
 import time
 import struct
-import socket
 import tomllib
 import tomlkit
 
@@ -17,7 +17,8 @@ from collections import deque
 
 # from hacker import Hacker
 import definitions
-from PamsFunctions import Handler, averager, unconnect, zero_padding, polynom_interp_max, exact_polynom_interp_max
+from PamsFunctions import Handler, averager, change_dict, polynom_interp_max, exact_polynom_interp_max, unconnect, \
+    zero_padding
 
 
 class Receiver(QThread):
@@ -32,8 +33,8 @@ class Receiver(QThread):
 
         self.ip = ip_address
         self.port = port
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 2**18)
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 2 ** 18)
 
         self.shifts = shifts
         self.s_reps = sequence_repetitions
@@ -45,7 +46,7 @@ class Receiver(QThread):
     def connect(self):
         try:
             self.st_connecting.emit()
-            self.socket.bind((self.ip, self.port))
+            self.sock.bind((self.ip, self.port))
             self.st_connected.emit()
         except OSError:
             self.st_connect_failed.emit('os')
@@ -53,7 +54,7 @@ class Receiver(QThread):
             self.st_connect_failed.emit('type')
 
     def run(self):
-        handler = Handler(self.socket, shifts=self.shifts, sequence_reps=self.s_reps, samples_per_sequence=self.sps)
+        handler = Handler(self.sock, shifts=self.shifts, sequence_reps=self.s_reps, samples_per_sequence=self.sps)
         g = handler.assembler_2()
         while not self.stop_receive:
             r = next(g)
@@ -64,7 +65,7 @@ class Receiver(QThread):
                 # yData = np.frombuffer(r, dtype=np.int32) * 8.192 / pow(2, 18)
                 xData = np.arange(0, (1000 * self.set_len)/4.9e+06, 1000/4.9e+06)
                 self.packageReady.emit((xData, yData))
-        self.socket.close()
+        self.sock.close()
 
     def stop(self):
         self.stop_receive = True
@@ -97,7 +98,7 @@ class SecondData(QObject):
         self.package2Ready.emit((xData, yData))
 
     def distance(self, data):
-        data = zero_padding(data[0], data[1], 2.4e+09, 8160)
+        data = zero_padding(data[0], data[1], 2.4e+09, 16080)
         # print(find_peaks(data[1]))
         # print(np.argsort(data[1][:5000])[-3:])
         # self.maxima.append(data[0][data[1].argmax()])
@@ -128,10 +129,17 @@ class UI(QMainWindow):
         # Load the ui file
         uic.loadUi('resources/Mainwindow.ui', self)
 
-        # Getting the parameters for data interpreting
-        self.samples_per_sequence = int(self.sps_edit.text())
-        self.sequence_reps = int(self.sr_edit.text())
-        self.shifts = int(self.shifts_edit.text())
+        # Loading the values and getting the parameters for data interpreting
+        with open('configurations.bin', 'rb') as f:
+            self.values = pickle.load(f)
+        self.samples_per_sequence = self.values['samples_per_sequence']
+        self.sequence_reps = self.values['sequence_reps']
+        self.shifts = self.values['shifts']
+        self.length = self.values['length']
+        self.sps_edit.setText(str(self.samples_per_sequence))
+        self.sr_edit.setText(str(self.sequence_reps))
+        self.shifts_edit.setText(str(self.shifts))
+        self.length_edit.setCurrentText(str(self.length))
         self.refresh_config.clicked.connect(self.refresh_configuration)
         self.xData = np.arange(1, self.shifts * self.sequence_reps * self.samples_per_sequence + 1) / 5 * 10 ** 9
         self.xData2 = np.arange(0, 1280) / 5 * 10 ** 9
@@ -311,6 +319,7 @@ class UI(QMainWindow):
         if self.request1 <= 1 and self.request2 <= 1:
             unconnect(self.receiver.packageReady, self.second_data.irf)
         else:
+            unconnect(self.receiver.packageReady, self.second_data.irf)
             self.receiver.packageReady.connect(self.second_data.irf)
         if self.request1 == 3 or self.request2 == 3:
             self.second_data.t0 = time.time()
@@ -323,14 +332,17 @@ class UI(QMainWindow):
                 self.second_data.refresh_x2 = True
             else:
                 self.second_data.refresh_x2 = False
+            unconnect(self.second_data.package2Ready, self.second_data.distance)
             self.second_data.package2Ready.connect(self.second_data.distance)
         else:
             unconnect(self.second_data.package2Ready, self.second_data.distance)
         if self.request1 == 4 or self.request2 == 4:
+            unconnect(self.second_data.package2Ready, self.second_data.option_3)
             self.second_data.package2Ready.connect(self.second_data.option_3)
         else:
             unconnect(self.second_data.package2Ready, self.second_data.option_3)
         if self.request1 == 5 or self.request2 == 5:
+            unconnect(self.second_data.package2Ready, self.second_data.option_4)
             self.second_data.package2Ready.connect(self.second_data.option_4)
         else:
             unconnect(self.second_data.package2Ready, self.second_data.option_4)
@@ -416,6 +428,10 @@ class UI(QMainWindow):
         self.samples_per_sequence = int(self.sps_edit.text())
         self.sequence_reps = int(self.sr_edit.text())
         self.shifts = int(self.shifts_edit.text())
+        self.length = int(self.length_edit.currentText())
+        with open('configurations.bin', 'wb') as f:
+            pickle.dump(change_dict(self.values, self.shifts, self.samples_per_sequence, self.sequence_reps,
+                                    self.length), f)
         self.second_data.sps = self.samples_per_sequence
         self.second_data.sr = self.sequence_reps
         self.second_data.shifts = self.shifts

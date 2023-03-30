@@ -163,6 +163,17 @@ def exact_polynom_interp_max(t_data, y_data):
     return x
 
 
+def change_dict(dictionary: dict, *args):
+    d = dictionary
+    k_list = list(d.keys())
+    if len(d) != len(args):
+        raise ValueError(f'Dictionary length and args must be the same, found: {len(d), len(args)}')
+    for i in range(len(args)):
+        d[k_list[i]] = args[i]
+    return d
+
+
+
 if __name__ == '__main__':
     # tries = 1000
     # t0 = time.time()
@@ -170,4 +181,9 @@ if __name__ == '__main__':
     #     maximum = polynomial_interpolation([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
     #                                        [1, 1, 1, 6, 8, 7, 1, 1, 1, 1])
     # print((time.time()-t0) / tries * 1000, maximum)
+    test_dict = {'name': 'bron', 'age': 18, 'height': 195}
+    test_dict_c = change_dict(test_dict, 1, 2, 3)
+    print(test_dict_c)
+
+
     pass
