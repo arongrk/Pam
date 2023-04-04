@@ -12,13 +12,50 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5 import uic
-from pyqtgraph import mkPen, PlotWidget, DateAxisItem
+from pyqtgraph import mkPen, AxisItem # PlotWidget, DateAxisItem
 from collections import deque
 
 # from hacker import Hacker
 import definitions
-from PamsFunctions import Handler, averager, change_dict, polynom_interp_max, exact_polynom_interp_max, unconnect, \
+from pams_functions import Handler, averager, change_dict, polynom_interp_max, exact_polynom_interp_max, unconnect, \
     zero_padding
+
+
+class CustomAxis(AxisItem):
+    @property
+    def nudge(self):
+        if not hasattr(self, "_nudge"):
+            self._nudge = -5
+        return self._nudge
+
+    @nudge.setter
+    def nudge(self, nudge):
+        self._nudge = nudge
+        s = self.size()
+        # call resizeEvent indirectly
+        self.resize(s + QSizeF(1, 1))
+        self.resize(s)
+
+    def resizeEvent(self, ev=None):
+        # s = self.size()
+
+        ## Set the position of the label
+        br = self.label.boundingRect()
+        p = QPointF(0, 0)
+        if self.orientation == "left":
+            p.setY(int(self.size().height() / 2 + br.width() / 2))
+            p.setX(-self.nudge)
+        elif self.orientation == "right":
+            p.setY(int(self.size().height() / 2 + br.width() / 2))
+            p.setX(int(self.size().width() - br.height() + self.nudge))
+        elif self.orientation == "top":
+            p.setY(-self.nudge)
+            p.setX(int(self.size().width() / 2.0 - br.width() / 2.0))
+        elif self.orientation == "bottom":
+            p.setX(int(self.size().width() / 2.0 - br.width() / 2.0))
+            p.setY(int(self.size().height() - br.height() + self.nudge))
+        self.label.setPos(p)
+        self.picture = None
 
 
 class Receiver(QThread):
@@ -78,7 +115,7 @@ class SecondData(QObject):
     package3aReady = pyqtSignal(tuple)
     package3bReady = pyqtSignal(tuple)
 
-    def __init__(self, samples_per_sequence, shifts, sequence_reps):
+    def __init__(self, samples_per_sequence, shifts, sequence_reps, last_n_values_plot1, last_n_values_plot2):
         QObject.__init__(self)
         self.sps = samples_per_sequence
         self.shifts = shifts
@@ -87,6 +124,8 @@ class SecondData(QObject):
         self.refresh_x2 = False
         self.t0 = time.time()
         self.maxima, self.time_stamps = list(), list()
+        self.last_values1 = last_n_values_plot1
+        self.last_values2 = last_n_values_plot2
 
     def irf(self, data):
         yData = averager(data[1], self.shifts, self.sps, self.sr)
@@ -106,11 +145,11 @@ class SecondData(QObject):
         self.maxima.append(exact_polynom_interp_max(data[0][:int(len(data[0])/2)], data[1][:int(len(data[0])/2)]))
         self.time_stamps.append(round(time.time() - self.t0, 5))
         if self.refresh_x1:
-            self.package3aReady.emit((self.time_stamps[-1000:], self.maxima[-1000:]))
+            self.package3aReady.emit((self.time_stamps[-self.last_values1:], self.maxima[-self.last_values1:]))
         else:
             self.package3aReady.emit((self.time_stamps, self.maxima))
         if self.refresh_x2:
-            self.package3bReady.emit((self.time_stamps[-1000:], self.maxima[-1000:]))
+            self.package3bReady.emit((self.time_stamps[-self.last_values2:], self.maxima[-self.last_values2:]))
         else:
             self.package3bReady.emit((self.time_stamps, self.maxima))
 
@@ -136,10 +175,14 @@ class UI(QMainWindow):
         self.sequence_reps = self.values['sequence_reps']
         self.shifts = self.values['shifts']
         self.length = self.values['length']
+        self.last_n_values1 = self.values['last_values1']
+        self.last_n_values2 = self.values['last_values2']
         self.sps_edit.setText(str(self.samples_per_sequence))
         self.sr_edit.setText(str(self.sequence_reps))
         self.shifts_edit.setText(str(self.shifts))
         self.length_edit.setCurrentText(str(self.length))
+        self.last_values1.setValue(self.last_n_values1)
+        self.last_values2.setValue(self.last_n_values2)
         self.refresh_config.clicked.connect(self.refresh_configuration)
         self.xData = np.arange(1, self.shifts * self.sequence_reps * self.samples_per_sequence + 1) / 5 * 10 ** 9
         self.xData2 = np.arange(0, 1280) / 5 * 10 ** 9
@@ -147,9 +190,13 @@ class UI(QMainWindow):
         # Configuring both plot-widgets
         pen = mkPen(color=(0, 0, 0), width=1)
         self.graph1.setBackground('w')
+        self.graph1.setAxisItems(axisItems={'bottom': CustomAxis(orientation='bottom'),
+                                            'left': CustomAxis(orientation='left')})
         self.line1 = self.graph1.plot(self.xData, np.zeros(len(self.xData)), pen=pen)
 
         self.graph2.setBackground('w')
+        self.graph2.setAxisItems(axisItems={'bottom': CustomAxis(orientation='bottom'),
+                                            'left': CustomAxis(orientation='left')})
         self.line2 = self.graph2.plot(self.xData2, np.zeros(len(self.xData2)), pen=pen)
 
         # Setting up the IP and Port inputs and values:
@@ -183,7 +230,8 @@ class UI(QMainWindow):
 
         # Setting up the SecondData class
         self.second_thread = QThread()
-        self.second_data = SecondData(self.samples_per_sequence, self.shifts, self.sequence_reps)
+        self.second_data = SecondData(self.samples_per_sequence, self.shifts, self.sequence_reps,
+                                      self.last_n_values1, self.last_n_values2)
         self.second_data.moveToThread(self.second_thread)
         self.second_thread.start()
         self.start_plot2.clicked.connect(self.plot_starter2)
@@ -196,6 +244,10 @@ class UI(QMainWindow):
         # Refreshing weather x should be refreshed or not
         self.refresh_x1.stateChanged.connect(self.refresh_x1_refresher)
         self.refresh_x2.stateChanged.connect(self.refresh_x2_refresher)
+
+        # Refreshing how many last values are displayed
+        self.last_values1.valueChanged.connect(self.last_values_changer1)
+        self.last_values2.valueChanged.connect(self.last_values_changer2)
 
         # Setting up the plot timer:
         self.timer = QTimer()
@@ -224,10 +276,16 @@ class UI(QMainWindow):
         box = self.QComboBox_1.currentText()
         if box == 'Raw data':
             self.request1 = 1
+            self.graph1.setTitle('Raw data')
+            # self.graph1.getAxis('bottom').setLabel('Time', units='ms')
         if box == 'IRF':
             self.request1 = 2
+            self.graph1.setTitle('IRF data')
+            # self.graph1.getAxis('bottom').setLabel('Time', units='ms')
         if box == 'Distance':
             self.request1 = 3
+            self.graph1.setTitle('Distance')
+            self.graph1.getAxis('bottom').setLabel('Time', units='s')
         self.data_connector()
         # self.xdata_refresher()
         self.plot_connector1()
@@ -238,10 +296,20 @@ class UI(QMainWindow):
         box = self.QComboBox_2.currentText()
         if box == 'Raw data':
             self.request2 = 1
+            self.graph2.setTitle('Raw Data')
+            self.graph2.getAxis('left').setLabel('Voltage')
+            self.graph2.getAxis('bottom').setLabel('Time', units='ms')
+            self.graph2.getAxis('left').setLabel('Voltage', units='v')
         if box == 'IRF':
             self.request2 = 2
+            self.graph2.setTitle('IRF Data')
+            self.graph2.getAxis('bottom').setLabel('Time', units='ms')
+            self.graph2.getAxis('left').setLabel('Voltage', units='v')
         if box == 'Distance':
             self.request2 = 3
+            self.graph2.setTitle('Distance')
+            self.graph2.getAxis('bottom').setLabel('Time', units='s')
+            self.graph2.getAxis('left').setLabel('Distance', units='m')
         self.data_connector()
         self.plot_connector2()
         self.stop_plot2.setEnabled(True)
@@ -292,8 +360,10 @@ class UI(QMainWindow):
             self.plot_starter1()
         if self.QComboBox_1.currentText() == 'Distance':
             self.refresh_x1.setEnabled(True)
+            self.last_values1.setEnabled(True)
         else:
             self.refresh_x1.setEnabled(False)
+            self.last_values1.setEnabled(False)
 
     def running_refresher2(self):
         if not self.start_plot2.isEnabled():
@@ -301,8 +371,10 @@ class UI(QMainWindow):
             self.plot_starter2()
         if self.QComboBox_2.currentText() == 'Distance':
             self.refresh_x2.setEnabled(True)
+            self.last_values2.setEnabled(True)
         else:
             self.refresh_x2.setEnabled(False)
+            self.last_values2.setEnabled(False)
 
     def refresh_x1_refresher(self):
         if not self.start_plot1.isEnabled():
@@ -313,6 +385,12 @@ class UI(QMainWindow):
         if not self.start_plot2.isEnabled():
             self.plot_breaker2()
             self.plot_starter2()
+
+    def last_values_changer1(self, value):
+        self.second_data.last_values1 = value
+
+    def last_values_changer2(self, value):
+        self.second_data.last_values2 = value
 
     # Maybe double connections!!:
     def data_connector(self):
@@ -431,7 +509,7 @@ class UI(QMainWindow):
         self.length = int(self.length_edit.currentText())
         with open('configurations.bin', 'wb') as f:
             pickle.dump(change_dict(self.values, self.shifts, self.samples_per_sequence, self.sequence_reps,
-                                    self.length), f)
+                                    self.length, self.last_n_values1, self.last_n_values2), f)
         self.second_data.sps = self.samples_per_sequence
         self.second_data.sr = self.sequence_reps
         self.second_data.shifts = self.shifts

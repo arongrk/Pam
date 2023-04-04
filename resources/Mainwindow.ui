@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>809</width>
-    <height>609</height>
+    <width>883</width>
+    <height>672</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,8 +23,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>801</width>
-      <height>581</height>
+      <width>881</width>
+      <height>651</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -39,34 +39,62 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>781</width>
-        <height>541</height>
+        <width>861</width>
+        <height>611</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,6,6" columnstretch="8,0">
        <item row="1" column="1">
         <layout class="QGridLayout" name="gridLayout_4">
          <item row="3" column="0">
-          <widget class="QLabel" name="label_12">
-           <property name="text">
-            <string>Plot1</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QLabel" name="label_14">
+             <property name="text">
+              <string>Display last</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="last_values1">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximum">
+              <number>5000</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_17">
+             <property name="text">
+              <string>values</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_14">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_16">
            <property name="text">
             <string>TextLabel</string>
            </property>
           </widget>
          </item>
-         <item row="7" column="0">
-          <widget class="QPushButton" name="stop_plot1">
+         <item row="4" column="0">
+          <widget class="QCheckBox" name="refresh_x1">
            <property name="enabled">
             <bool>false</bool>
            </property>
            <property name="text">
-            <string>Stop</string>
+            <string>Refresh X</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_12">
+           <property name="text">
+            <string>Plot1</string>
            </property>
           </widget>
          </item>
@@ -76,6 +104,48 @@
             <string>TextLabel</string>
            </property>
           </widget>
+         </item>
+         <item row="6" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <item>
+            <widget class="QPushButton" name="stop_plot1">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Stop</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="start_plot1">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Start</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item row="5" column="0">
           <widget class="QComboBox" name="QComboBox_1">
@@ -96,51 +166,10 @@
            </item>
           </widget>
          </item>
-         <item row="4" column="0">
-          <widget class="QCheckBox" name="refresh_x1">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Refresh X</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QPushButton" name="start_plot1">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Start</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_16">
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
         </layout>
        </item>
        <item row="2" column="1">
         <layout class="QGridLayout" name="gridLayout_5">
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_22">
-           <property name="text">
-            <string>Plot2</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_18">
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
          <item row="5" column="0">
           <widget class="QComboBox" name="QComboBox_2">
            <item>
@@ -160,13 +189,10 @@
            </item>
           </widget>
          </item>
-         <item row="7" column="0">
-          <widget class="QPushButton" name="stop_plot2">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_22">
            <property name="text">
-            <string>Stop</string>
+            <string>Plot2</string>
            </property>
           </widget>
          </item>
@@ -174,16 +200,6 @@
           <widget class="QLabel" name="label_19">
            <property name="text">
             <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QPushButton" name="start_plot2">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Start</string>
            </property>
           </widget>
          </item>
@@ -204,10 +220,71 @@
            </property>
           </widget>
          </item>
+         <item row="3" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
+            <widget class="QLabel" name="label_18">
+             <property name="text">
+              <string>Display last</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="last_values2">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximum">
+              <number>5000</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_29">
+             <property name="text">
+              <string>values</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="6" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <widget class="QPushButton" name="stop_plot2">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Stop</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="start_plot2">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>65</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Start</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
         </layout>
-       </item>
-       <item row="1" column="0">
-        <widget class="PlotWidget" name="graph1" native="true"/>
        </item>
        <item row="0" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1,5,1">
@@ -300,6 +377,9 @@
        </item>
        <item row="2" column="0">
         <widget class="PlotWidget" name="graph2" native="true"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="PlotWidget" name="graph1" native="true"/>
        </item>
       </layout>
      </widget>
@@ -669,11 +749,7 @@
   <tabstop>senport</tabstop>
   <tabstop>refresh</tabstop>
   <tabstop>QComboBox_1</tabstop>
-  <tabstop>start_plot1</tabstop>
-  <tabstop>stop_plot1</tabstop>
   <tabstop>QComboBox_2</tabstop>
-  <tabstop>start_plot2</tabstop>
-  <tabstop>stop_plot2</tabstop>
   <tabstop>shifts_edit</tabstop>
   <tabstop>sps_edit</tabstop>
   <tabstop>offset_edit</tabstop>

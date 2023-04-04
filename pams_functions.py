@@ -4,6 +4,7 @@ import numpy as np
 from math import trunc
 from scipy.fft import fft, ifft
 from scipy.interpolate import BarycentricInterpolator as bary
+from scipy.constants import speed_of_light
 from sympy.solvers import solve
 from sympy import Symbol
 from PyQt5.QtCore import *
@@ -160,6 +161,7 @@ def exact_polynom_interp_max(t_data, y_data):
 
     # Get the first differentiation
     x = -factors[1]/(factors[2]*2)
+    x = x/2 * speed_of_light - 2.9011
     return x
 
 
