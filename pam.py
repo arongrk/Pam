@@ -3,10 +3,12 @@ import pickle
 import sys
 import numpy as np
 from scipy.signal import find_peaks
+from scipy.fft import fft, ifft
 import time
 import struct
 import tomllib
 import tomlkit
+from math import ceil
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -65,7 +67,7 @@ class Receiver(QThread):
     st_connect_failed = pyqtSignal(str)
     packageLost = pyqtSignal()
 
-    def __init__(self, shifts, sequence_repetitions, samples_per_sequence, port=9090, ip_address='192.168.1.1', ):
+    def __init__(self, shifts, sequence_repetitions, samples_per_sequence, length, port=9090, ip_address='192.168.1.1'):
         QThread.__init__(self)
 
         self.ip = ip_address
@@ -76,6 +78,7 @@ class Receiver(QThread):
         self.shifts = shifts
         self.s_reps = sequence_repetitions
         self.sps = samples_per_sequence
+        self.mes_len = length
         self.set_len = self.shifts * self.s_reps * self.sps
 
         self.stop_receive = False
@@ -91,16 +94,18 @@ class Receiver(QThread):
             self.st_connect_failed.emit('type')
 
     def run(self):
-        handler = Handler(self.sock, shifts=self.shifts, sequence_reps=self.s_reps, samples_per_sequence=self.sps)
+        handler = Handler(self.sock, shifts=ceil(self.shifts/80)*80, sequence_reps=self.s_reps,
+                          samples_per_sequence=self.sps)
         g = handler.assembler_2()
         while not self.stop_receive:
             r = next(g)
             if not r:
                 self.packageLost.emit()
             else:
-                yData = np.absolute(np.frombuffer(r, dtype=np.int32)) * 8.192 / pow(2, 18)
+                yData = np.absolute(np.frombuffer(r, dtype=np.int32)[:self.set_len]) * 8.192 / pow(2, 18)
                 # yData = np.frombuffer(r, dtype=np.int32) * 8.192 / pow(2, 18)
-                xData = np.arange(0, (1000 * self.set_len)/4.9e+06, 1000/4.9e+06)
+                # xData = np.arange(0, self.set_len*1000/4.9e+06, 1000/4.9e+06)
+                xData = np.linspace(0, self.mes_len/self.sps*2e-10*self.set_len, self.set_len)
                 self.packageReady.emit((xData, yData))
         self.sock.close()
 
@@ -115,15 +120,16 @@ class SecondData(QObject):
     package3aReady = pyqtSignal(tuple)
     package3bReady = pyqtSignal(tuple)
 
-    def __init__(self, samples_per_sequence, shifts, sequence_reps, last_n_values_plot1, last_n_values_plot2):
+    def __init__(self, samples_per_sequence, shifts, sequence_reps, length, last_n_values_plot1, last_n_values_plot2):
         QObject.__init__(self)
         self.sps = samples_per_sequence
         self.shifts = shifts
         self.sr = sequence_reps
+        self.mes_len = length
         self.refresh_x1 = False
         self.refresh_x2 = False
         self.t0 = time.time()
-        self.maxima, self.time_stamps = list(), list()
+        self.maxima, self.time_stamps = deque(maxlen=1000), deque(maxlen=1000)
         self.last_values1 = last_n_values_plot1
         self.last_values2 = last_n_values_plot2
 
@@ -131,13 +137,14 @@ class SecondData(QObject):
         yData = averager(data[1], self.shifts, self.sps, self.sr)
         yData = yData - np.average(yData[len(yData)-100:])
         xData = np.arange(1, self.shifts+1) / 5e+09
-        # data = zero_padding(xData, yData, 2.4e+09, 16080)
+        # yData = np.angle(fft(yData), deg=True)
+        # xData, yData = zero_padding(xData, yData, 2.4e+09, 16080)
         # print(find_peaks(data[1], height=0.05))
         # self.package2Ready.emit((data[0], data[1]))
         self.package2Ready.emit((xData, yData))
 
     def distance(self, data):
-        data = zero_padding(data[0], data[1], 2.4e+09, 16080)
+        data = zero_padding(data[0], data[1], 2.4e+09, 2**5*self.shifts)
         # print(find_peaks(data[1]))
         # print(np.argsort(data[1][:5000])[-3:])
         # self.maxima.append(data[0][data[1].argmax()])
@@ -189,6 +196,7 @@ class UI(QMainWindow):
 
         # Configuring both plot-widgets
         pen = mkPen(color=(0, 0, 0), width=1)
+
         self.graph1.setBackground('w')
         self.graph1.setAxisItems(axisItems={'bottom': CustomAxis(orientation='bottom'),
                                             'left': CustomAxis(orientation='left')})
@@ -211,7 +219,8 @@ class UI(QMainWindow):
         self.port_label.setText(f' Port: {self.port}')
 
         # Setting up the Receiver class
-        self.receiver = Receiver(self.shifts, self.sequence_reps, self.samples_per_sequence, self.port, self.ip)
+        self.receiver = Receiver(self.shifts, self.sequence_reps, self.samples_per_sequence,
+                                 self.length, self.port, self.ip)
         self.connect_button.clicked.connect(self.receiver.connect)
         self.receiver.st_connecting.connect(self.rec_connecting)
         self.receiver.st_connecting.connect(self.rec_connected)
@@ -230,7 +239,7 @@ class UI(QMainWindow):
 
         # Setting up the SecondData class
         self.second_thread = QThread()
-        self.second_data = SecondData(self.samples_per_sequence, self.shifts, self.sequence_reps,
+        self.second_data = SecondData(self.samples_per_sequence, self.shifts, self.sequence_reps, self.length,
                                       self.last_n_values1, self.last_n_values2)
         self.second_data.moveToThread(self.second_thread)
         self.second_thread.start()
@@ -259,9 +268,17 @@ class UI(QMainWindow):
         self.counter2 = 0
         self.counter_lost = 0
 
-
         self.request1 = 0
         self.request2 = 0
+
+        # Setting up the smoother window
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.__mousePos = None
+        self.close_button.clicked.connect(self.close)
+        self.maximize_button.clicked.connect(self.toggle_maximized)
+        self.minimize_button.clicked.connect(self.showMinimized)
+        with open('resources\pams_style.qss', 'r') as f:
+            self.setStyleSheet(f.read())
 
     def plot(self, data):
         self.line1.setData(data[0], data[1])
@@ -277,11 +294,13 @@ class UI(QMainWindow):
         if box == 'Raw data':
             self.request1 = 1
             self.graph1.setTitle('Raw data')
-            # self.graph1.getAxis('bottom').setLabel('Time', units='ms')
+            self.graph1.getAxis('bottom').setLabel('Time', units='s')
+            self.graph1.getAxis('left').setLabel('Voltage', units='v')
         if box == 'IRF':
             self.request1 = 2
             self.graph1.setTitle('IRF data')
-            # self.graph1.getAxis('bottom').setLabel('Time', units='ms')
+            self.graph1.getAxis('bottom').setLabel('Time', units='ms')
+            self.graph1.getAxis('left').setLabel('Voltage', units='v')
         if box == 'Distance':
             self.request1 = 3
             self.graph1.setTitle('Distance')
@@ -298,7 +317,7 @@ class UI(QMainWindow):
             self.request2 = 1
             self.graph2.setTitle('Raw Data')
             self.graph2.getAxis('left').setLabel('Voltage')
-            self.graph2.getAxis('bottom').setLabel('Time', units='ms')
+            self.graph2.getAxis('bottom').setLabel('Time', units='s')
             self.graph2.getAxis('left').setLabel('Voltage', units='v')
         if box == 'IRF':
             self.request2 = 2
@@ -360,10 +379,8 @@ class UI(QMainWindow):
             self.plot_starter1()
         if self.QComboBox_1.currentText() == 'Distance':
             self.refresh_x1.setEnabled(True)
-            self.last_values1.setEnabled(True)
         else:
             self.refresh_x1.setEnabled(False)
-            self.last_values1.setEnabled(False)
 
     def running_refresher2(self):
         if not self.start_plot2.isEnabled():
@@ -371,10 +388,8 @@ class UI(QMainWindow):
             self.plot_starter2()
         if self.QComboBox_2.currentText() == 'Distance':
             self.refresh_x2.setEnabled(True)
-            self.last_values2.setEnabled(True)
         else:
             self.refresh_x2.setEnabled(False)
-            self.last_values2.setEnabled(False)
 
     def refresh_x1_refresher(self):
         if not self.start_plot1.isEnabled():
@@ -404,12 +419,16 @@ class UI(QMainWindow):
             self.second_data.time_stamps, self.second_data.maxima = list(), list()
             if self.refresh_x1.isChecked():
                 self.second_data.refresh_x1 = True
+                self.last_values1.setEnabled(True)
             else:
                 self.second_data.refresh_x1 = False
+                self.last_values1.setEnabled(False)
             if self.refresh_x2.isChecked():
                 self.second_data.refresh_x2 = True
+                self.last_values2.setEnabled(True)
             else:
                 self.second_data.refresh_x2 = False
+                self.last_values2.setEnabled(False)
             unconnect(self.second_data.package2Ready, self.second_data.distance)
             self.second_data.package2Ready.connect(self.second_data.distance)
         else:
@@ -479,7 +498,8 @@ class UI(QMainWindow):
         self.receiver.stop()
         self.receiver.quit()
         self.receiver.wait()
-        self.receiver = Receiver(self.shifts, self.sequence_reps, self.samples_per_sequence, self.port, self.ip)
+        self.receiver = Receiver(self.shifts, self.sequence_reps, self.samples_per_sequence, self.length,
+                                 self.port, self.ip)
         # self.receiver.packageReady.connect(self.plot)
         self.receiver.st_connecting.connect(self.rec_connecting)
         self.receiver.st_connecting.connect(self.rec_connected)
@@ -604,6 +624,25 @@ class UI(QMainWindow):
     def receiver_timer(self):
         self.label_21.setText(f'Lost: {self.counter_lost} p/s')
         self.counter_lost = 0
+
+    def mousePressEvent(self, event):
+        self.__mousePos = event.globalPos()
+
+    def mouseMoveEvent(self, event):
+        if self.__mousePos:
+            delta = event.globalPos() - self.__mousePos
+            self.move(self.x() + delta.x(), self.y() + delta.y())
+            self.__mousePos = event.globalPos()
+
+    def mouseReleaseEvent(self, event):
+        self.__mousePos = None
+
+    def toggle_maximized(self):
+        if self.isMaximized():
+            self.showNormal()
+        else:
+            self.showMaximized()
+
 
 
 def main():
