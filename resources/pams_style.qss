@@ -1,3 +1,12 @@
 /*-----QToolButton-----*/
 QToolButton {
-    color
+    background-color: transparent;
+}
+
+QToolButton:hover {
+    background-color: #FF4D4D;
+}
+
+QToolButton:clicked {
+    background-color: #d32f2f;
+}

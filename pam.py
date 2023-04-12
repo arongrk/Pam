@@ -2,25 +2,19 @@ import socket
 import pickle
 import sys
 import numpy as np
-from scipy.signal import find_peaks
-from scipy.fft import fft, ifft
 import time
-import struct
-import tomllib
-import tomlkit
 from math import ceil
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
 from PyQt5 import uic
-from pyqtgraph import mkPen, AxisItem # PlotWidget, DateAxisItem
+from pyqtgraph import mkPen, AxisItem
 from collections import deque
-
-# from hacker import Hacker
 import definitions
-from pams_functions import Handler, averager, change_dict, polynom_interp_max, exact_polynom_interp_max, unconnect, \
-    zero_padding
+from pams_functions import Handler, averager, change_dict, exact_polynom_interp_max, unconnect, zero_padding
+
+
+resource_path = "C:/Users/dasa/PycharmProjects/MatlabData/resources/"
 
 
 class CustomAxis(AxisItem):
@@ -102,11 +96,11 @@ class Receiver(QThread):
             if not r:
                 self.packageLost.emit()
             else:
-                yData = np.absolute(np.frombuffer(r, dtype=np.int32)[:self.set_len]) * 8.192 / pow(2, 18)
+                yData = np.frombuffer(r, dtype=np.int32)[:self.set_len] * 8.192 / pow(2, 18)
                 # yData = np.frombuffer(r, dtype=np.int32) * 8.192 / pow(2, 18)
                 # xData = np.arange(0, self.set_len*1000/4.9e+06, 1000/4.9e+06)
                 xData = np.linspace(0, self.mes_len/self.sps*2e-10*self.set_len, self.set_len)
-                self.packageReady.emit((xData, yData))
+                self.packageReady.emit((xData, yData, round(time.time(), 5)))
         self.sock.close()
 
     def stop(self):
@@ -141,16 +135,16 @@ class SecondData(QObject):
         # xData, yData = zero_padding(xData, yData, 2.4e+09, 16080)
         # print(find_peaks(data[1], height=0.05))
         # self.package2Ready.emit((data[0], data[1]))
-        self.package2Ready.emit((xData, yData))
+        self.package2Ready.emit((xData, yData, data[2]))
 
     def distance(self, data):
-        data = zero_padding(data[0], data[1], 2.4e+09, 2**5*self.shifts)
+        self.time_stamps.append(data[2])
+        data = zero_padding(data[0], np.absolute(data[1]), 2.4e+09, 2**3*self.shifts)
         # print(find_peaks(data[1]))
         # print(np.argsort(data[1][:5000])[-3:])
         # self.maxima.append(data[0][data[1].argmax()])
         # self.maxima.append(polynom_interp_max(data[0][:int(len(data[0])/2)], data[1][:int(len(data[0])/2)], 50))
         self.maxima.append(exact_polynom_interp_max(data[0][:int(len(data[0])/2)], data[1][:int(len(data[0])/2)]))
-        self.time_stamps.append(round(time.time() - self.t0, 5))
         if self.refresh_x1:
             self.package3aReady.emit((self.time_stamps[-self.last_values1:], self.maxima[-self.last_values1:]))
         else:
@@ -173,10 +167,10 @@ class UI(QMainWindow):
         super(UI, self).__init__()
 
         # Load the ui file
-        uic.loadUi('resources/Mainwindow.ui', self)
+        uic.loadUi(resource_path + 'Mainwindow.ui', self)
 
         # Loading the values and getting the parameters for data interpreting
-        with open('configurations.bin', 'rb') as f:
+        with open('resources/configurations.bin', 'rb') as f:
             self.values = pickle.load(f)
         self.samples_per_sequence = self.values['samples_per_sequence']
         self.sequence_reps = self.values['sequence_reps']
@@ -277,7 +271,7 @@ class UI(QMainWindow):
         self.close_button.clicked.connect(self.close)
         self.maximize_button.clicked.connect(self.toggle_maximized)
         self.minimize_button.clicked.connect(self.showMinimized)
-        with open('resources\pams_style.qss', 'r') as f:
+        with open(resource_path + 'pams_style.qss', 'r') as f:
             self.setStyleSheet(f.read())
 
     def plot(self, data):
@@ -416,7 +410,7 @@ class UI(QMainWindow):
             self.receiver.packageReady.connect(self.second_data.irf)
         if self.request1 == 3 or self.request2 == 3:
             self.second_data.t0 = time.time()
-            self.second_data.time_stamps, self.second_data.maxima = list(), list()
+            self.second_data.time_stamps, self.second_data.maxima = deque(maxlen=1000), deque(maxlen=1000)
             if self.refresh_x1.isChecked():
                 self.second_data.refresh_x1 = True
                 self.last_values1.setEnabled(True)
@@ -527,7 +521,7 @@ class UI(QMainWindow):
         self.sequence_reps = int(self.sr_edit.text())
         self.shifts = int(self.shifts_edit.text())
         self.length = int(self.length_edit.currentText())
-        with open('configurations.bin', 'wb') as f:
+        with open('resources/configurations.bin', 'wb') as f:
             pickle.dump(change_dict(self.values, self.shifts, self.samples_per_sequence, self.sequence_reps,
                                     self.length, self.last_n_values1, self.last_n_values2), f)
         self.second_data.sps = self.samples_per_sequence
@@ -642,7 +636,6 @@ class UI(QMainWindow):
             self.showNormal()
         else:
             self.showMaximized()
-
 
 
 def main():

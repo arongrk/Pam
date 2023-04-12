@@ -5,10 +5,6 @@ from math import trunc
 from scipy.fft import fft, ifft
 from scipy.interpolate import BarycentricInterpolator as bary
 from scipy.constants import speed_of_light
-from sympy.solvers import solve
-from sympy import Symbol
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
 
 import definitions
 
