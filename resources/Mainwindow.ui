@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>780</width>
-    <height>709</height>
+    <width>850</width>
+    <height>796</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -45,14 +45,34 @@
          <number>0</number>
         </property>
         <item>
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <widget class="QLabel" name="label_31">
           <property name="font">
            <font>
-            <pointsize>18</pointsize>
+            <family>Arial</family>
+            <pointsize>12</pointsize>
            </font>
           </property>
+          <property name="styleSheet">
+           <string notr="true">color:white</string>
+          </property>
           <property name="text">
-           <string> Pam</string>
+           <string>Digitales TDR - Pam Signalverarbeitung</string>
           </property>
           <property name="textInteractionFlags">
            <set>Qt::NoTextInteraction</set>
@@ -157,16 +177,202 @@
         <property name="whatsThis">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;central wid&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background: #393E46;</string>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
         <widget class="QWidget" name="tab">
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
          <attribute name="title">
           <string>Plot</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
-           <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,6,6" columnstretch="8,0">
+           <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,5,5" columnstretch="8,0">
+            <item row="0" column="0">
+             <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0">
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout">
+                <item>
+                 <widget class="QPushButton" name="connect_button">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton:enabled
+ {
+    background-color: #00ADB5;
+    color: #EEEEEE;
+}
+QPushButton:enabled:hover
+ {
+    background-color: #00C5CE;
+    color: #EEEEEE;
+}
+QPushButton:disabled
+ {
+    background-color: #858585;
+    color: white;
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Connect</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="ip_label">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string> IP:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="port_label">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string> Port:</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_2">
+                <item>
+                 <widget class="QLabel" name="con_status">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Not connected</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QWidget" name="widget" native="true">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QWidget" name="widget_2" native="true"/>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_4">
+                <item>
+                 <widget class="QPushButton" name="start_receive">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton:enabled
+ {
+    background-color: #00ADB5;
+    color: #EEEEEE;
+}
+QPushButton:enabled:hover
+ {
+    background-color: #00C5CE;
+    color: #EEEEEE;
+}
+QPushButton:disabled
+ {
+    background-color: #858585;
+    color: white;
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Start</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="stop_receive">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton:enabled
+ {
+    background-color: #00ADB5;
+    color: #EEEEEE;
+}
+QPushButton:enabled:hover
+ {
+    background-color: #00C5CE;
+    color: #EEEEEE;
+}
+QPushButton:disabled
+ {
+    background-color: #858585;
+    color: white;
+}
+</string>
+                  </property>
+                  <property name="text">
+                   <string>Stop</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
             <item row="1" column="1">
              <layout class="QGridLayout" name="gridLayout_4">
               <item row="4" column="0">
@@ -248,6 +454,24 @@
                     <height>16777215</height>
                    </size>
                   </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton:enabled
+ {
+    background-color: #00ADB5;
+    color: #EEEEEE;
+}
+QPushButton:enabled:hover
+ {
+    background-color: #00C5CE;
+    color: #EEEEEE;
+}
+QPushButton:disabled
+ {
+    background-color: #858585;
+    color: white;
+}
+</string>
+                  </property>
                   <property name="text">
                    <string>Stop</string>
                   </property>
@@ -263,6 +487,24 @@
                     <width>65</width>
                     <height>16777215</height>
                    </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton:enabled
+ {
+    background-color: #00ADB5;
+    color: #EEEEEE;
+}
+QPushButton:enabled:hover
+ {
+    background-color: #00C5CE;
+    color: #EEEEEE;
+}
+QPushButton:disabled
+ {
+    background-color: #858585;
+    color: white;
+}
+</string>
                   </property>
                   <property name="text">
                    <string>Start</string>
@@ -404,6 +646,24 @@
                     <height>16777215</height>
                    </size>
                   </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton:enabled
+ {
+    background-color: #00ADB5;
+    color: #EEEEEE;
+}
+QPushButton:enabled:hover
+ {
+    background-color: #00C5CE;
+    color: #EEEEEE;
+}
+QPushButton:disabled
+ {
+    background-color: #858585;
+    color: white;
+}
+</string>
+                  </property>
                   <property name="text">
                    <string>Stop</string>
                   </property>
@@ -419,6 +679,24 @@
                     <width>65</width>
                     <height>16777215</height>
                    </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton:enabled
+ {
+    background-color: #00ADB5;
+    color: #EEEEEE;
+}
+QPushButton:enabled:hover
+ {
+    background-color: #00C5CE;
+    color: #EEEEEE;
+}
+QPushButton:disabled
+ {
+    background-color: #858585;
+    color: white;
+}
+</string>
                   </property>
                   <property name="text">
                    <string>Start</string>
@@ -497,6 +775,13 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="styleSheet">
+               <string notr="true">QWidget {
+	border: 2px solid #222831;
+	border-radius: 2px;
+}
+</string>
+              </property>
              </widget>
             </item>
             <item row="1" column="0">
@@ -507,136 +792,23 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="styleSheet">
+               <string notr="true">QWidget {
+	border: 2px solid #222831;
+	border-radius: 2px;
+}
+</string>
+              </property>
              </widget>
-            </item>
-            <item row="0" column="0">
-             <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0">
-              <item>
-               <layout class="QVBoxLayout" name="verticalLayout">
-                <item>
-                 <widget class="QPushButton" name="connect_button">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Connect</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="ip_label">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string> IP:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="port_label">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string> Port:</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QVBoxLayout" name="verticalLayout_2">
-                <item>
-                 <widget class="QLabel" name="con_status">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Not connected</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QWidget" name="widget" native="true">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_2">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <widget class="QWidget" name="widget_2" native="true"/>
-              </item>
-              <item>
-               <layout class="QVBoxLayout" name="verticalLayout_4">
-                <item>
-                 <widget class="QPushButton" name="start_receive">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Start</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="stop_receive">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="text">
-                   <string>Stop</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
             </item>
            </layout>
           </item>
          </layout>
         </widget>
         <widget class="QWidget" name="tab_2">
+         <property name="styleSheet">
+          <string notr="true">background-color: #393E46</string>
+         </property>
          <attribute name="title">
           <string>Configuration</string>
          </attribute>
@@ -880,6 +1052,9 @@
          </widget>
         </widget>
         <widget class="QWidget" name="tab_3">
+         <property name="styleSheet">
+          <string notr="true">background-color: #393E46</string>
+         </property>
          <attribute name="title">
           <string>Connection</string>
          </attribute>
@@ -1040,5 +1215,38 @@
   <tabstop>offset_edit</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>close_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>750</x>
+     <y>25</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>389</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>minimize_button</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showMinimized()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>678</x>
+     <y>25</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>389</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

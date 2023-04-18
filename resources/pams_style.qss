@@ -1,6 +1,12 @@
+/*-----App-----*/
+QMainWindow {
+    background-color: #222831;
+}
+
 /*-----QToolButton-----*/
 QToolButton {
     background-color: transparent;
+    border: none;
 }
 
 QToolButton:hover {
@@ -10,3 +16,51 @@ QToolButton:hover {
 QToolButton:clicked {
     background-color: #d32f2f;
 }
+
+/*-----QTabWidget-----*/
+
+QTabBar::tab {
+    background: #222831;
+    color: white;
+    min-width: 100px;
+    padding: 5px;
+}
+
+QTabWidget::tab {
+    background: #393E46;
+}
+
+QTabBar::tab:selected {
+/*    background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:0.994, stop:0 rgba(34, 40, 49, 255), stop:1 rgba(57, 62, 70, 255));*/
+    background: #393E46;
+    border: 2px solid #222831;
+    border-bottom-color: #393E46;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+QTabBar::tab:!selected {
+    background: #515863;
+    border: 2px solid #222831;
+    border-bottom-color: #393E46;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    margin-top: 4px;
+}
+
+QTabWidget::pane {
+    border: none;
+}
+
+/*-----QPushButton-----*/
+QPushButton {
+    background-color: #00ADB5;
+    color: #EEEEEE;
+}
+
+/*-----QPlotWidget-----*/
+/*PlotWidget {*/
+/*	border: 2px solid #222831;*/
+/*	border-radius: 8px;*/
+/*	outline-radius: 8px;*/
+/*}*/

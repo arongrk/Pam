@@ -7,8 +7,9 @@ from math import ceil
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QIcon
 from PyQt5 import uic
-from pyqtgraph import mkPen, AxisItem
+from pyqtgraph import mkPen, AxisItem, PlotWidget
 from collections import deque
 import definitions
 from pams_functions import Handler, averager, change_dict, exact_polynom_interp_max, unconnect, zero_padding
@@ -268,11 +269,26 @@ class UI(QMainWindow):
         # Setting up the smoother window
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.__mousePos = None
-        self.close_button.clicked.connect(self.close)
-        self.maximize_button.clicked.connect(self.toggle_maximized)
-        self.minimize_button.clicked.connect(self.showMinimized)
         with open(resource_path + 'pams_style.qss', 'r') as f:
             self.setStyleSheet(f.read())
+        self.tabWidget.setStyleSheet('QTabWidget::pane {background: #222831;}')
+
+        # Setting up the three window buttons
+        self.maximize_button.clicked.connect(self.maximize_button_clicked)
+        self.med_ic = QIcon('resources/medimize_button.svg')
+        self.med_ic_white = QIcon('resources/medimize_button_white.svg')
+        self.max_ic = QIcon('resources/maximize_button.svg')
+        self.max_ic_white = QIcon('resources/maximize_button_white.svg')
+        self.min_ic = QIcon('resources/minimize_button.svg')
+        self.min_ic_white = QIcon('resources/minimize_button_white.svg')
+        self.clos_ic = QIcon('resources/closing_button.svg')
+        self.clos_ic_white = QIcon('resources/closing_button_white.svg')
+        self.maximize_button.enterEvent = self.maximize_button_hover
+        self.maximize_button.leaveEvent = self.maximize_button_exit
+        self.minimize_button.enterEvent = self.minimize_button_hover
+        self.minimize_button.leaveEvent = self.minimize_button_exit
+        self.close_button.enterEvent = self.close_button_hover
+        self.close_button.leaveEvent = self.close_button_exit
 
     def plot(self, data):
         self.line1.setData(data[0], data[1])
@@ -401,7 +417,6 @@ class UI(QMainWindow):
     def last_values_changer2(self, value):
         self.second_data.last_values2 = value
 
-    # Maybe double connections!!:
     def data_connector(self):
         if self.request1 <= 1 and self.request2 <= 1:
             unconnect(self.receiver.packageReady, self.second_data.irf)
@@ -437,44 +452,6 @@ class UI(QMainWindow):
             self.second_data.package2Ready.connect(self.second_data.option_4)
         else:
             unconnect(self.second_data.package2Ready, self.second_data.option_4)
-
-    '''
-    def plot1_starter(self):
-        self.receiver.packageReady.connect(self.plot)
-        self.start_plot1.setEnabled(False)
-    
-    def plot1_breaker(self):
-        self.receiver.packageReady.disconnect(self.plot)
-        self.start_plot1.setEnabled(True)
-        self.stop_plot1.setEnabled(False)
-
-    def plot2_starter(self):
-        self.second_data.package2Ready.connect(self.plot_2)
-        if self.QComboBox_2.currentText() == 'average':
-            self.receiver.packageReady.connect(self.second_data.step_averager)
-        if self.QComboBox_2.currentText() == 'option 2':
-            self.receiver.packageReady.connect(self.second_data.distance)
-        if self.QComboBox_2.currentText() == 'option 3':
-            self.receiver.packageReady.connect(self.second_data.option_3)
-        self.start_plot2.setEnabled(False)
-        self.stop_plot2.setEnabled(True)
-
-    def plot2_breaker(self):
-        try:
-            self.receiver.packageReady.disconnect(self.second_data.step_averager)
-        except TypeError:
-            pass
-        try:
-            self.receiver.packageReady.disconnect(self.second_data.distance)
-        except TypeError:
-            pass
-        try:
-            self.receiver.packageReady.disconnect(self.second_data.option_3)
-        except TypeError:
-            pass
-        self.stop_plot2.setEnabled(False)
-        self.start_plot2.setEnabled(True)
-    '''
 
     def start_receiver(self):
         self.receiver.start()
@@ -533,58 +510,6 @@ class UI(QMainWindow):
         if self.stop_plot2.isEnabled():
             self.plot_starter2()
 
-    '''
-    def plot1_chooser(self):
-        pass
-
-    def plot2_chooser(self):
-        text = self.QComboBox_2.currentText()
-        if text == 'IRF':
-            try:
-                self.receiver.packageReady.disconnect(self.second_data.distance)
-            except TypeError:
-                pass
-            try:
-                self.receiver.packageReady.disconnect(self.second_data.option_3)
-            except TypeError:
-                pass
-            self.receiver.packageReady.connect(self.second_data.irf)
-        if text == 'option 2':
-            try:
-                self.receiver.packageReady.disconnect(self.second_data.irf)
-            except TypeError:
-                pass
-            try:
-                self.receiver.packageReady.disconnect(self.second_data.option_3)
-            except TypeError:
-                pass
-            self.receiver.packageReady.connect(self.second_data.distance)
-        if text == 'option 3':
-            try:
-                self.receiver.packageReady.disconnect(self.second_data.irf)
-            except TypeError:
-                pass
-            try:
-                self.receiver.packageReady.disconnect(self.second_data.distance)
-            except TypeError:
-                pass
-            self.receiver.packageReady.connect(self.second_data.option_3)
-
-    def xdata_refresher(self):
-        if self.QComboBox_1.currentText() == 'Raw data':
-            self.xData = np.arange(1, self.samples_per_sequence * self.shifts * self.sequence_reps + 1) / 5e+09
-        if self.QComboBox_1.currentText() == 'IRF':
-            self.xData = np.arange(1, self.shifts + 1) / 5e+09
-        if self.QComboBox_1.currentText() == 'Distance':
-            self.xData = np.arange(-999, 1)                                     # Not finished!
-        if self.QComboBox_2.currentText() == 'Raw data':
-            self.xData2 = np.arange(1, self.samples_per_sequence * self.shifts * self.sequence_reps + 1) / 5e+09
-        if self.QComboBox_2.currentText() == 'IRF':
-            self.xData2 = np.arange(1, self.shifts + 1) / 5e+09
-        if self.QComboBox_2.currentText() == 'Distance':
-            self.xData2 = np.arange(-999, 1)                                    # Not finished!
-    '''
-
     def rec_connecting(self):
         self.con_status.setStyleSheet('color: black')
         self.con_status.setText('Connecting...')
@@ -618,6 +543,37 @@ class UI(QMainWindow):
     def receiver_timer(self):
         self.label_21.setText(f'Lost: {self.counter_lost} p/s')
         self.counter_lost = 0
+
+    def close_button_hover(self, event):
+        self.close_button.setIcon(self.clos_ic_white)
+
+    def close_button_exit(self, event):
+        self.close_button.setIcon(self.clos_ic)
+
+    def maximize_button_hover(self, event):
+        if self.isMaximized():
+            self.maximize_button.setIcon(self.med_ic_white)
+        else:
+            self.maximize_button.setIcon(self.max_ic_white)
+
+    def maximize_button_exit(self, event):
+        if self.isMaximized():
+            self.maximize_button.setIcon(self.med_ic)
+        else:
+            self.maximize_button.setIcon(self.max_ic)
+
+    def minimize_button_hover(self, event):
+        self.minimize_button.setIcon(self.min_ic_white)
+
+    def minimize_button_exit(self, event):
+        self.minimize_button.setIcon(self.min_ic)
+
+    def maximize_button_clicked(self):
+        self.toggle_maximized()
+        if self.isMaximized():
+            self.maximize_button.setIcon(self.med_ic)
+        else:
+            self.maximize_button.setIcon(self.max_ic)
 
     def mousePressEvent(self, event):
         self.__mousePos = event.globalPos()

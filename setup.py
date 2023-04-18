@@ -8,12 +8,11 @@ import os
 # data_file = [("platforms", ["C:C:\\Users\\dasa\\PycharmProjects\\MatlabData\\venv\\Lib\\site-packages\\PyQt5\\Qt\\plugins\\platforms\\qwindows.dll"])]
 
 files = []
-for files in os.listdir('C:Users/dasa/PycharmProjects/MatlabData/resources'):
-    f1 = 'C:Users/dasa/PycharmProjects/MatlabData/resources' + files
+for file in os.listdir('c:/users/dasa/pycharmprojects/matlabdata/resources'):
+    f1 = 'C:/Users/dasa/PycharmProjects/MatlabData/resources/' + file
     if os.path.isfile(f1): # skip directories
-        f2 = 'images', [f1]
-        files.append(f2)
+        files.append(f1)
 setup(
-    windows=['pam.py']
-    # data_files = data_file
+    windows=['pam.py'],
+    data_files=[('resources', files)]
 )
