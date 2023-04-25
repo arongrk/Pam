@@ -4,6 +4,7 @@ import sys
 import numpy as np
 import time
 from math import ceil
+import psutil
 
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
@@ -258,10 +259,12 @@ class UI(QMainWindow):
         self.timer.timeout.connect(self.plot1_timer)
         self.timer.timeout.connect(self.plot2_timer)
         self.timer.timeout.connect(self.receiver_timer)
+        self.timer.timeout.connect(self.data_rate_timer)
         self.timer.start(1000)
         self.counter1 = 0
         self.counter2 = 0
         self.counter_lost = 0
+        self.bytes_received = 0
 
         self.request1 = 0
         self.request2 = 0
@@ -289,6 +292,10 @@ class UI(QMainWindow):
         self.minimize_button.leaveEvent = self.minimize_button_exit
         self.close_button.enterEvent = self.close_button_hover
         self.close_button.leaveEvent = self.close_button_exit
+
+        # Setting up the animations for QTabWidget
+        # self.rect1 = QRect(self.tabWidget.tabBar.tabRect(0).x(), self.tabWidget.tabBar.tabRect(0).y(), self.tabWidget.tabBar.tabRect(0).width(), 5)
+        # self.tab_animation1 = QPropertyAnimation()
 
     def plot(self, data):
         self.line1.setData(data[0], data[1])
@@ -543,6 +550,11 @@ class UI(QMainWindow):
     def receiver_timer(self):
         self.label_21.setText(f'Lost: {self.counter_lost} p/s')
         self.counter_lost = 0
+
+    def data_rate_timer(self):
+        byties = psutil.net_io_counters(pernic=True)['Ethernet 2'][1]
+        self.ethernet_rate.setText(f'Ethernet 2: {round((byties - self.bytes_received) * 8e-06, 1)} MBit/s')
+        self.bytes_received = byties
 
     def close_button_hover(self, event):
         self.close_button.setIcon(self.clos_ic_white)

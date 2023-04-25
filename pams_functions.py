@@ -5,13 +5,14 @@ from math import trunc
 from scipy.fft import fft, ifft
 from scipy.interpolate import BarycentricInterpolator as bary
 from scipy.constants import speed_of_light
+from PyQt5.QtNetwork import QUdpSocket
 
 import definitions
 
 
 class Handler:
 
-    def __init__(self, receive: socket, package_length=350, shifts=1280,
+    def __init__(self, receive: QUdpSocket, package_length=350, shifts=1280,
                  samples_per_sequence=16, sequence_reps=2, marker=b'\xff\xff\xff\xaa'):
         self.sock = receive
         self.pack_len = package_length

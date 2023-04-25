@@ -174,6 +174,11 @@
       </item>
       <item>
        <widget class="QTabWidget" name="tabWidget">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
         <property name="whatsThis">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;central wid&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -181,7 +186,25 @@
          <bool>false</bool>
         </property>
         <property name="styleSheet">
-         <string notr="true">background: #393E46;</string>
+         <string notr="true">QTabWidget::tab {
+	background-color: white
+}
+QTabBar::tab {
+    background-color: transparent;
+    color: white;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+QTabBar::tab:hover {
+    color: #8dae10;
+}
+
+QTabBar::tab:selected {
+    background-color: transparent;
+    margin-bottom: 8px;
+}
+</string>
         </property>
         <property name="currentIndex">
          <number>0</number>
@@ -211,13 +234,13 @@
                   <property name="styleSheet">
                    <string notr="true">QPushButton:enabled
  {
-    background-color: #00ADB5;
-    color: #EEEEEE;
+    background-color: #8dae10;
+    color: white;
 }
 QPushButton:enabled:hover
  {
-    background-color: #00C5CE;
-    color: #EEEEEE;
+    background-color: #b0d918;
+    color: white;
 }
 QPushButton:disabled
  {
@@ -278,12 +301,12 @@ QPushButton:disabled
                  </widget>
                 </item>
                 <item>
-                 <widget class="QWidget" name="widget" native="true">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
+                 <widget class="QLabel" name="ethernet_rate">
+                  <property name="styleSheet">
+                   <string notr="true">color: #e7e7e7</string>
+                  </property>
+                  <property name="text">
+                   <string>Ethernet 2: x MBit/s</string>
                   </property>
                  </widget>
                 </item>
@@ -318,13 +341,13 @@ QPushButton:disabled
                   <property name="styleSheet">
                    <string notr="true">QPushButton:enabled
  {
-    background-color: #00ADB5;
-    color: #EEEEEE;
+    background-color: #8dae10;
+    color: white;
 }
 QPushButton:enabled:hover
  {
-    background-color: #00C5CE;
-    color: #EEEEEE;
+    background-color: #b0d918;
+    color: white;
 }
 QPushButton:disabled
  {
@@ -349,13 +372,13 @@ QPushButton:disabled
                   <property name="styleSheet">
                    <string notr="true">QPushButton:enabled
  {
-    background-color: #00ADB5;
-    color: #EEEEEE;
+    background-color: #8dae10;
+    color: white;
 }
 QPushButton:enabled:hover
  {
-    background-color: #00C5CE;
-    color: #EEEEEE;
+    background-color: #b0d918;
+    color: white;
 }
 QPushButton:disabled
  {
@@ -457,13 +480,13 @@ QPushButton:disabled
                   <property name="styleSheet">
                    <string notr="true">QPushButton:enabled
  {
-    background-color: #00ADB5;
-    color: #EEEEEE;
+    background-color: #8dae10;
+    color: white;
 }
 QPushButton:enabled:hover
  {
-    background-color: #00C5CE;
-    color: #EEEEEE;
+    background-color: #b0d918;
+    color: white;
 }
 QPushButton:disabled
  {
@@ -491,13 +514,13 @@ QPushButton:disabled
                   <property name="styleSheet">
                    <string notr="true">QPushButton:enabled
  {
-    background-color: #00ADB5;
-    color: #EEEEEE;
+    background-color: #8dae10;
+    color: white;
 }
 QPushButton:enabled:hover
  {
-    background-color: #00C5CE;
-    color: #EEEEEE;
+    background-color: #b0d918;
+    color: white;
 }
 QPushButton:disabled
  {
@@ -649,13 +672,13 @@ QPushButton:disabled
                   <property name="styleSheet">
                    <string notr="true">QPushButton:enabled
  {
-    background-color: #00ADB5;
-    color: #EEEEEE;
+    background-color: #8dae10;
+    color: white;
 }
 QPushButton:enabled:hover
  {
-    background-color: #00C5CE;
-    color: #EEEEEE;
+    background-color: #b0d918;
+    color: white;
 }
 QPushButton:disabled
  {
@@ -683,13 +706,13 @@ QPushButton:disabled
                   <property name="styleSheet">
                    <string notr="true">QPushButton:enabled
  {
-    background-color: #00ADB5;
-    color: #EEEEEE;
+    background-color: #8dae10;
+    color: white;
 }
 QPushButton:enabled:hover
  {
-    background-color: #00C5CE;
-    color: #EEEEEE;
+    background-color: #b0d918;
+    color: white;
 }
 QPushButton:disabled
  {
@@ -777,7 +800,7 @@ QPushButton:disabled
               </property>
               <property name="styleSheet">
                <string notr="true">QWidget {
-	border: 2px solid #222831;
+	border: 2px solid #c1baa3;
 	border-radius: 2px;
 }
 </string>
@@ -794,7 +817,7 @@ QPushButton:disabled
               </property>
               <property name="styleSheet">
                <string notr="true">QWidget {
-	border: 2px solid #222831;
+	border: 2px solid #c1baa3;
 	border-radius: 2px;
 }
 </string>
@@ -807,7 +830,7 @@ QPushButton:disabled
         </widget>
         <widget class="QWidget" name="tab_2">
          <property name="styleSheet">
-          <string notr="true">background-color: #393E46</string>
+          <string notr="true">background-color: white</string>
          </property>
          <attribute name="title">
           <string>Configuration</string>
@@ -1053,7 +1076,7 @@ QPushButton:disabled
         </widget>
         <widget class="QWidget" name="tab_3">
          <property name="styleSheet">
-          <string notr="true">background-color: #393E46</string>
+          <string notr="true">background-color: white</string>
          </property>
          <attribute name="title">
           <string>Connection</string>
@@ -1190,7 +1213,6 @@ QPushButton:disabled
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <customwidgets>
   <customwidget>

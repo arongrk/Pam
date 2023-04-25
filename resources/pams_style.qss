@@ -1,6 +1,6 @@
 /*-----App-----*/
 QMainWindow {
-    background-color: #222831;
+    background-color: #17365c;
 }
 
 /*-----QToolButton-----*/
@@ -18,7 +18,7 @@ QToolButton:clicked {
 }
 
 /*-----QTabWidget-----*/
-
+/*
 QTabBar::tab {
     background: #222831;
     color: white;
@@ -27,12 +27,10 @@ QTabBar::tab {
 }
 
 QTabWidget::tab {
-    background: #393E46;
+    background: white;
 }
 
 QTabBar::tab:selected {
-/*    background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:0.994, stop:0 rgba(34, 40, 49, 255), stop:1 rgba(57, 62, 70, 255));*/
-    background: #393E46;
     border: 2px solid #222831;
     border-bottom-color: #393E46;
     border-top-left-radius: 10px;
@@ -51,6 +49,7 @@ QTabBar::tab:!selected {
 QTabWidget::pane {
     border: none;
 }
+*/
 
 /*-----QPushButton-----*/
 QPushButton {
