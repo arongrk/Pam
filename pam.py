@@ -10,7 +10,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
 from PyQt5 import uic
-from pyqtgraph import mkPen, AxisItem, PlotWidget
+from pyqtgraph import mkPen, AxisItem, PlotWidget, InfiniteLine
 from collections import deque
 import definitions
 from pams_functions import Handler, averager, change_dict, exact_polynom_interp_max, unconnect, zero_padding
@@ -93,16 +93,18 @@ class Receiver(QThread):
         handler = Handler(self.sock, shifts=ceil(self.shifts/80)*80, sequence_reps=self.s_reps,
                           samples_per_sequence=self.sps)
         g = handler.assembler_2()
+        t0 = time.time()
         while not self.stop_receive:
             r = next(g)
             if not r:
                 self.packageLost.emit()
             else:
+                time_stamp = round(time.time() - t0, 10)
                 yData = np.frombuffer(r, dtype=np.int32)[:self.set_len] * 8.192 / pow(2, 18)
                 # yData = np.frombuffer(r, dtype=np.int32) * 8.192 / pow(2, 18)
                 # xData = np.arange(0, self.set_len*1000/4.9e+06, 1000/4.9e+06)
                 xData = np.linspace(0, self.mes_len/self.sps*2e-10*self.set_len, self.set_len)
-                self.packageReady.emit((xData, yData, round(time.time(), 5)))
+                self.packageReady.emit((xData, yData, time_stamp))
         self.sock.close()
 
     def stop(self):
@@ -115,6 +117,7 @@ class SecondData(QObject):
     package2Ready = pyqtSignal(tuple)
     package3aReady = pyqtSignal(tuple)
     package3bReady = pyqtSignal(tuple)
+    package4Ready = pyqtSignal(tuple)
 
     def __init__(self, samples_per_sequence, shifts, sequence_reps, length, last_n_values_plot1, last_n_values_plot2):
         QObject.__init__(self)
@@ -141,7 +144,7 @@ class SecondData(QObject):
 
     def distance(self, data):
         self.time_stamps.append(data[2])
-        data = zero_padding(data[0], np.absolute(data[1]), 2.4e+09, 2**3*self.shifts)
+        data = zero_padding(data[0], np.absolute(data[1]), 2.5e+09, 2**5*self.shifts)
         # print(find_peaks(data[1]))
         # print(np.argsort(data[1][:5000])[-3:])
         # self.maxima.append(data[0][data[1].argmax()])
@@ -150,15 +153,17 @@ class SecondData(QObject):
         if self.refresh_x1:
             self.package3aReady.emit((self.time_stamps[-self.last_values1:], self.maxima[-self.last_values1:]))
         else:
-            self.package3aReady.emit((self.time_stamps, self.maxima))
+            self.package3aReady.emit((list(self.time_stamps), list(self.maxima)))
         if self.refresh_x2:
             self.package3bReady.emit((self.time_stamps[-self.last_values2:], self.maxima[-self.last_values2:]))
         else:
             self.package3bReady.emit((self.time_stamps, self.maxima))
 
-
-    def option_3(self, data):
-        pass
+    def irf_interp(self, data):
+        data = zero_padding(data[0], np.absolute(data[1]), 2.5e+09, 2**5*self.shifts)
+        yData = data[1]
+        xData = data[0]
+        self.package4Ready.emit((xData, yData))
 
     def option_4(self, data):
         pass
@@ -294,8 +299,17 @@ class UI(QMainWindow):
         self.close_button.leaveEvent = self.close_button_exit
 
         # Setting up the animations for QTabWidget
-        # self.rect1 = QRect(self.tabWidget.tabBar.tabRect(0).x(), self.tabWidget.tabBar.tabRect(0).y(), self.tabWidget.tabBar.tabRect(0).width(), 5)
-        # self.tab_animation1 = QPropertyAnimation()
+        self.tabBar = self.tabWidget.tabBar()
+        # self.tab1 = self.tabBar.tabButton()
+        # print(self.tab1)
+        self.rect1 = QWidget(self.tabBar)
+        self.rect1.setStyleSheet('background-color: transparent')
+        self.rect1.resize(self.tab.width(), self.tab.height())
+        self.tab_animation1 = QPropertyAnimation(self.rect1, b"pos")
+        self.tab_animation1.setDuration(1000)
+        self.tab_animation1.setStartValue(QPoint(0, 0))
+        self.tab_animation1.setEndValue(QPoint(1, 1))
+        self.tab_animation1.start()
 
     def plot(self, data):
         self.line1.setData(data[0], data[1])
@@ -322,6 +336,11 @@ class UI(QMainWindow):
             self.request1 = 3
             self.graph1.setTitle('Distance')
             self.graph1.getAxis('bottom').setLabel('Time', units='s')
+            self.graph1.getAxis('left').setLabel('Distance', units='m')
+        if box == 'IRF Interpolated':
+            self.request1 = 4
+            self.graph1.getAxis('bottom').setLabel('Time', units='s')
+            self.graph1.getAxis('left').setLabel('Voltage', units='v')
         self.data_connector()
         # self.xdata_refresher()
         self.plot_connector1()
@@ -346,6 +365,10 @@ class UI(QMainWindow):
             self.graph2.setTitle('Distance')
             self.graph2.getAxis('bottom').setLabel('Time', units='s')
             self.graph2.getAxis('left').setLabel('Distance', units='m')
+        if box == 'IRF Interpolated':
+            self.request1 = 4
+            self.graph2.getAxis('bottom').setLabel('Time', units='s')
+            self.graph2.getAxis('left').setLabel('Voltage', units='v')
         self.data_connector()
         self.plot_connector2()
         self.stop_plot2.setEnabled(True)
@@ -371,6 +394,8 @@ class UI(QMainWindow):
             self.second_data.package2Ready.connect(self.plot)
         if self.request1 == 3:
             self.second_data.package3aReady.connect(self.plot)
+        if self.request1 == 4:
+            self.second_data.package4Ready.connect(self.plot)
 
     def plot_connector2(self):
         if self.request2 == 1:
@@ -379,16 +404,20 @@ class UI(QMainWindow):
             self.second_data.package2Ready.connect(self.plot_2)
         if self.request2 == 3:
             self.second_data.package3bReady.connect(self.plot_2)
+        if self.request2 == 4:
+            self.second_data.package4Ready.connect(self.plot_2)
 
     def plot_disconnector1(self):
         unconnect(self.receiver.packageReady, self.plot)
         unconnect(self.second_data.package2Ready, self.plot)
         unconnect(self.second_data.package3aReady, self.plot)
+        unconnect(self.second_data.package4Ready, self.plot)
 
     def plot_disconnector2(self):
         unconnect(self.receiver.packageReady, self.plot_2)
         unconnect(self.second_data.package2Ready, self.plot_2)
         unconnect(self.second_data.package3bReady, self.plot_2)
+        unconnect(self.second_data.package4Ready, self.plot_2)
 
     def running_refresher1(self):
         if not self.start_plot1.isEnabled():
@@ -450,10 +479,10 @@ class UI(QMainWindow):
         else:
             unconnect(self.second_data.package2Ready, self.second_data.distance)
         if self.request1 == 4 or self.request2 == 4:
-            unconnect(self.second_data.package2Ready, self.second_data.option_3)
-            self.second_data.package2Ready.connect(self.second_data.option_3)
+            unconnect(self.second_data.package2Ready, self.second_data.irf_interp)
+            self.second_data.package2Ready.connect(self.second_data.irf_interp)
         else:
-            unconnect(self.second_data.package2Ready, self.second_data.option_3)
+            unconnect(self.second_data.package2Ready, self.second_data.irf_interp)
         if self.request1 == 5 or self.request2 == 5:
             unconnect(self.second_data.package2Ready, self.second_data.option_4)
             self.second_data.package2Ready.connect(self.second_data.option_4)

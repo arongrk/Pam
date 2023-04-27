@@ -144,7 +144,9 @@ def exact_polynom_interp_max(t_data, y_data):
     t, y = t_data, y_data
 
     # Get the sorted indexes of the three highest y-Values
-    m_i = np.sort(np.argsort(y)[-3:])
+    m = np.argmax(y)
+    m_i = [m-1, m, m+1]
+
 
     # load the x and y values into x_ and y_
     x_ = [t[m_i[0]], t[m_i[1]], t[m_i[2]]]

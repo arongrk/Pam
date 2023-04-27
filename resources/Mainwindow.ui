@@ -26,6 +26,9 @@
    <iconset>
     <normaloff>pam_logo.jpg</normaloff>pam_logo.jpg</iconset>
   </property>
+  <property name="inputMethodHints">
+   <set>Qt::ImhNone</set>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -179,6 +182,9 @@
           <pointsize>12</pointsize>
          </font>
         </property>
+        <property name="toolTip">
+         <string/>
+        </property>
         <property name="whatsThis">
          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;central wid&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -303,7 +309,7 @@ QPushButton:disabled
                 <item>
                  <widget class="QLabel" name="ethernet_rate">
                   <property name="styleSheet">
-                   <string notr="true">color: #e7e7e7</string>
+                   <string notr="true"/>
                   </property>
                   <property name="text">
                    <string>Ethernet 2: x MBit/s</string>
@@ -563,6 +569,11 @@ QPushButton:disabled
                   <string>Distance</string>
                  </property>
                 </item>
+                <item>
+                 <property name="text">
+                  <string>IRF Interpolated</string>
+                 </property>
+                </item>
                </widget>
               </item>
               <item row="5" column="0">
@@ -753,6 +764,11 @@ QPushButton:disabled
                 <item>
                  <property name="text">
                   <string>Distance</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>IRF Interpolated</string>
                  </property>
                 </item>
                </widget>
@@ -1206,6 +1222,11 @@ QPushButton:disabled
            </item>
           </layout>
          </widget>
+        </widget>
+        <widget class="QWidget" name="tab_4">
+         <attribute name="title">
+          <string>Seite</string>
+         </attribute>
         </widget>
        </widget>
       </item>

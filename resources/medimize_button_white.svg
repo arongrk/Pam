@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="4.2000003mm"
+   height="4.1999998mm"
+   viewBox="0 0 4.2000004 4.1999999"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="medimize_button_white.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="32"
+     inkscape:cx="10.421875"
+     inkscape:cy="6.953125"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="1672"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-0.92435713,-0.65654047)">
+    <path
+       id="rect3694"
+       style="fill:#ffffff;fill-opacity:1;stroke-width:0.377953"
+       d="M 4.5371094 0 C 4.1183377 0 3.78125 0.33708746 3.78125 0.75585938 L 3.78125 3.4023438 L 5.2929688 3.4023438 L 5.2929688 1.5117188 L 14.363281 1.5117188 L 14.363281 10.582031 L 12.472656 10.582031 L 12.472656 12.09375 L 15.119141 12.09375 C 15.537913 12.09375 15.875 11.756661 15.875 11.337891 L 15.875 0.75585938 C 15.875 0.33708749 15.537911 7.4014868e-17 15.119141 0 L 4.5371094 0 z M 0.75585938 3.7792969 C 0.33708747 3.7792969 7.4014868e-17 4.1163844 0 4.5351562 L 0 15.117188 C 0 15.535958 0.33708747 15.873047 0.75585938 15.873047 L 11.337891 15.873047 C 11.756663 15.873047 12.09375 15.535958 12.09375 15.117188 L 12.09375 4.5351562 C 12.09375 4.1163844 11.756663 3.7792969 11.337891 3.7792969 L 0.75585938 3.7792969 z M 1.5117188 5.2910156 L 10.582031 5.2910156 L 10.582031 14.361328 L 1.5117188 14.361328 L 1.5117188 5.2910156 z "
+       transform="matrix(0.26458333,0,0,0.26458333,0.92435713,0.65654047)" />
+  </g>
+</svg>
