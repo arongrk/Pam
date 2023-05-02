@@ -3,6 +3,11 @@ QMainWindow {
     background-color: #17365c;
 }
 
+/*-----QStackedWidget-----*/
+QStackedWidget {
+    background-color: white;
+}
+
 /*-----QToolButton-----*/
 QToolButton {
     background-color: transparent;
@@ -18,38 +23,27 @@ QToolButton:clicked {
 }
 
 /*-----QTabWidget-----*/
-/*
-QTabBar::tab {
-    background: #222831;
-    color: white;
-    min-width: 100px;
-    padding: 5px;
-}
 
-QTabWidget::tab {
-    background: white;
+QTabBar::tab {
+    background: transparent;
+    color: white;
+    margin-bottom: 10px;
+    margin-right: 10 px;
+    margin-left: 10px;
 }
 
 QTabBar::tab:selected {
-    border: 2px solid #222831;
-    border-bottom-color: #393E46;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    color: #8dae10;
 }
 
 QTabBar::tab:!selected {
-    background: #515863;
-    border: 2px solid #222831;
-    border-bottom-color: #393E46;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    margin-top: 4px;
+    background: #17365c;
 }
 
 QTabWidget::pane {
     border: none;
 }
-*/
+
 
 /*-----QPushButton-----*/
 QPushButton {

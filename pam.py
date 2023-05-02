@@ -174,7 +174,7 @@ class UI(QMainWindow):
         super(UI, self).__init__()
 
         # Load the ui file
-        uic.loadUi(resource_path + 'Mainwindow.ui', self)
+        uic.loadUi('resources/Mainwindow.ui', self)
 
         # Loading the values and getting the parameters for data interpreting
         with open('resources/configurations.bin', 'rb') as f:
@@ -277,9 +277,10 @@ class UI(QMainWindow):
         # Setting up the smoother window
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.__mousePos = None
-        with open(resource_path + 'pams_style.qss', 'r') as f:
+        with open('resources/pams_style.qss', 'r') as f:
             self.setStyleSheet(f.read())
-        self.tabWidget.setStyleSheet('QTabWidget::pane {background: #222831;}')
+        # for i in [self.tab, self.tab_2, self.tab_3, self.tab_4]:
+        #     i.setStyleSheet('background: white')
 
         # Setting up the three window buttons
         self.maximize_button.clicked.connect(self.maximize_button_clicked)
@@ -300,15 +301,24 @@ class UI(QMainWindow):
 
         # Setting up the animations for QTabWidget
         self.tabBar = self.tabWidget.tabBar()
-        # self.tab1 = self.tabBar.tabButton()
-        # print(self.tab1)
+        self.tab1 = QLabel('Plot')
+        self.tab2 = QLabel('Configuration')
+        self.tab3 = QLabel('Connection')
+        self.tab4 = QLabel('Test')
+        print(self.tabBar.tabButton(1, self.tabBar.LeftSide))
+        self.tabBar.setTabButton(0, self.tabBar.LeftSide, self.tab1)
+        self.tabBar.setTabButton(1, self.tabBar.LeftSide, self.tab2)
+        self.tabBar.setTabButton(2, self.tabBar.LeftSide, self.tab3)
+        self.tabBar.setTabButton(3, self.tabBar.LeftSide, self.tab4)
         self.rect1 = QWidget(self.tabBar)
-        self.rect1.setStyleSheet('background-color: transparent')
-        self.rect1.resize(self.tab.width(), self.tab.height())
+        self.rect1.setStyleSheet('background-color: #8dae10')
+        self.rect1.setGeometry(0, self.tab1.height(), self.tab1.width(), 8)
         self.tab_animation1 = QPropertyAnimation(self.rect1, b"pos")
-        self.tab_animation1.setDuration(1000)
-        self.tab_animation1.setStartValue(QPoint(0, 0))
-        self.tab_animation1.setEndValue(QPoint(1, 1))
+        self.tab_animation1.setDuration(100)
+        self.tab_animation1.setStartValue(QPoint(self.tab1.x(), self.tab1.height()))
+        self.tab_animation1.setEndValue(QPoint(self.tab1.x(), self.tab1.height() - 8))
+
+    def animationstarter(self, event):
         self.tab_animation1.start()
 
     def plot(self, data):

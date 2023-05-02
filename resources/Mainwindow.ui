@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>850</width>
+    <width>759</width>
     <height>796</height>
    </rect>
   </property>
@@ -192,35 +192,32 @@
          <bool>false</bool>
         </property>
         <property name="styleSheet">
-         <string notr="true">QTabWidget::tab {
-	background-color: white
-}
-QTabBar::tab {
-    background-color: transparent;
-    color: white;
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
-QTabBar::tab:hover {
-    color: #8dae10;
-}
-
-QTabBar::tab:selected {
-    background-color: transparent;
-    margin-bottom: 8px;
-}
-</string>
+         <string notr="true"/>
+        </property>
+        <property name="tabPosition">
+         <enum>QTabWidget::North</enum>
         </property>
         <property name="currentIndex">
          <number>0</number>
+        </property>
+        <property name="elideMode">
+         <enum>Qt::ElideLeft</enum>
+        </property>
+        <property name="usesScrollButtons">
+         <bool>true</bool>
+        </property>
+        <property name="documentMode">
+         <bool>true</bool>
+        </property>
+        <property name="tabBarAutoHide">
+         <bool>false</bool>
         </property>
         <widget class="QWidget" name="tab">
          <property name="styleSheet">
           <string notr="true"/>
          </property>
          <attribute name="title">
-          <string>Plot</string>
+          <string/>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
@@ -846,10 +843,10 @@ QPushButton:disabled
         </widget>
         <widget class="QWidget" name="tab_2">
          <property name="styleSheet">
-          <string notr="true">background-color: white</string>
+          <string notr="true"/>
          </property>
          <attribute name="title">
-          <string>Configuration</string>
+          <string/>
          </attribute>
          <widget class="QWidget" name="gridLayoutWidget_2">
           <property name="geometry">
@@ -1092,10 +1089,10 @@ QPushButton:disabled
         </widget>
         <widget class="QWidget" name="tab_3">
          <property name="styleSheet">
-          <string notr="true">background-color: white</string>
+          <string notr="true"/>
          </property>
          <attribute name="title">
-          <string>Connection</string>
+          <string/>
          </attribute>
          <widget class="QWidget" name="gridLayoutWidget">
           <property name="geometry">
@@ -1225,7 +1222,7 @@ QPushButton:disabled
         </widget>
         <widget class="QWidget" name="tab_4">
          <attribute name="title">
-          <string>Seite</string>
+          <string/>
          </attribute>
         </widget>
        </widget>
