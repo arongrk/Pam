@@ -137,7 +137,7 @@ def polynom_interp_max(t, y, accuracy: int):
     return exact_maximum
 
 
-def exact_polynom_interp_max(t_data, y_data):
+def exact_polynom_interp_max(t_data, y_data, cable_constant):
     if np.shape(t_data) != np.shape(y_data):
         raise ValueError('t_data and y_data are not the same shape!')
 
@@ -160,7 +160,7 @@ def exact_polynom_interp_max(t_data, y_data):
 
     # Get the first differentiation
     x = -factors[1]/(factors[2]*2)
-    x = x/2 * speed_of_light - 2.9011
+    x = x/2 * speed_of_light - cable_constant
     return x
 
 

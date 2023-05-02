@@ -23,13 +23,12 @@ QToolButton:clicked {
 }
 
 /*-----QTabWidget-----*/
-
 QTabBar::tab {
     background: transparent;
     color: white;
-    margin-bottom: 10px;
-    margin-right: 10 px;
-    margin-left: 10px;
+    margin-bottom: 6px;
+    margin-right: 20px;
+    margin-left: 20px;
 }
 
 QTabBar::tab:selected {
@@ -41,9 +40,8 @@ QTabBar::tab:!selected {
 }
 
 QTabWidget::pane {
-    border: none;
+    border-top: 5px solid #8dae10;
 }
-
 
 /*-----QPushButton-----*/
 QPushButton {
