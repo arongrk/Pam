@@ -109,22 +109,22 @@ def zero_padding(t, y, fLim, NZP):
     fs = 1/(t[1]-t[0])
     df = fs/Ly
     f = np.arange(0, trunc(Ly/2))*df
-    LidxLim = sum(f <= fLim)
+    LidxLim = sum(f<=fLim)
     idxLim = np.arange(0, LidxLim)
     fWindCal = f[idxLim]
 
     # Tp = 1/(2*(LidxLim-1))/df
 
 
-    Ytemp = np.real(fft(y, Ly))/Ly
+    Ytemp = fft(y, Ly)/Ly
     YPos = Ytemp[0:trunc(Ly/2)+1]
 
-    YZP = np.zeros(np.real(NZP))
+    YZP = np.zeros(NZP, dtype=np.complex_)
     YPos[1:-1] = 2 * YPos[1:-1]
     YZP[idxLim] = YPos[idxLim]
 
     yData = np.real(ifft(YZP)*NZP)
-    tData = (np.arange(0, NZP) / fs * Ly/NZP + t[1])
+    tData = (np.arange(0, NZP) / fs * Ly/NZP + t[0])
 
     return tData, yData
 
@@ -137,7 +137,7 @@ def polynom_interp_max(t, y, accuracy: int):
     return exact_maximum
 
 
-def exact_polynom_interp_max(t_data, y_data, cable_constant):
+def exact_polynom_interp_max(t_data, y_data, get_distance: bool, cable_constant=0):
     if np.shape(t_data) != np.shape(y_data):
         raise ValueError('t_data and y_data are not the same shape!')
 
@@ -160,6 +160,10 @@ def exact_polynom_interp_max(t_data, y_data, cable_constant):
 
     # Get the first differentiation
     x = -factors[1]/(factors[2]*2)
+
+    # Return the time if not asked for speed:
+    if not get_distance:
+        return x
     x = x/2 * speed_of_light - cable_constant
     return x
 

@@ -1,7 +1,6 @@
 import socket
 import pickle
 import sys
-from itertools import islice
 
 import numpy as np
 import time
@@ -13,6 +12,8 @@ from PyQt5.QtSvg import QSvgWidget
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QSizePolicy
 from PyQt5.QtGui import QIcon
 from PyQt5 import uic
+from PyQt5.QtMultimedia import QAudio
+
 from pyqtgraph import mkPen, AxisItem, PlotWidget, InfiniteLine, ViewBox
 from collections import deque
 import definitions
@@ -152,12 +153,13 @@ class SecondData(QObject):
 
     def distance(self, data):
         self.time_stamps.append(data[2])
-        data = zero_padding(data[0], np.absolute(data[1]), 2.5e+09, 2**5*self.shifts)
+        data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts)
         # print(find_peaks(data[1]))
         # print(np.argsort(data[1][:5000])[-3:])
         # self.maxima.append(data[0][data[1].argmax()])
         # self.maxima.append(polynom_interp_max(data[0][:int(len(data[0])/2)], data[1][:int(len(data[0])/2)], 50))
-        self.maxima.append(exact_polynom_interp_max(data[0][:int(len(data[0])/2)], data[1][:int(len(data[0])/2)], self.cable_constant))
+        self.maxima.append(exact_polynom_interp_max(data[0], np.absolute(data[1]), True,
+                                                    self.cable_constant))
         if self.refresh_x1:
             self.package3aReady.emit((self.time_stamps[-self.last_values1:], self.maxima[-self.last_values1:]))
         else:
@@ -168,10 +170,12 @@ class SecondData(QObject):
             self.package3bReady.emit((list(self.time_stamps), list(self.maxima)))
 
     def irf_interp(self, data):
-        data = zero_padding(data[0], np.absolute(data[1]), 2.5e+09, 2**5*self.shifts)
+        data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts)
         yData = data[1]
         xData = data[0]
-        self.package4Ready.emit((xData, yData))
+        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), False)
+        # self.package4Ready.emit((xData, 20*np.log10(np.absolute(yData)), exact_max))
+        self.package4Ready.emit((xData, yData, exact_max))
 
     def option_4(self, data):
         pass
@@ -205,40 +209,44 @@ class UI(QMainWindow):
         self.xData2 = np.arange(0, 1280) / 5 * 10 ** 9
 
         # Configuring both plot-widgets
-        pen = mkPen(color=(0, 0, 0), width=1)
+        if True:
+            pen = mkPen(color=(0, 0, 0), width=1)
 
-        self.graph1.setBackground('w')
-        self.graph1.setAxisItems(axisItems={'bottom': CustomAxis(orientation='bottom'),
-                                            'left': CustomAxis(orientation='left')})
-        self.line1 = self.graph1.plot(self.xData, np.zeros(len(self.xData)), pen=pen)
+            self.graph1.setBackground('w')
+            self.graph1.setAxisItems(axisItems={'bottom': CustomAxis(orientation='bottom'),
+                                                'left': CustomAxis(orientation='left')})
+            self.line1 = self.graph1.plot(self.xData, np.zeros(len(self.xData)), pen=pen)
+            self.graph1.enableAutoRange(axis=ViewBox.XYAxes)
 
-        self.graph2.setBackground('w')
-        self.graph2.setAxisItems(axisItems={'bottom': CustomAxis(orientation='bottom'),
-                                            'left': CustomAxis(orientation='left')})
-        self.line2 = self.graph2.plot(self.xData2, np.zeros(len(self.xData2)), pen=pen)
+            self.graph2.setBackground('w')
+            self.graph2.setAxisItems(axisItems={'bottom': CustomAxis(orientation='bottom'),
+                                                'left': CustomAxis(orientation='left')})
+            self.line2 = self.graph2.plot(self.xData2, np.zeros(len(self.xData2)), pen=pen)
+            self.graph2.enableAutoRange(axis=ViewBox.XYAxes)
 
-        # Setting up the IP and Port inputs and values:
-        self.ip, self.port, self.sender_port = definitions.IP_Address, definitions.PORT, definitions.SENDER_PORT
-        split_ip = self.ip.split('.')
-        ip_inputs = (self.ip1, self.ip2, self.ip3, self.ip4)
-        for i in range(4):
-            ip_inputs[i].setText(split_ip[i])
+            # Setting up the IP and Port inputs and values:
+            self.ip, self.port, self.sender_port = definitions.IP_Address, definitions.PORT, definitions.SENDER_PORT
+            split_ip = self.ip.split('.')
+            ip_inputs = (self.ip1, self.ip2, self.ip3, self.ip4)
+            for i in range(4):
+                ip_inputs[i].setText(split_ip[i])
 
         # Label SetUp
         self.ip_label.setText(f' IP:   {self.ip}')
         self.port_label.setText(f' Port: {self.port}')
 
         # Setting up the Receiver class
-        self.receiver = Receiver(self.shifts, self.sequence_reps, self.samples_per_sequence,
-                                 self.length, self.port, self.ip)
-        self.connect_button.clicked.connect(self.receiver.connect)
-        self.receiver.st_connecting.connect(self.rec_connecting)
-        self.receiver.st_connecting.connect(self.rec_connected)
-        self.receiver.st_connect_failed.connect(self.rec_failed)
-        self.start_receive.clicked.connect(self.start_receiver)
-        self.stop_receive.clicked.connect(self.reconnect_receiver)
-        self.start_receive.setEnabled(False)
-        self.stop_receive.setEnabled(False)
+        if True:
+            self.receiver = Receiver(self.shifts, self.sequence_reps, self.samples_per_sequence,
+                                     self.length, self.port, self.ip)
+            self.connect_button.clicked.connect(self.receiver.connect)
+            self.receiver.st_connecting.connect(self.rec_connecting)
+            self.receiver.st_connecting.connect(self.rec_connected)
+            self.receiver.st_connect_failed.connect(self.rec_failed)
+            self.start_receive.clicked.connect(self.start_receiver)
+            self.stop_receive.clicked.connect(self.reconnect_receiver)
+            self.start_receive.setEnabled(False)
+            self.stop_receive.setEnabled(False)
 
         # Setting up the ip and port changer:
         self.refresh.clicked.connect(self.refresh_connect)
@@ -248,13 +256,14 @@ class UI(QMainWindow):
         self.stop_plot1.clicked.connect(self.plot_breaker1)
 
         # Setting up the SecondData class
-        self.second_thread = QThread()
-        self.second_data = SecondData(self.samples_per_sequence, self.shifts, self.sequence_reps, self.length,
-                                      self.last_n_values1, self.last_n_values2, self.cable_const)
-        self.second_data.moveToThread(self.second_thread)
-        self.second_thread.start()
-        self.start_plot2.clicked.connect(self.plot_starter2)
-        self.stop_plot2.clicked.connect(self.plot_breaker2)
+        if True:
+            self.second_thread = QThread()
+            self.second_data = SecondData(self.samples_per_sequence, self.shifts, self.sequence_reps, self.length,
+                                          self.last_n_values1, self.last_n_values2, self.cable_const)
+            self.second_data.moveToThread(self.second_thread)
+            self.second_thread.start()
+            self.start_plot2.clicked.connect(self.plot_starter2)
+            self.stop_plot2.clicked.connect(self.plot_breaker2)
 
         # Refreshing the chosen plot option
         self.QComboBox_1.currentTextChanged.connect(self.running_refresher1)
@@ -274,45 +283,46 @@ class UI(QMainWindow):
         self.tare_distance.clicked.connect(self.cable_constant_refresher)
 
         # Setting up the plot timer:
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.plot1_timer)
-        self.timer.timeout.connect(self.plot2_timer)
-        self.timer.timeout.connect(self.receiver_timer)
-        self.timer.timeout.connect(self.data_rate_timer)
-        self.timer.start(1000)
-        self.counter1 = 0
-        self.counter2 = 0
-        self.counter_lost = 0
-        self.bytes_received = 0
+        self.make_plot_timers = True
+        if self.make_plot_timers:
+            self.timer = QTimer()
+            self.timer.timeout.connect(self.plot1_timer)
+            self.timer.timeout.connect(self.plot2_timer)
+            self.timer.timeout.connect(self.receiver_timer)
+            self.timer.timeout.connect(self.data_rate_timer)
+            self.timer.timeout.connect(self.home_non_auto_plots)
+            self.timer.start(500)
+            self.counter1 = 0
+            self.counter2 = 0
+            self.counter_lost = 0
+            self.bytes_received = 0
 
         self.request1 = 0
         self.request2 = 0
 
-        # Setting up the smoother window
-        self.setWindowFlags(Qt.FramelessWindowHint)
-        self.__mousePos = None
+        # Setting up the qss style sheet
         with open('resources/pams_style.qss', 'r') as f:
             self.setStyleSheet(f.read())
-        # self.label_31.setStyleSheet('QLabel {font-family:RubFlama Light;font-size: 14pt;font-style:normal;}')
-        # for i in [self.tab, self.tab_2, self.tab_3, self.tab_4]:
-        #     i.setStyleSheet('background: white')
 
-        # Setting up the three window buttons
-        self.maximize_button.clicked.connect(self.maximize_button_clicked)
-        self.med_ic = QIcon('resources/medimize_button.svg')
-        self.med_ic_white = QIcon('resources/medimize_button_white.svg')
-        self.max_ic = QIcon('resources/maximize_button.svg')
-        self.max_ic_white = QIcon('resources/maximize_button_white.svg')
-        self.min_ic = QIcon('resources/minimize_button.svg')
-        self.min_ic_white = QIcon('resources/minimize_button_white.svg')
-        self.clos_ic = QIcon('resources/closing_button.svg')
-        self.clos_ic_white = QIcon('resources/closing_button_white.svg')
-        self.maximize_button.enterEvent = self.maximize_button_hover
-        self.maximize_button.leaveEvent = self.maximize_button_exit
-        self.minimize_button.enterEvent = self.minimize_button_hover
-        self.minimize_button.leaveEvent = self.minimize_button_exit
-        self.close_button.enterEvent = self.close_button_hover
-        self.close_button.leaveEvent = self.close_button_exit
+        # Setting up the three window buttons and hiding the frame
+        self.make_own_window_buttons = True
+        if self.make_own_window_buttons:
+            self.setWindowFlags(Qt.FramelessWindowHint)
+            self.maximize_button.clicked.connect(self.maximize_button_clicked)
+            self.med_ic = QIcon('resources/medimize_button.svg')
+            self.med_ic_white = QIcon('resources/medimize_button_white.svg')
+            self.max_ic = QIcon('resources/maximize_button.svg')
+            self.max_ic_white = QIcon('resources/maximize_button_white.svg')
+            self.min_ic = QIcon('resources/minimize_button.svg')
+            self.min_ic_white = QIcon('resources/minimize_button_white.svg')
+            self.clos_ic = QIcon('resources/closing_button.svg')
+            self.clos_ic_white = QIcon('resources/closing_button_white.svg')
+            self.maximize_button.enterEvent = self.maximize_button_hover
+            self.maximize_button.leaveEvent = self.maximize_button_exit
+            self.minimize_button.enterEvent = self.minimize_button_hover
+            self.minimize_button.leaveEvent = self.minimize_button_exit
+            self.close_button.enterEvent = self.close_button_hover
+            self.close_button.leaveEvent = self.close_button_exit
 
         # Setting up the animations for QTabWidget
         self.animate_tab_buttons = True
@@ -379,23 +389,51 @@ class UI(QMainWindow):
             self.tab_antimation3.setEndValue(QPoint(self.tabRect3.x(), self.tabRect3.height()))
             self.tabIndex = -1
 
-        # Set up the auto-range checkboxes:
+        # Set up the auto-range checkboxes and home buttons:
         if True:
             self.auto_x1.stateChanged.connect(self.auto_x_changer1)
+            self.auto_y1.stateChanged.connect(self.auto_y_changer1)
+            self.auto_x2.stateChanged.connect(self.auto_x_changer2)
+            self.auto_y2.stateChanged.connect(self.auto_y_changer2)
+            self.plot_home1.clicked.connect(self.graph1.autoRange)
+            self.plot_home2.clicked.connect(self.graph2.autoRange)
 
-        # Add the RUB-logo
+        # Add the RUB- and EST-logo
         if True:
             self.rub_logo = QSvgWidget('resources/Logo_RUB_weiss_rgb.svg')
             self.rub_logo.setMaximumHeight(40)
-            self.rub_logo.setMaximumWidth(190)
+            self.rub_logo.setMaximumWidth(150)
             self.horizontalLayout_9.insertWidget(3, self.rub_logo)
+            self.est_logo = QSvgWidget('resources/est_logo.svg')
+            # self.est_logo.setMaximumHeight(40)
+            # self.est_logo.setMaximumWidth(92)
+            # self.horizontalLayout_9.insertWidget(3, self.est_logo)
+            self.est_logo.setParent(self)
+            self.est_logo.setGeometry(QRect(570, 5, 69, 30))
+            # self.est_animation = QPropertyAnimation(self.est_logo, b"pos")
+            # self.est_animation.setStartValue(QPoint(self.est_logo.x(), self.est_logo.y()))
+            # self.est_animation.setEndValue(QPoint(self.est_logo.x(), self.est_logo.y()-10))
+            # self.est_animation.setDuration(0)
+            # self.est_animation.start()
+
+        # Setting up the vertical lines:
+        self.make_infinite_lines = True
+        if self.make_infinite_lines:
+            self.inf_line1 = InfiniteLine(angle=90, pen=mkPen(color=(255, 0, 0), width=1))
+            self.inf_line2 = InfiniteLine(angle=90, pen=mkPen(color=(255, 0, 0), width=1))
+            self.vert_line1.stateChanged.connect(self.inf_line1_refresher)
+            self.vert_line2.stateChanged.connect(self.inf_line2_refresher)
 
     def plot(self, data):
         self.line1.setData(data[0], data[1])
+        if self.vert_line1.isChecked():
+            self.inf_line1.setPos(data[2])
         self.counter1 += 1
 
     def plot_2(self, data):
         self.line2.setData(data[0], data[1])
+        if self.vert_line2.isChecked():
+            self.inf_line2.setPos(data[2])
         self.counter2 += 1
 
     def plot_starter1(self):
@@ -408,26 +446,35 @@ class UI(QMainWindow):
                 self.graph1.setTitle('Raw data')
                 self.graph1.getAxis('bottom').setLabel('Time', units='s')
                 self.graph1.getAxis('left').setLabel('Voltage', units='v')
+                self.vert_line1.setEnabled(False)
+                self.vert_line1.setChecked(False)
             case 'IRF':
                 self.request1 = 2
                 self.graph1.setTitle('IRF data')
                 self.graph1.getAxis('bottom').setLabel('Time', units='ms')
                 self.graph1.getAxis('left').setLabel('Voltage', units='v')
+                self.vert_line1.setEnabled(False)
+                self.vert_line1.setChecked(False)
             case 'Distance':
                 self.request1 = 3
                 self.graph1.setTitle('Distance')
                 self.graph1.getAxis('bottom').setLabel('Time', units='s')
                 self.graph1.getAxis('left').setLabel('Distance', units='m')
-                self.graph1.enableAutoRange(axis=ViewBox.XYAxes)
+                self.auto_x1.setChecked(True)
+                self.auto_y1.setChecked(True)
+                self.vert_line1.setEnabled(False)
+                self.vert_line1.setChecked(False)
             case 'IRF Interpolated':
                 self.request1 = 4
                 self.graph1.getAxis('bottom').setLabel('Time', units='s')
                 self.graph1.getAxis('left').setLabel('Voltage', units='v')
+                self.vert_line1.setEnabled(True)
         self.data_connector()
         self.plot_connector1()
-        if box != 'Distance':
-            self.graph1.disableAutoRange(axis=ViewBox.XYAxes)
         self.stop_plot1.setEnabled(True)
+        if box != 'Distance':
+            self.auto_x1.setChecked(False)
+            self.auto_y1.setChecked(False)
 
     def plot_starter2(self):
         self.start_plot2.setEnabled(False)
@@ -440,26 +487,35 @@ class UI(QMainWindow):
                 self.graph2.getAxis('left').setLabel('Voltage')
                 self.graph2.getAxis('bottom').setLabel('Time', units='s')
                 self.graph2.getAxis('left').setLabel('Voltage', units='v')
+                self.vert_line2.setEnabled(False)
+                self.vert_line2.setChecked(False)
             case 'IRF':
                 self.request2 = 2
                 self.graph2.setTitle('IRF Data')
                 self.graph2.getAxis('bottom').setLabel('Time', units='ms')
                 self.graph2.getAxis('left').setLabel('Voltage', units='v')
+                self.vert_line2.setEnabled(False)
+                self.vert_line2.setChecked(False)
             case 'Distance':
                 self.request2 = 3
                 self.graph2.setTitle('Distance')
                 self.graph2.getAxis('bottom').setLabel('Time', units='s')
                 self.graph2.getAxis('left').setLabel('Distance', units='m')
-                self.graph2.enableAutoRange(axis=ViewBox.XYAxes)
+                self.auto_x2.setChecked(True)
+                self.auto_y2.setChecked(True)
+                self.vert_line2.setEnabled(False)
+                self.vert_line2.setChecked(False)
             case 'IRF Interpolated':
                 self.request1 = 4
                 self.graph2.getAxis('bottom').setLabel('Time', units='s')
                 self.graph2.getAxis('left').setLabel('Voltage', units='v')
+                self.vert_line2.setEnabled(True)
         self.data_connector()
         self.plot_connector2()
-        if box != 'Distance':
-            self.graph2.disableAutoRange(axis=ViewBox.XYAxes)
         self.stop_plot2.setEnabled(True)
+        if box != 'Distance':
+            self.auto_x2.setChecked(False)
+            self.auto_y2.setChecked(False)
 
     def plot_breaker1(self):
         self.stop_plot1.setEnabled(False)
@@ -510,7 +566,7 @@ class UI(QMainWindow):
         unconnect(self.second_data.package4Ready, self.plot_2)
 
     def running_refresher1(self):
-        if not self.start_plot1.isEnabled():
+        if self.stop_plot1.isEnabled():
             self.plot_breaker1()
             self.plot_starter1()
         if self.QComboBox_1.currentText() == 'Distance':
@@ -524,7 +580,7 @@ class UI(QMainWindow):
                 self.distance_const.setEnabled(False)
 
     def running_refresher2(self):
-        if not self.start_plot2.isEnabled():
+        if self.stop_plot2.isEnabled():
             self.plot_breaker2()
             self.plot_starter2()
         if self.QComboBox_2.currentText() == 'Distance':
@@ -565,10 +621,33 @@ class UI(QMainWindow):
         else:
             self.graph2.disableAutoRange(axis=ViewBox.XAxis)
 
+    def auto_y_changer1(self):
+        if self.auto_y1.isChecked():
+            self.graph1.enableAutoRange(axis=ViewBox.YAxis)
+        else:
+            self.graph1.disableAutoRange(axis=ViewBox.YAxis)
+
+    def auto_y_changer2(self):
+        if self.auto_y2.isChecked():
+            self.graph2.enableAutoRange(axis=ViewBox.YAxis)
+        else:
+            self.graph2.disableAutoRange(axis=ViewBox.YAxis)
+
+    def inf_line1_refresher(self, state):
+        if state == 2:
+            self.graph1.addItem(self.inf_line1)
+        else:
+            self.graph1.removeItem(self.inf_line1)
+
+    def inf_line2_refresher(self, state):
+        if state == 2:
+            self.graph2.addItem(self.inf_line2)
+        else:
+            self.graph2.removeItem(self.inf_line2)
+
     def cable_constant_refresher(self):
         self.cable_const = self.second_data.cable_constant = np.average(np.array(self.second_data.maxima)[-20:])+self.cable_const
         self.distance_const.setValue(self.cable_const)
-
 
     def data_connector(self):
         if self.request1 <= 1 and self.request2 <= 1:
@@ -578,7 +657,6 @@ class UI(QMainWindow):
             self.receiver.packageReady.connect(self.second_data.irf)
         if self.request1 == 3 or self.request2 == 3:
             self.second_data.t0 = time.time()
-            self.second_data.time_stamps, self.second_data.maxima = deque(maxlen=1000), deque(maxlen=1000)
             if self.refresh_x1.isChecked():
                 self.second_data.refresh_x1 = True
                 self.last_values1.setEnabled(True)
@@ -651,9 +729,9 @@ class UI(QMainWindow):
         self.sequence_reps = int(self.sr_edit.text())
         self.shifts = int(self.shifts_edit.text())
         self.length = int(self.length_edit.currentText())
-        with open('resources/configurations.bin', 'wb') as f:
-            pickle.dump(change_dict(self.values, self.shifts, self.samples_per_sequence, self.sequence_reps,
-                                    self.length, self.last_n_values1, self.last_n_values2), f)
+        # with open('resources/configurations.bin', 'wb') as f:
+        #     pickle.dump(change_dict(self.values, self.shifts, self.samples_per_sequence, self.sequence_reps,
+        #                             self.length, self.last_n_values1, self.last_n_values2), f)
         self.second_data.sps = self.samples_per_sequence
         self.second_data.sr = self.sequence_reps
         self.second_data.shifts = self.shifts
@@ -691,21 +769,28 @@ class UI(QMainWindow):
         self.counter_lost += 1
 
     def plot1_timer(self):
-        self.label_12.setText(f'Plot 1: {self.counter1} P/s')
+        self.label_12.setText(f'Plot 1: {self.counter1*2} P/s')
         self.counter1 = 0
 
     def plot2_timer(self):
-        self.label_22.setText(f'Plot 2: {self.counter2} P/s')
+        self.label_22.setText(f'Plot 2: {self.counter2*2} P/s')
         self.counter2 = 0
 
     def receiver_timer(self):
-        self.label_21.setText(f'Lost: {self.counter_lost} p/s')
+        self.label_21.setText(f'Lost: {self.counter_lost*2} p/s')
         self.counter_lost = 0
 
     def data_rate_timer(self):
         byties = psutil.net_io_counters(pernic=True)['Ethernet 2'][1]
-        self.ethernet_rate.setText(f'Ethernet 2: {round((byties - self.bytes_received) * 8e-06, 1)} MBit/s')
+        self.ethernet_rate.setText(f'Ethernet 2: {round((byties - self.bytes_received) * 8e-06 * 2, 1)} MBit/s')
         self.bytes_received = byties
+
+    def home_non_auto_plots(self):
+        if self.QComboBox_1.currentText() != 'Distance' and self.stop_plot1.isEnabled():
+            self.graph1.autoRange()
+        if self.QComboBox_2.currentText() != 'Distance' and self.stop_plot2.isEnabled():
+            self.graph2.autoRange()
+        unconnect(self.timer.timeout, self.home_non_auto_plots)
 
     def close_button_hover(self, event):
         self.close_button.setIcon(self.clos_ic_white)
@@ -714,13 +799,13 @@ class UI(QMainWindow):
         self.close_button.setIcon(self.clos_ic)
 
     def maximize_button_hover(self, event):
-        if self.isMaximized():
+        if self.isFullScreen():
             self.maximize_button.setIcon(self.med_ic_white)
         else:
             self.maximize_button.setIcon(self.max_ic_white)
 
     def maximize_button_exit(self, event):
-        if self.isMaximized():
+        if self.isFullScreen():
             self.maximize_button.setIcon(self.med_ic)
         else:
             self.maximize_button.setIcon(self.max_ic)
@@ -732,11 +817,12 @@ class UI(QMainWindow):
         self.minimize_button.setIcon(self.min_ic)
 
     def maximize_button_clicked(self):
-        self.toggle_maximized()
-        if self.isMaximized():
-            self.maximize_button.setIcon(self.med_ic)
-        else:
+        if self.isFullScreen():
+            self.showNormal()
             self.maximize_button.setIcon(self.max_ic)
+        else:
+            self.maximize_button.setIcon(self.med_ic)
+            self.showFullScreen()
 
     def mousePressEvent(self, event):
         self.__mousePos = event.globalPos()
