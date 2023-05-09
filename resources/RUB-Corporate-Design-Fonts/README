@@ -1,0 +1,26 @@
+Hinweis zu Windows XP:
+
+Die Rasterung, und damit die Lesbarkeit der Schriften auf dem Bildschirm 
+wird durch die Anstellungen des Bildschirms stark beeinflusst.
+Durch 
+  "Eigenschaften von Anzeige" (rechte Maustaste über Desktop)
+     -> (Registerkarte) "Darstellung"
+       -> (Anwahl) "Effekte"
+         -> "Folgende Methode zum Kantenglätten von Bildschirmschriftarten verwenden:"
+           kann mit der Anwahl von "Standard" oder "Cleartype"
+die Ausgabe signifikant verbessert werden.
+Das von Microsoft unter
+    http://www.microsoft.com/typography/ClearTypePowerToy.mspx
+bereitgestellte Tool "ClearTypePowerToy" führt die ClearType-Einstellungen
+vollständig durch. Die Anwahl alleine kann auch zu unvollständig wiedergegeben
+Zeichen führen.
+
+Zur Installation des Tools sind Administrator-Rechte erforderlich.
+
+----------------------------------------------------------------------------------------
+
+Hinweis zu Microsoft Word:
+
+Die unterschiedlichen Word-Versionen, insbesondere "Word 2003" und "Word 2007"
+verhalten sich in der Schriftdarstellung unterschiedlich. 
+"Word 2003" wird durch das oben angegebene Verfahren stärker beeinflusst.

@@ -9,8 +9,9 @@ import psutil
 
 from PyQt5.QtCore import *
 from PyQt5.QtSvg import QSvgWidget
-from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QSizePolicy
-from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QSizePolicy, QSplashScreen, QHBoxLayout, QPushButton, \
+    QBoxLayout
+from PyQt5.QtGui import QIcon, QPixmap, QColor
 from PyQt5 import uic
 from PyQt5.QtMultimedia import QAudio
 
@@ -217,12 +218,14 @@ class UI(QMainWindow):
                                                 'left': CustomAxis(orientation='left')})
             self.line1 = self.graph1.plot(self.xData, np.zeros(len(self.xData)), pen=pen)
             self.graph1.enableAutoRange(axis=ViewBox.XYAxes)
+            self.graph1.hideButtons()
 
             self.graph2.setBackground('w')
             self.graph2.setAxisItems(axisItems={'bottom': CustomAxis(orientation='bottom'),
                                                 'left': CustomAxis(orientation='left')})
             self.line2 = self.graph2.plot(self.xData2, np.zeros(len(self.xData2)), pen=pen)
             self.graph2.enableAutoRange(axis=ViewBox.XYAxes)
+            self.graph2.hideButtons()
 
             # Setting up the IP and Port inputs and values:
             self.ip, self.port, self.sender_port = definitions.IP_Address, definitions.PORT, definitions.SENDER_PORT
@@ -290,7 +293,6 @@ class UI(QMainWindow):
             self.timer.timeout.connect(self.plot2_timer)
             self.timer.timeout.connect(self.receiver_timer)
             self.timer.timeout.connect(self.data_rate_timer)
-            self.timer.timeout.connect(self.home_non_auto_plots)
             self.timer.start(500)
             self.counter1 = 0
             self.counter2 = 0
@@ -395,8 +397,8 @@ class UI(QMainWindow):
             self.auto_y1.stateChanged.connect(self.auto_y_changer1)
             self.auto_x2.stateChanged.connect(self.auto_x_changer2)
             self.auto_y2.stateChanged.connect(self.auto_y_changer2)
-            self.plot_home1.clicked.connect(self.graph1.autoRange)
-            self.plot_home2.clicked.connect(self.graph2.autoRange)
+            self.plot_home1.clicked.connect(self.auto_graph1)
+            self.plot_home2.clicked.connect(self.auto_graph2)
 
         # Add the RUB- and EST-logo
         if True:
@@ -424,14 +426,22 @@ class UI(QMainWindow):
             self.vert_line1.stateChanged.connect(self.inf_line1_refresher)
             self.vert_line2.stateChanged.connect(self.inf_line2_refresher)
 
+        self.pixmap = QPixmap('resources/est_logo.svg')
+
     def plot(self, data):
-        self.line1.setData(data[0], data[1])
+        if self.log_y1.isChecked():
+            self.line1.setData(data[0], np.log10(np.absolute(data[1])))
+        else:
+            self.line1.setData(data[0], data[1])
         if self.vert_line1.isChecked():
             self.inf_line1.setPos(data[2])
         self.counter1 += 1
 
     def plot_2(self, data):
-        self.line2.setData(data[0], data[1])
+        if self.log_y2.isChecked():
+            self.line2.setData(data[0], np.log10(np.absolute(data[1])))
+        else:
+            self.line2.setData(data[0], data[1])
         if self.vert_line2.isChecked():
             self.inf_line2.setPos(data[2])
         self.counter2 += 1
@@ -448,6 +458,8 @@ class UI(QMainWindow):
                 self.graph1.getAxis('left').setLabel('Voltage', units='v')
                 self.vert_line1.setEnabled(False)
                 self.vert_line1.setChecked(False)
+                self.log_y1.setEnabled(False)
+                self.log_y1.setChecked(False)
             case 'IRF':
                 self.request1 = 2
                 self.graph1.setTitle('IRF data')
@@ -455,6 +467,8 @@ class UI(QMainWindow):
                 self.graph1.getAxis('left').setLabel('Voltage', units='v')
                 self.vert_line1.setEnabled(False)
                 self.vert_line1.setChecked(False)
+                self.log_y1.setEnabled(False)
+                self.log_y1.setChecked(False)
             case 'Distance':
                 self.request1 = 3
                 self.graph1.setTitle('Distance')
@@ -464,17 +478,17 @@ class UI(QMainWindow):
                 self.auto_y1.setChecked(True)
                 self.vert_line1.setEnabled(False)
                 self.vert_line1.setChecked(False)
+                self.log_y1.setEnabled(False)
+                self.log_y1.setChecked(False)
             case 'IRF Interpolated':
                 self.request1 = 4
                 self.graph1.getAxis('bottom').setLabel('Time', units='s')
                 self.graph1.getAxis('left').setLabel('Voltage', units='v')
                 self.vert_line1.setEnabled(True)
+                self.log_y1.setEnabled(True)
         self.data_connector()
         self.plot_connector1()
         self.stop_plot1.setEnabled(True)
-        if box != 'Distance':
-            self.auto_x1.setChecked(False)
-            self.auto_y1.setChecked(False)
 
     def plot_starter2(self):
         self.start_plot2.setEnabled(False)
@@ -489,6 +503,8 @@ class UI(QMainWindow):
                 self.graph2.getAxis('left').setLabel('Voltage', units='v')
                 self.vert_line2.setEnabled(False)
                 self.vert_line2.setChecked(False)
+                self.log_y2.setEnabled(False)
+                self.log_y2.setChecked(False)
             case 'IRF':
                 self.request2 = 2
                 self.graph2.setTitle('IRF Data')
@@ -496,6 +512,8 @@ class UI(QMainWindow):
                 self.graph2.getAxis('left').setLabel('Voltage', units='v')
                 self.vert_line2.setEnabled(False)
                 self.vert_line2.setChecked(False)
+                self.log_y2.setEnabled(False)
+                self.log_y2.setChecked(False)
             case 'Distance':
                 self.request2 = 3
                 self.graph2.setTitle('Distance')
@@ -505,17 +523,17 @@ class UI(QMainWindow):
                 self.auto_y2.setChecked(True)
                 self.vert_line2.setEnabled(False)
                 self.vert_line2.setChecked(False)
+                self.log_y2.setEnabled(False)
+                self.log_y2.setChecked(False)
             case 'IRF Interpolated':
-                self.request1 = 4
+                self.request2 = 4
                 self.graph2.getAxis('bottom').setLabel('Time', units='s')
                 self.graph2.getAxis('left').setLabel('Voltage', units='v')
                 self.vert_line2.setEnabled(True)
+                self.log_y2.setEnabled(True)
         self.data_connector()
         self.plot_connector2()
         self.stop_plot2.setEnabled(True)
-        if box != 'Distance':
-            self.auto_x2.setChecked(False)
-            self.auto_y2.setChecked(False)
 
     def plot_breaker1(self):
         self.stop_plot1.setEnabled(False)
@@ -632,6 +650,12 @@ class UI(QMainWindow):
             self.graph2.enableAutoRange(axis=ViewBox.YAxis)
         else:
             self.graph2.disableAutoRange(axis=ViewBox.YAxis)
+
+    def auto_graph1(self):
+        self.graph1.autoRange(padding=0.04)
+
+    def auto_graph2(self):
+        self.graph2.autoRange(padding=0.04)
 
     def inf_line1_refresher(self, state):
         if state == 2:
@@ -785,13 +809,6 @@ class UI(QMainWindow):
         self.ethernet_rate.setText(f'Ethernet 2: {round((byties - self.bytes_received) * 8e-06 * 2, 1)} MBit/s')
         self.bytes_received = byties
 
-    def home_non_auto_plots(self):
-        if self.QComboBox_1.currentText() != 'Distance' and self.stop_plot1.isEnabled():
-            self.graph1.autoRange()
-        if self.QComboBox_2.currentText() != 'Distance' and self.stop_plot2.isEnabled():
-            self.graph2.autoRange()
-        unconnect(self.timer.timeout, self.home_non_auto_plots)
-
     def close_button_hover(self, event):
         self.close_button.setIcon(self.clos_ic_white)
 
@@ -884,10 +901,29 @@ class UI(QMainWindow):
         super().close()
 
 
+'''
+class SplashScreen(QSplashScreen):
+    def __init__(self):
+        super().__init__()
+        self.widget = QWidget()
+        self.widget.resize(300, 300)
+        self.widget.setStyleSheet('background: green')
+        self.layout1 = QHBoxLayout()
+        self.layout1.addWidget(self.widget)
+        self.setLayout(self.layout1)
+        pixmap = QPixmap(self.widget())
+        self.setPixmap(pixmap)
+'''
+
+
 def main():
     app = QApplication(sys.argv)
+    pixmap = QPixmap('resources/splash_screen.png')
+    splashscreen = QSplashScreen(pixmap)
+    splashscreen.show()
     window = UI()
     window.show()
+    splashscreen.finish(window)
     app.exec()
 
 

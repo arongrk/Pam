@@ -1,11 +1,15 @@
 import sys
+
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from PyQt6 import uic
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QPixmap
+from PyQt6.QtMultimedia import QAudioFormat, QAudio, QAudioOutput, QAudioDevice
+from pysine import sine
+from pyaudio import PyAudio
 
 
-class SliderWindow(QMainWindow):
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         if True:
@@ -28,6 +32,12 @@ class SliderWindow(QMainWindow):
             self.minimize_button.leaveEvent = self.minimize_button_exit
             self.close_button.enterEvent = self.close_button_hover
             self.close_button.leaveEvent = self.close_button_exit
+        self.sine = sine(440.0, duration=5.0)
+        self.pyaudio = PyAudio()
+        self.stream = self.pyaudio.open(rate=96000,
+                                        format=self.pyaudio.get_format_from_width(1),
+                                        channels=1,
+                                        output=True)
 
 
     def close_button_hover(self, event):
@@ -65,8 +75,12 @@ class SliderWindow(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    window = SliderWindow()
+    pixmap = QPixmap('resources/splash_screen.png')
+    splashscreen = QSplashScreen(pixmap)
+    splashscreen.show()
+    window = MainWindow()
     window.show()
+    splashscreen.finish(window)
     app.exec()
 
 
