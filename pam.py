@@ -192,22 +192,23 @@ class UI(QMainWindow):
         # Loading the values and getting the parameters for data interpreting
         with open('resources/configurations.bin', 'rb') as f:
             self.values = pickle.load(f)
-        self.samples_per_sequence = self.values['samples_per_sequence']
-        self.sequence_reps = self.values['sequence_reps']
-        self.shifts = self.values['shifts']
-        self.length = self.values['length']
-        self.last_n_values1 = self.values['last_values1']
-        self.last_n_values2 = self.values['last_values2']
-        self.cable_const = self.values['cable_length_constant']
-        self.sps_edit.setText(str(self.samples_per_sequence))
-        self.sr_edit.setText(str(self.sequence_reps))
-        self.shifts_edit.setText(str(self.shifts))
-        self.length_edit.setCurrentText(str(self.length))
-        self.last_values1.setValue(self.last_n_values1)
-        self.last_values2.setValue(self.last_n_values2)
-        self.refresh_config.clicked.connect(self.refresh_configuration)
-        self.xData = np.arange(1, self.shifts * self.sequence_reps * self.samples_per_sequence + 1) / 5 * 10 ** 9
-        self.xData2 = np.arange(0, 1280) / 5 * 10 ** 9
+        if True:
+            self.samples_per_sequence = self.values['samples_per_sequence']
+            self.sequence_reps = self.values['sequence_reps']
+            self.shifts = self.values['shifts']
+            self.length = self.values['length']
+            self.last_n_values1 = self.values['last_values1']
+            self.last_n_values2 = self.values['last_values2']
+            self.cable_const = self.values['cable_length_constant']
+            self.sps_edit.setText(str(self.samples_per_sequence))
+            self.sr_edit.setText(str(self.sequence_reps))
+            self.shifts_edit.setText(str(self.shifts))
+            self.length_edit.setCurrentText(str(self.length))
+            self.last_values1.setValue(self.last_n_values1)
+            self.last_values2.setValue(self.last_n_values2)
+            self.refresh_config.clicked.connect(self.refresh_configuration)
+            self.xData = np.arange(1, self.shifts * self.sequence_reps * self.samples_per_sequence + 1) / 5 * 10 ** 9
+            self.xData2 = np.arange(0, 1280) / 5 * 10 ** 9
 
         # Configuring both plot-widgets
         if True:
@@ -219,6 +220,7 @@ class UI(QMainWindow):
             self.line1 = self.graph1.plot(self.xData, np.zeros(len(self.xData)), pen=pen)
             self.graph1.enableAutoRange(axis=ViewBox.XYAxes)
             self.graph1.hideButtons()
+            print(type(self.graph1))
 
             self.graph2.setBackground('w')
             self.graph2.setAxisItems(axisItems={'bottom': CustomAxis(orientation='bottom'),
