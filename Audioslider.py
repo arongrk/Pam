@@ -92,9 +92,11 @@ if __name__ == '__main__':
 import sys
 import numpy as np
 from PyQt5.QtCore import Qt, QTimer, QBuffer, QIODevice, QByteArray, QDataStream
-from PyQt5.QtMultimedia import QAudioDeviceInfo, QAudioFormat, QAudioOutput
-from PyQt5.QtWidgets import QApplication, QMainWindow, QSlider, QVBoxLayout, QWidget
+from PyQt5.QtMultimedia import QAudioDeviceInfo, QAudioFormat, QAudioOutput, QAudio
+from PyQt5.QtWidgets import QApplication, QMainWindow, QSlider, QVBoxLayout, QWidget, QPushButton
 import pyqtgraph
+import time
+import sounddevice
 
 
 class MainWindow(QMainWindow):
@@ -107,13 +109,16 @@ class MainWindow(QMainWindow):
         self.freq_slider.setMinimum(1)
         self.freq_slider.setMaximum(2000)
         self.freq_slider.setValue(440)
-        self.freq_slider.valueChanged.connect(self.update_frequency)
+        self.freq_slider.valueChanged.connect(self.update_tone)
 
         self.volume_slider = QSlider(Qt.Orientation.Horizontal)
         self.volume_slider.setMinimum(0)
         self.volume_slider.setMaximum(100)
         self.volume_slider.setValue(50)
-        self.volume_slider.valueChanged.connect(self.update_volume)
+        self.volume_slider.valueChanged.connect(self.update_tone)
+
+        self.start_button = QPushButton('start')
+        self.start_button.clicked.connect(self.play_tone)
 
         self.plotwidget = pyqtgraph.PlotWidget()
         self.line = self.plotwidget.plot([0,1,2,3,4,5],[0,0,0,0,0,0])
@@ -122,55 +127,31 @@ class MainWindow(QMainWindow):
         self.slider_layout = QVBoxLayout()
         self.slider_layout.addWidget(self.freq_slider)
         self.slider_layout.addWidget(self.volume_slider)
-        self.slider_layout.addWidget(self.plotwidget)
+        self.slider_layout.addWidget(self.start_button)
 
         # Create widget and set layout
         self.centralWidget = QWidget()
         self.centralWidget.setLayout(self.slider_layout)
         self.setCentralWidget(self.centralWidget)
-
-        # Set up audio output
-        self.device = QAudioDeviceInfo.defaultOutputDevice()
-        self.format = QAudioFormat()
-        self.format.setSampleRate(164000)
-        self.format.setChannelCount(1)
-        self.format.setSampleSize(16)
-        self.format.setCodec("audio/pcm")
-        self.format.setByteOrder(QAudioFormat.Endian.LittleEndian)
-        self.format.setSampleType(QAudioFormat.SampleType.SignedInt)
-
-        self.output = QAudioOutput(self.device, self.format)
-        self.output.setBufferSize(328000)
-        print(self.output.bufferSize())
-        self.buffer = QBuffer()
         self.timer = QTimer()
-        self.timer.timeout.connect(self.timer_callback)
-        self.duration = 1000
-        self.timer.start(self.duration)
+
+        self.SAMPLE_RATE = 4000
 
         self.frequency = 440
         self.volume = 0.5
-        # self.timer_callback()
 
+        self.tone = np.sin(np.linspace(0, 1, self.SAMPLE_RATE) * np.pi * 2 * self.frequency) * self.volume
+        sounddevice.default.samplerate = self.SAMPLE_RATE
 
-    def update_frequency(self, value):
-        self.frequency = value
+    def update_tone(self):
+        self.tone = np.sin(np.linspace(0, 1, self.SAMPLE_RATE) * np.pi * 2 * self.frequency) * self.volume
 
-    def update_volume(self, value):
-        self.volume = value
-
-    def timer_callback(self):
-        sample_rate = self.format.sampleRate()
-        duration = self.duration / 1000
-        self.buffer = QBuffer()
-        self.buffer.open(QIODevice.ReadWrite)
-        stream = QDataStream(self.buffer)
-        tone = ((2**15-1) * np.sin(np.linspace(0, duration, int(duration*sample_rate)) * 2 * np.pi * self.frequency)).astype(np.int16)
-        self.line.setData(np.linspace(0, duration, int(duration*sample_rate)), tone)
-        stream.writeRawData(tone.tobytes())
-        self.buffer.seek(0)
-        self.output.start(self.buffer)
-
+    def play_tone(self):
+        while True:
+            t0 = time.time()
+            sounddevice.play(self.tone)
+            sounddevice.wait()
+            print(time.time() - t0)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
