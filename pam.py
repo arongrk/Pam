@@ -190,9 +190,10 @@ class UI(QMainWindow):
         uic.loadUi('resources/Mainwindow.ui', self)
 
         # Loading the values and getting the parameters for data interpreting
-        with open('resources/configurations.bin', 'rb') as f:
-            self.values = pickle.load(f)
         if True:
+
+            with open('resources/configurations.bin', 'rb') as f:
+                self.values = pickle.load(f)
             self.samples_per_sequence = self.values['samples_per_sequence']
             self.sequence_reps = self.values['sequence_reps']
             self.shifts = self.values['shifts']

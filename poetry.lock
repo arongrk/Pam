@@ -78,36 +78,6 @@ files = [
 pycparser = "*"
 
 [[package]]
-name = "mock"
-version = "5.0.2"
-description = "Rolling backport of unittest.mock for all Pythons"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-files = [
-    {file = "mock-5.0.2-py3-none-any.whl", hash = "sha256:0e0bc5ba78b8db3667ad636d964eb963dc97a59f04c6f6214c5f0e4a8f726c56"},
-    {file = "mock-5.0.2.tar.gz", hash = "sha256:06f18d7d65b44428202b145a9a36e99c2ee00d1eb992df0caf881d4664377891"},
-]
-
-[package.extras]
-build = ["blurb", "twine", "wheel"]
-docs = ["sphinx"]
-test = ["pytest", "pytest-cov"]
-
-[[package]]
-name = "nose"
-version = "1.3.7"
-description = "nose extends unittest to make testing easier"
-category = "main"
-optional = false
-python-versions = "*"
-files = [
-    {file = "nose-1.3.7-py2-none-any.whl", hash = "sha256:dadcddc0aefbf99eea214e0f1232b94f2fa9bd98fa8353711dacb112bfcbbb2a"},
-    {file = "nose-1.3.7-py3-none-any.whl", hash = "sha256:9ff7c6cc443f8c51994b34a667bbcf45afd6d945be7477b52e97516fd17c53ac"},
-    {file = "nose-1.3.7.tar.gz", hash = "sha256:f1bffef9cbc82628f6e7d7b40d7e255aefaa1adb6a1b1d26c69a8b79e6208a98"},
-]
-
-[[package]]
 name = "numpy"
 version = "1.24.3"
 description = "Fundamental package for array computing in Python"
@@ -146,6 +116,18 @@ files = [
 ]
 
 [[package]]
+name = "pa-ringbuffer"
+version = "0.1.4"
+description = "Python wrapper for PortAudio's ring buffer"
+category = "main"
+optional = false
+python-versions = ">=2.6"
+files = [
+    {file = "pa-ringbuffer-0.1.4.tar.gz", hash = "sha256:0878054e979e7b4fafcbcf6273a87e1ed2c50dad44c29fc557d72b7b3a04cf42"},
+    {file = "pa_ringbuffer-0.1.4-py2.py3-none-any.whl", hash = "sha256:a4cb24883645696e021c309bfe13904617bf551491d6f0ab9f9ec70ff33d6a04"},
+]
+
+[[package]]
 name = "psutil"
 version = "5.9.5"
 description = "Cross-platform lib for process and system monitoring in Python."
@@ -171,30 +153,6 @@ files = [
 
 [package.extras]
 test = ["enum34", "ipaddress", "mock", "pywin32", "wmi"]
-
-[[package]]
-name = "pyaudio"
-version = "0.2.13"
-description = "Cross-platform audio I/O with PortAudio"
-category = "main"
-optional = false
-python-versions = "*"
-files = [
-    {file = "PyAudio-0.2.13-cp310-cp310-win32.whl", hash = "sha256:48e29537ea22ae2ae323eebe297bfb2683831cee4f20d96964e131f65ab2161d"},
-    {file = "PyAudio-0.2.13-cp310-cp310-win_amd64.whl", hash = "sha256:87137cfd0ef8608a2a383be3f6996f59505e322dab9d16531f14cf542fa294f1"},
-    {file = "PyAudio-0.2.13-cp311-cp311-win32.whl", hash = "sha256:13915faaa780e6bbbb6d745ef0e761674fd461b1b1b3f9c1f57042a534bfc0c3"},
-    {file = "PyAudio-0.2.13-cp311-cp311-win_amd64.whl", hash = "sha256:59cc3cc5211b729c7854e3989058a145872cc58b1a7b46c6d4d88448a343d890"},
-    {file = "PyAudio-0.2.13-cp37-cp37m-win32.whl", hash = "sha256:d294e3f85b2238649b1ff49ce3412459a8a312569975a89d14646536362d7576"},
-    {file = "PyAudio-0.2.13-cp37-cp37m-win_amd64.whl", hash = "sha256:ff7f5e44ef51fe61da1e09c6f632f0b5808198edd61b363855cc7dd03bf4a8ac"},
-    {file = "PyAudio-0.2.13-cp38-cp38-win32.whl", hash = "sha256:c6b302b048c054b7463936d8ba884b73877dc47012f3c94665dba92dd658ae04"},
-    {file = "PyAudio-0.2.13-cp38-cp38-win_amd64.whl", hash = "sha256:1505d766ee718df6f5a18b73ac42307ba1cb4d2c0397873159254a34f67515d6"},
-    {file = "PyAudio-0.2.13-cp39-cp39-win32.whl", hash = "sha256:eb128e4a6ea9b98d9a31f33c44978885af27dbe8ae53d665f8790cbfe045517e"},
-    {file = "PyAudio-0.2.13-cp39-cp39-win_amd64.whl", hash = "sha256:910ef09225cce227adbba92622d4a3e3c8375117f7dd64039f287d9ffc0e02a1"},
-    {file = "PyAudio-0.2.13.tar.gz", hash = "sha256:26bccc81e4243d1c0ff5487e6b481de6329fcd65c79365c267cef38f363a2b56"},
-]
-
-[package.extras]
-test = ["numpy"]
 
 [[package]]
 name = "pycparser"
@@ -273,67 +231,6 @@ files = [
 ]
 
 [[package]]
-name = "pyqt6"
-version = "6.5.0"
-description = "Python bindings for the Qt cross platform application toolkit"
-category = "main"
-optional = false
-python-versions = ">=3.6.1"
-files = [
-    {file = "PyQt6-6.5.0-1-cp37-abi3-macosx_10_14_universal2.whl", hash = "sha256:b3f2bf611e7f09c25f5decb82fc27bbe63fcc498e63bf11d17e23916d716c805"},
-    {file = "PyQt6-6.5.0-1-cp37-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:6f3d232fe2abb02689d23a83f9629ccca6d57a36384688cd6411700ff5cf43f2"},
-    {file = "PyQt6-6.5.0-1-cp37-abi3-win_amd64.whl", hash = "sha256:952ba3b50c10f61289ea74db4c7a616170219959ac5300e0d9ec5427a27e95c7"},
-    {file = "PyQt6-6.5.0-cp37-abi3-macosx_10_14_universal2.whl", hash = "sha256:e3c8289d9a509be897265981b77eb29e64ce29e9d221fdf52545c2c95e819c9b"},
-    {file = "PyQt6-6.5.0-cp37-abi3-manylinux_2_28_x86_64.whl", hash = "sha256:2b0d9628134811fbfc988d1757111ca8e25cb697f136fa54c969fb1a4d4a61d1"},
-    {file = "PyQt6-6.5.0-cp37-abi3-win_amd64.whl", hash = "sha256:99ea0e68f548509b7ef97cded0feeaf3dca7d1fe719388569407326be3be38c2"},
-    {file = "PyQt6-6.5.0.tar.gz", hash = "sha256:b97cb4be9b2c8997904ea668cf3b0a4ae5822196f7792590d05ecde6216a9fbc"},
-]
-
-[package.dependencies]
-PyQt6-Qt6 = ">=6.5.0"
-PyQt6-sip = ">=13.4,<14"
-
-[[package]]
-name = "pyqt6-qt6"
-version = "6.5.0"
-description = "The subset of a Qt installation needed by PyQt6."
-category = "main"
-optional = false
-python-versions = "*"
-files = [
-    {file = "PyQt6_Qt6-6.5.0-py3-none-macosx_10_14_x86_64.whl", hash = "sha256:1178fcd5e9590fec4261e06a753a8fa028222ec0bd9a0788b3bd37720fbbe6cf"},
-    {file = "PyQt6_Qt6-6.5.0-py3-none-macosx_11_0_arm64.whl", hash = "sha256:9d82d8af986a0eef55905f309fdda4303d1354eba10175824ae62ab6547f7a96"},
-    {file = "PyQt6_Qt6-6.5.0-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:5f40ef19eb632731828283361f800928517650c74c914c093af9a364d6843953"},
-    {file = "PyQt6_Qt6-6.5.0-py3-none-win_amd64.whl", hash = "sha256:8c1f898f4d02a31615fe7613a38f82b489fb2c8554965c917d551470731635a8"},
-]
-
-[[package]]
-name = "pyqt6-sip"
-version = "13.5.1"
-description = "The sip module support for PyQt6"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "PyQt6_sip-13.5.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:2a15f080a994936ed182f4a81343baa19bac9063ec6efc0a93d026f5cfc95ace"},
-    {file = "PyQt6_sip-13.5.1-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.whl", hash = "sha256:d90dfec64c35c91644a3e32d3e5680cdee549d00245ea7252cb6298797f9bcef"},
-    {file = "PyQt6_sip-13.5.1-cp310-cp310-win_amd64.whl", hash = "sha256:1e7bb3e45e57dfdb9437043d99b7cb797707e7f2475d122928b13688458f94b7"},
-    {file = "PyQt6_sip-13.5.1-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:18c0e75e6ebd91dc96dbc6290f044ec37e764890ef2182c82b99ea5b655ea466"},
-    {file = "PyQt6_sip-13.5.1-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.whl", hash = "sha256:c3e2f155f92f96d73c680caf3d87f4f9f9aaf6487c125ecbe7140daad7d87245"},
-    {file = "PyQt6_sip-13.5.1-cp311-cp311-win_amd64.whl", hash = "sha256:08b69898aab0fcc73661b212d434f9e9eb50319481bc2ac3aaf1ac06bc9feca6"},
-    {file = "PyQt6_sip-13.5.1-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:d79957dd0c0ea1a17f0846806ea203dce827df6a9dcd93ebfe98fdd6186d9ecc"},
-    {file = "PyQt6_sip-13.5.1-cp37-cp37m-manylinux_2_5_x86_64.manylinux1_x86_64.whl", hash = "sha256:a867601c38acc9b0c7f9aab4f96d9ec8cbedfcd5ae245f82a9c1c48f352413e4"},
-    {file = "PyQt6_sip-13.5.1-cp37-cp37m-win_amd64.whl", hash = "sha256:52931307cf06c5ac992df2877e899f8b8ba72464e2828fe442b18fd51c7bf787"},
-    {file = "PyQt6_sip-13.5.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:c71d303ff654ad947d8c0cb5ebfde9a59390aac52eb695a775234a08bee8f44e"},
-    {file = "PyQt6_sip-13.5.1-cp38-cp38-manylinux_2_5_x86_64.manylinux1_x86_64.whl", hash = "sha256:e0d715bb5b86eb8f09d84b2b4400df7e4c96ef730801bc145a1c23be79f39fac"},
-    {file = "PyQt6_sip-13.5.1-cp38-cp38-win_amd64.whl", hash = "sha256:4b2e70d21069fe6e20bf22de1de2985e064e00d1368e0a171ce38824be4339ab"},
-    {file = "PyQt6_sip-13.5.1-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:f7b4e3cad598afd9b50a32732007184141b400769d425cae86f4e702cbc882b3"},
-    {file = "PyQt6_sip-13.5.1-cp39-cp39-manylinux_2_5_x86_64.manylinux1_x86_64.whl", hash = "sha256:ad802005e68bb9bb6f869b7f904c73d7c7793d11b83d317c33ff6b0c163d785f"},
-    {file = "PyQt6_sip-13.5.1-cp39-cp39-win_amd64.whl", hash = "sha256:5e8fdb0821c0c556d2a34db1229d4bd711499a1102241b1b9fcf1ee34f87e564"},
-    {file = "PyQt6_sip-13.5.1.tar.gz", hash = "sha256:d1e9141752966669576d04b37ba0b122abbc41cc9c35493751028d7d91c4dd49"},
-]
-
-[[package]]
 name = "pyqtgraph"
 version = "0.13.3"
 description = "Scientific Graphics and GUI Library for Python"
@@ -349,22 +246,63 @@ files = [
 numpy = ">=1.20.0"
 
 [[package]]
-name = "pysine"
-version = "0.9.2"
-description = "Allows to play single tones on the PyAudio sound output in real time"
+name = "rtmixer"
+version = "0.1.4"
+description = "Reliable low-latency audio playback and recording"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.6"
 files = [
-    {file = "pysine-0.9.2-py2.py3-none-any.whl", hash = "sha256:9ec0264bcc8acdf6e95f08dd2fbdc2c2fe8af263b0e4983f121bd677eb61f536"},
-    {file = "pysine-0.9.2.tar.gz", hash = "sha256:574853e257d05482d2396422f28a4723903d35d195df09d0e400d7cd6c6fb23f"},
+    {file = "rtmixer-0.1.4-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:3d9aa05f24706df0b9c530f6b0f821e7363706099b5e1b27e9ef2bec8c34964f"},
+    {file = "rtmixer-0.1.4-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:56072835a415cb31773564e60a326c56194aed20a267645c0849658473a2620d"},
+    {file = "rtmixer-0.1.4-cp310-cp310-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:28db86d77356fa3644be3d9bf29b4055184e92d6f6fe5c5db1c945deac6c9733"},
+    {file = "rtmixer-0.1.4-cp310-cp310-musllinux_1_1_i686.whl", hash = "sha256:f55aba0c86f2c48fc4acd42f65725ab6d69353658c327032454a21e269a87b7a"},
+    {file = "rtmixer-0.1.4-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:8a64a3a9b75528c74967c99a299fddbd1201c3bb13eea60fee709de08100f2e1"},
+    {file = "rtmixer-0.1.4-cp310-cp310-win32.whl", hash = "sha256:e62fbe6fb9f5d2a818ab67e041c35f313d0897dfa50cdad6a82dc5d2f74052dc"},
+    {file = "rtmixer-0.1.4-cp310-cp310-win_amd64.whl", hash = "sha256:57dcb9fdc59490dd89b6ec932d7f1843fe5b65cc4e774a21e6a3070f3d0069c4"},
+    {file = "rtmixer-0.1.4-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:fae2c6bc873b7b7c88ac3948f5af1d80d316bceb81bb331c5925cd0c9ac3c2c8"},
+    {file = "rtmixer-0.1.4-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9c71defa2665bdec17a4728653f0484b19d92357396d0147d29f4b9df0aab76d"},
+    {file = "rtmixer-0.1.4-cp36-cp36m-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:bbe2de239599c19a10b42fffee17730ceb101a99a14c00dacbc2b32ee234cd2f"},
+    {file = "rtmixer-0.1.4-cp36-cp36m-musllinux_1_1_i686.whl", hash = "sha256:b492fc2f74361f385efdb9df114654c9b9cec89e588572e855c0962b1fc3a473"},
+    {file = "rtmixer-0.1.4-cp36-cp36m-musllinux_1_1_x86_64.whl", hash = "sha256:d8778a5359042f2504dd6e0a923d15289712d8a78163aca045001ba9757412b6"},
+    {file = "rtmixer-0.1.4-cp36-cp36m-win32.whl", hash = "sha256:1c6d8c3a59c6081d28277ba077435e268d66f2f58ddcc7c9f1166425e023b6c0"},
+    {file = "rtmixer-0.1.4-cp36-cp36m-win_amd64.whl", hash = "sha256:5e7010120836d29896afb9066080a3e6abed87bd22b9f204cd614cb6eec41254"},
+    {file = "rtmixer-0.1.4-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:f217eea267f459fc429e3a9d5b30f572ed679bed00808fe4d6956d625c3d6e43"},
+    {file = "rtmixer-0.1.4-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:4751c002af7baedcae14e9171a2a1947e480736792131cc56997ad9e9d7c553d"},
+    {file = "rtmixer-0.1.4-cp37-cp37m-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:424b9804d142409c9b3b0256dc07e176fddfe4a694f9badc649bc0c4d4fee4b6"},
+    {file = "rtmixer-0.1.4-cp37-cp37m-musllinux_1_1_i686.whl", hash = "sha256:ff363461dd5df226f10a3c2984c2e1719a16f2ae11154abf85817ec39b5f3d54"},
+    {file = "rtmixer-0.1.4-cp37-cp37m-musllinux_1_1_x86_64.whl", hash = "sha256:d6df701f5b1345e26a55da7b48b2957797ed3a93e2f3a2ba26353330ea86247c"},
+    {file = "rtmixer-0.1.4-cp37-cp37m-win32.whl", hash = "sha256:c9750c2c72a16a9283c8213c9b8143885b93259d53d5b34684835ffe4a3c69e2"},
+    {file = "rtmixer-0.1.4-cp37-cp37m-win_amd64.whl", hash = "sha256:5d43e2b8e04460bc5b4b34f51778223dd2d21185adc77f1634849b5d8b5c614f"},
+    {file = "rtmixer-0.1.4-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:a449e5c65203a3f4a554701e4e34ee026826f47d3c50cd1429bae0149f88b087"},
+    {file = "rtmixer-0.1.4-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a9b898d989f6dda4fd77708698f61378f9fd8205f7599366b3f6f95ea74b69c6"},
+    {file = "rtmixer-0.1.4-cp38-cp38-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:ba4b6eda37f4946030367c34b6cf2d19f9dfa14d4338326ce818cef18d050ae3"},
+    {file = "rtmixer-0.1.4-cp38-cp38-musllinux_1_1_i686.whl", hash = "sha256:fec05a35005d8aa11fd8b85661ae1138a7e199bceddae311ff77481c70ee3400"},
+    {file = "rtmixer-0.1.4-cp38-cp38-musllinux_1_1_x86_64.whl", hash = "sha256:417633d0d231d0c0679190f7ecf22f1c611f556ca6484f90393d0b22e3989dd3"},
+    {file = "rtmixer-0.1.4-cp38-cp38-win32.whl", hash = "sha256:254a2a87caaf5a96ef0d27af000ac5d172ecd82930f83639b379ed86dbd6ea3c"},
+    {file = "rtmixer-0.1.4-cp38-cp38-win_amd64.whl", hash = "sha256:d35c28de11a56b07749cb9554cf96ae5008db1a94fce11bfeb5207bec8dd1aa8"},
+    {file = "rtmixer-0.1.4-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:49a41490596ef178a865fd8d1ef186e37ccb9dce26836183ccabdd8934c63b66"},
+    {file = "rtmixer-0.1.4-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7a2811a6985a4729bddd215b12a8f7b38ed62a7497d087a19de06a05f8354067"},
+    {file = "rtmixer-0.1.4-cp39-cp39-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:d60c6301f18fe264c362eefc154628ecd980e84994807b422f6bc535ec446af5"},
+    {file = "rtmixer-0.1.4-cp39-cp39-musllinux_1_1_i686.whl", hash = "sha256:17d63b5e503535b9ef9095cbeb9155d9832bf417cfb9fafcdac92158decc33ca"},
+    {file = "rtmixer-0.1.4-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:3d79e3f813cd24b97eeb6bb00e55dbe34c468e352a191a0ec6c03844e4ac5749"},
+    {file = "rtmixer-0.1.4-cp39-cp39-win32.whl", hash = "sha256:d4a64cf9b938d55155240e1f929409b9657811aa9c990df870bb1c39e7f70848"},
+    {file = "rtmixer-0.1.4-cp39-cp39-win_amd64.whl", hash = "sha256:dd938f28397a41456c53c257504c06354653c0a240543ef098aa4a0f437407c5"},
+    {file = "rtmixer-0.1.4-pp37-pypy37_pp73-macosx_10_9_x86_64.whl", hash = "sha256:a3c016fb94a44ec29e9dc79c90d6e238db5377225dfb2838b2d9eaa5955ee079"},
+    {file = "rtmixer-0.1.4-pp37-pypy37_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6903133194805e38ebf27c21a52cfd9f08e5a25970a851987f2f3de32ae8065e"},
+    {file = "rtmixer-0.1.4-pp37-pypy37_pp73-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:5fa1d4b66a0a4f8dd290e8ade061e330f8f7ecad410de0727b0bca84c845d69e"},
+    {file = "rtmixer-0.1.4-pp37-pypy37_pp73-win_amd64.whl", hash = "sha256:46082b8833b528df3cd3f898ff94ad6c8a3c6739e1c19f0496a4e6dbc286f77c"},
+    {file = "rtmixer-0.1.4-pp38-pypy38_pp73-macosx_10_9_x86_64.whl", hash = "sha256:5549a425c473e985f63defa6b2419df919feaaeabb329416e71c4af07ccd4a97"},
+    {file = "rtmixer-0.1.4-pp38-pypy38_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:79174656d2a0a94480b4095aa702ad7211cdbcb593a469405594112e369f869e"},
+    {file = "rtmixer-0.1.4-pp38-pypy38_pp73-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:59b1c5ebe6bd6a986968d1233a7d79a0781310ecb43d481b07eeb4017be12ef7"},
+    {file = "rtmixer-0.1.4-pp38-pypy38_pp73-win_amd64.whl", hash = "sha256:51a742140455ba3114af21973a5dd50bbd7a78f1e24ab54b940109c84f86c2bf"},
+    {file = "rtmixer-0.1.4.tar.gz", hash = "sha256:f7e5777ac23f32d2ac42c3aae31d786cd66ebb0b9c84e30ac3069faf256a7da0"},
 ]
 
 [package.dependencies]
-mock = "*"
-nose = ">=1.0"
-numpy = "*"
-pyaudio = "*"
+CFFI = ">=1"
+pa-ringbuffer = "*"
+sounddevice = ">0.3.9"
 
 [[package]]
 name = "scipy"
@@ -428,5 +366,5 @@ numpy = ["NumPy"]
 
 [metadata]
 lock-version = "2.0"
-python-versions = "3.11.3"
-content-hash = "0a1c7944925052ef839240f115ba5cd21a80d431294a549b0c5da2e7bb75fb2b"
+python-versions = ">=3.10, <3.12"
+content-hash = "ae81d6b4457b9f1cf324cd1fc6c69280e5e73347f3015075759779a8620cffab"

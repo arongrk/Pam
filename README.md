@@ -1,1 +1,3 @@
-the readme file is yet to come
+Pam by Aron Grabski
+
+work in progress
