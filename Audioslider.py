@@ -91,13 +91,14 @@ if __name__ == '__main__':
 
 import sys
 import numpy as np
-from PyQt5.QtCore import Qt, QTimer, QBuffer, QIODevice, QByteArray, QDataStream, QThread
+from PyQt5.QtCore import Qt, QTimer, QBuffer, QIODevice, QByteArray, QDataStream, QThread, QObject
 from PyQt5.QtMultimedia import QAudioDeviceInfo, QAudioFormat, QAudioOutput, QAudio
 from PyQt5.QtWidgets import QApplication, QMainWindow, QSlider, QVBoxLayout, QWidget, QPushButton
 import pyqtgraph
 import time
 import sounddevice
 import rtmixer
+import pyaudio
 
 from pams_functions import unconnect
 
@@ -140,7 +141,7 @@ class MainWindow(QMainWindow):
 
         self.SAMPLE_RATE = 44100
         self.SAMPLE_DURATION = 1 / self.SAMPLE_RATE
-        self.SOUND_REFRESH_RATE = 0.1
+        self.SOUND_REFRESH_RATE = 1
         self.SAMPLE_SIZE = int(self.SAMPLE_RATE * self.SOUND_REFRESH_RATE)
         self.FREQUENCY = 600
         self.VOLUME = 0.5
@@ -151,7 +152,8 @@ class MainWindow(QMainWindow):
         sounddevice.default.channels = 1
         sounddevice.default.samplerate = self.SAMPLE_RATE
         sounddevice.default.latency = 'low'
-        self.audio_stream = sounddevice.OutputStream(samplerate=self.SAMPLE_RATE, latency='low', dtype='float32')
+        self.p = pyaudio.PyAudio()
+        # self.audio_stream = sounddevice.OutputStream(samplerate=self.SAMPLE_RATE, latency='low', dtype='float32')
         print('sounddevice defaults:\n'
               f'    Device: {sounddevice.default.device}\n'
               f'    Sample Rate: {sounddevice.default.samplerate}\n'
@@ -202,7 +204,7 @@ class MainWindow(QMainWindow):
         #       f' array length: {len(signal)}')
 
 
-class Playback(QThread):
+class Playback(QObject):
     def __init__(self, samplerate, latency='low'):
         super().__init__()
         self.signal = np.zeros(1000, dtype=np.float32)
@@ -214,6 +216,7 @@ class Playback(QThread):
         stream.start()
         playsound = True
         while playsound:
+            print('trying')
             signal = self.signal
             stream.write(signal)
         stream.stop()
