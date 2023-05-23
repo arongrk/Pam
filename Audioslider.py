@@ -1,12 +1,14 @@
-'''import sys
+import sys
+import numpy as np
+import time
 
-from PyQt6.QtWidgets import *
-from PyQt6.QtCore import *
-from PyQt6 import uic
-from PyQt6.QtGui import QIcon, QPixmap
-from PyQt6.QtMultimedia import QAudioFormat, QAudio, QAudioOutput, QAudioDevice
-from pysine import sine
-from pyaudio import PyAudio
+import pyaudio
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5 import uic
+from PyQt5.QtGui import QIcon, QPixmap
+from pyaudio import PyAudio, paFloat32
+from pyqtgraph import mkPen
 
 
 class MainWindow(QMainWindow):
@@ -32,13 +34,45 @@ class MainWindow(QMainWindow):
             self.minimize_button.leaveEvent = self.minimize_button_exit
             self.close_button.enterEvent = self.close_button_hover
             self.close_button.leaveEvent = self.close_button_exit
-        self.sine = sine(440.0, duration=5.0)
-        self.pyaudio = PyAudio()
-        self.stream = self.pyaudio.open(rate=96000,
-                                        format=self.pyaudio.get_format_from_width(1),
-                                        channels=1,
-                                        output=True)
+        # self.pyaudio = PyAudio()
 
+        self.SAMPLE_DURATION = 1000
+        self.SAMPLE_RATE = 96000
+        self.SAMPLE_SIZE = int(self.SAMPLE_RATE / 1000 * self.SAMPLE_DURATION)
+
+        # self.stream = self.pyaudio.open(rate=self.SAMPLE_RATE,
+        #                                 format=paFloat32,
+        #                                 channels=1,
+        #                                 output=True,
+        #                                 frames_per_buffer=self.SAMPLE_SIZE)
+
+        self.sound = np.sin((np.arange(0, self.SAMPLE_SIZE)/self.SAMPLE_RATE)*np.pi*2*self.freq_slider.value(), dtype=np.float32)
+        '''
+        self.write_timer = QTimer()
+        self.write_timer.timeout.connect(self.write_data)
+        self.write_timer.start(100)
+        self.stop_button.clicked.connect(self.write_timer.stop)
+        '''
+        pen = mkPen(color=(0, 0, 0), width=1)
+        self.sine_plot.setBackground('w')
+        self.line = self.sine_plot.plot(self.sound, pen=pen)
+
+        self.sinSender = Emitter(self.SAMPLE_RATE, self.freq_slider.value(), self.volume_slider.value())
+        self.start_button.clicked.connect(self.sinSender.start)
+        self.sinSender.sin_ready.connect(self.change_plot)
+        self.freq_slider.valueChanged.connect(self.sinSender.set_frequency)
+        self.freq_slider.valueChanged.connect(self.change_freq_label)
+        self.volume_slider.valueChanged.connect(self.sinSender.set_volume)
+        self.volume_slider.valueChanged.connect(self.change_vol_label)
+
+    def change_freq_label(self, new_value):
+        self.freq_label.setText(f'{new_value} Hz')
+
+    def change_vol_label(self, new_value):
+        self.vol_label.setText(f'{new_value} %')
+
+    def change_plot(self, data: tuple):
+        self.line.setData(np.arange(data[1]), data[0])
 
     def close_button_hover(self, event):
         self.close_button.setIcon(self.clos_ic_white)
@@ -72,6 +106,38 @@ class MainWindow(QMainWindow):
             self.maximize_button.setIcon(self.med_ic)
             self.showFullScreen()
 
+
+class Emitter(QThread):
+    sin_ready = pyqtSignal(tuple)
+
+    def __init__(self, sample_rate, frequency, volume, make_single_sine_wave=True):
+        QThread.__init__(self)
+        single_sin = make_single_sine_wave
+        self.SAMPLE_RATE = sample_rate
+        self.stop_sender = False
+        self.p = pyaudio.PyAudio()
+        self.frequency = frequency
+        self.volume = volume
+
+    def set_frequency(self, frequency):
+        self.frequency = frequency
+
+    def set_volume(self, volume):
+        self.volume = volume/100
+
+    def run(self):
+        stream = self.p.open(rate=self.SAMPLE_RATE,
+                             format=paFloat32,
+                             channels=1,
+                             output=True,
+                             frames_per_buffer=2019)
+        while not self.stop_sender:
+            samprate = self.SAMPLE_RATE
+            frequency = self.frequency
+            num_samp = int(samprate/frequency)
+            sinewave = np.sin(np.arange(num_samp)/samprate*np.pi*2*frequency, dtype=np.float32) * self.volume
+            stream.write(sinewave, num_frames=num_samp)
+            self.sin_ready.emit((sinewave, num_samp))
 
 def main():
     app = QApplication(sys.argv)
@@ -227,3 +293,4 @@ if __name__ == '__main__':
     window = MainWindow()
     window.show()
     app.exec()
+'''
