@@ -1,3 +1,4 @@
+import os
 import socket
 import pickle
 import sys
@@ -10,8 +11,8 @@ import psutil
 from PyQt5.QtCore import *
 from PyQt5.QtSvg import QSvgWidget
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QSizePolicy, QSplashScreen, QHBoxLayout, QPushButton, \
-    QBoxLayout
-from PyQt5.QtGui import QIcon, QPixmap, QColor
+    QBoxLayout, QCheckBox, QLabel, QLineEdit, QComboBox, QSpinBox
+from PyQt5.QtGui import QIcon, QPixmap, QColor, QFontDatabase, QFont
 from PyQt5 import uic
 from PyQt5.QtMultimedia import QAudio
 
@@ -271,22 +272,24 @@ class UI(QMainWindow):
             self.start_plot2.clicked.connect(self.plot_starter2)
             self.stop_plot2.clicked.connect(self.plot_breaker2)
 
-        # Refreshing the chosen plot option
-        self.QComboBox_1.currentTextChanged.connect(self.running_refresher1)
-        self.QComboBox_2.currentTextChanged.connect(self.running_refresher2)
+        # Other Connections:
+        if True:
+            # Refreshing the chosen plot option
+            self.QComboBox_1.currentTextChanged.connect(self.running_refresher1)
+            self.QComboBox_2.currentTextChanged.connect(self.running_refresher2)
 
-        # Refreshing weather x should be refreshed or not
-        self.refresh_x1.stateChanged.connect(self.refresh_x1_refresher)
-        self.refresh_x2.stateChanged.connect(self.refresh_x2_refresher)
+            # Refreshing weather x should be refreshed or not
+            self.refresh_x1.stateChanged.connect(self.refresh_x1_refresher)
+            self.refresh_x2.stateChanged.connect(self.refresh_x2_refresher)
 
-        # Refreshing how many last values are displayed
-        self.last_values1.valueChanged.connect(self.last_values_changer1)
-        self.last_values2.valueChanged.connect(self.last_values_changer2)
+            # Refreshing how many last values are displayed
+            self.last_values1.valueChanged.connect(self.last_values_changer1)
+            self.last_values2.valueChanged.connect(self.last_values_changer2)
 
-        # Setting up the distance calibration:
-        self.distance_const.setDecimals(5)
-        self.distance_const.setValue(self.cable_const)
-        self.tare_distance.clicked.connect(self.cable_constant_refresher)
+            # Setting up the distance calibration:
+            self.distance_const.setDecimals(5)
+            self.distance_const.setValue(self.cable_const)
+            self.tare_distance.clicked.connect(self.cable_constant_refresher)
 
         # Setting up the plot timer:
         self.make_plot_timers = True
@@ -328,12 +331,20 @@ class UI(QMainWindow):
             self.minimize_button.leaveEvent = self.minimize_button_exit
             self.close_button.enterEvent = self.close_button_hover
             self.close_button.leaveEvent = self.close_button_exit
+            self.close_button.setStyleSheet('QToolButton:hover {background-color: #FF4D4D}')
 
         # Setting up the animations for QTabWidget
         self.animate_tab_buttons = True
         if self.animate_tab_buttons:
             self.tabWidget.tabBar().installEventFilter(self)
             self.tabBar = self.tabWidget.tabBar()
+            tabcount = self.tabBar.count()
+            self.tab_animations = [list(), list(), list()]
+            for i in range(tabcount):
+                tabrect = self.tabBar.tabRect(i)
+                rect = QRect(tabrect.x(), tabrect.y()+tabrect.height(), tabrect.width(), 5)
+
+
 
             # First rectangle:
             self.tabRect1 = self.tabBar.tabRect(0)
@@ -394,6 +405,26 @@ class UI(QMainWindow):
             self.tab_antimation3.setEndValue(QPoint(self.tabRect3.x(), self.tabRect3.height()))
             self.tabIndex = -1
 
+        # Setting up the fonts
+        if True:
+            for file in os.listdir('resources/RUB-Corporate-Design-Fonts'):
+                QFontDatabase.addApplicationFont(file)
+            flama9 = QFont('RubFlama', 9)
+            flama10 = QFont('RubFlama', 10)
+            flama10u = QFont('RubFlama', 10)
+            flama10u.setUnderline(True)
+            self.tabBar.setFont(QFont('RubFlama Bold', 12))
+            for i in self.groupBox, self.groupBox_2, self.groupBox_3:
+                i.setFont(flama10u)
+            for i in self.findChildren(QPushButton):
+                i.setFont(flama10)
+            for _ in QLabel, QLineEdit, QSpinBox, QComboBox, QCheckBox:
+                for i in self.findChildren(_):
+                    i.setFont(flama9)
+            self.label_31.setFont(QFont('RubFlama Light', 14))
+            self.plot_home1.setIcon(QIcon('resources/icons8-home.svg'))
+            self.plot_home2.setIcon(QIcon('resources/icons8-home.svg'))
+
         # Set up the auto-range checkboxes and home buttons:
         if True:
             self.auto_x1.stateChanged.connect(self.auto_x_changer1)
@@ -410,16 +441,9 @@ class UI(QMainWindow):
             self.rub_logo.setMaximumWidth(150)
             self.horizontalLayout_9.insertWidget(3, self.rub_logo)
             self.est_logo = QSvgWidget('resources/est_logo.svg')
-            # self.est_logo.setMaximumHeight(40)
-            # self.est_logo.setMaximumWidth(92)
-            # self.horizontalLayout_9.insertWidget(3, self.est_logo)
-            self.est_logo.setParent(self)
-            self.est_logo.setGeometry(QRect(570, 5, 69, 30))
-            # self.est_animation = QPropertyAnimation(self.est_logo, b"pos")
-            # self.est_animation.setStartValue(QPoint(self.est_logo.x(), self.est_logo.y()))
-            # self.est_animation.setEndValue(QPoint(self.est_logo.x(), self.est_logo.y()-10))
-            # self.est_animation.setDuration(0)
-            # self.est_animation.start()
+            self.est_logo.setMaximumHeight(30)
+            self.est_logo.setMaximumWidth(92)
+            self.horizontalLayout_9.insertWidget(3, self.est_logo)
 
         # Setting up the vertical lines:
         self.make_infinite_lines = True

@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>867</width>
-    <height>852</height>
+    <width>884</width>
+    <height>751</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -44,9 +44,12 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_8">
-    <item>
+   <layout class="QGridLayout" name="gridLayout_6">
+    <item row="0" column="0">
      <layout class="QVBoxLayout" name="verticalLayout_5">
+      <property name="spacing">
+       <number>0</number>
+      </property>
       <property name="sizeConstraint">
        <enum>QLayout::SetFixedSize</enum>
       </property>
@@ -190,6 +193,17 @@
          </widget>
         </item>
        </layout>
+      </item>
+      <item>
+       <widget class="Line" name="line_10">
+        <property name="styleSheet">
+         <string notr="true">
+border-top: 1px solid #122b4a;</string>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QTabWidget" name="tabWidget">
@@ -386,22 +400,7 @@
                  </size>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">QPushButton:enabled
- {
-    background-color: #8dae10;
-    color: white;
-}
-QPushButton:enabled:hover
- {
-    background-color: #b0d918;
-    color: white;
-}
-QPushButton:disabled
- {
-    background-color: #858585;
-    color: white;
-}
-</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string/>
@@ -498,22 +497,7 @@ QPushButton:disabled
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">QPushButton:enabled
- {
-    background-color: #8dae10;
-    color: white;
-}
-QPushButton:enabled:hover
- {
-    background-color: #b0d918;
-    color: white;
-}
-QPushButton:disabled
- {
-    background-color: #858585;
-    color: white;
-}
-</string>
+                   <string notr="true"/>
                   </property>
                   <property name="text">
                    <string>Stop</string>
@@ -540,22 +524,7 @@ QPushButton:disabled
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">QPushButton:enabled
- {
-    background-color: #8dae10;
-    color: white;
-}
-QPushButton:enabled:hover
- {
-    background-color: #b0d918;
-    color: white;
-}
-QPushButton:disabled
- {
-    background-color: #858585;
-    color: white;
-}
-</string>
+                   <string notr="true"/>
                   </property>
                   <property name="text">
                    <string>Start</string>
@@ -854,22 +823,7 @@ QPushButton:disabled
                  </size>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">QPushButton:enabled
- {
-    background-color: #8dae10;
-    color: white;
-}
-QPushButton:enabled:hover
- {
-    background-color: #b0d918;
-    color: white;
-}
-QPushButton:disabled
- {
-    background-color: #858585;
-    color: white;
-}
-</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string/>
@@ -912,22 +866,7 @@ QPushButton:disabled
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">QPushButton:enabled
- {
-    background-color: #8dae10;
-    color: white;
-}
-QPushButton:enabled:hover
- {
-    background-color: #b0d918;
-    color: white;
-}
-QPushButton:disabled
- {
-    background-color: #858585;
-    color: white;
-}
-</string>
+                   <string notr="true"/>
                   </property>
                   <property name="text">
                    <string>Stop</string>
@@ -954,22 +893,7 @@ QPushButton:disabled
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">QPushButton:enabled
- {
-    background-color: #8dae10;
-    color: white;
-}
-QPushButton:enabled:hover
- {
-    background-color: #b0d918;
-    color: white;
-}
-QPushButton:disabled
- {
-    background-color: #858585;
-    color: white;
-}
-</string>
+                   <string notr="true"/>
                   </property>
                   <property name="text">
                    <string>Start</string>
@@ -1235,22 +1159,7 @@ QPushButton:disabled
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">QPushButton:enabled
- {
-    background-color: #8dae10;
-    color: white;
-}
-QPushButton:enabled:hover
- {
-    background-color: #b0d918;
-    color: white;
-}
-QPushButton:disabled
- {
-    background-color: #858585;
-    color: white;
-}
-</string>
+                   <string notr="true"/>
                   </property>
                   <property name="text">
                    <string>Connect</string>
@@ -1404,22 +1313,7 @@ QPushButton:disabled
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">QPushButton:enabled
- {
-    background-color: #8dae10;
-    color: white;
-}
-QPushButton:enabled:hover
- {
-    background-color: #b0d918;
-    color: white;
-}
-QPushButton:disabled
- {
-    background-color: #858585;
-    color: white;
-}
-</string>
+                   <string notr="true"/>
                   </property>
                   <property name="text">
                    <string>Start</string>
@@ -1443,22 +1337,7 @@ QPushButton:disabled
                    </font>
                   </property>
                   <property name="styleSheet">
-                   <string notr="true">QPushButton:enabled
- {
-    background-color: #8dae10;
-    color: white;
-}
-QPushButton:enabled:hover
- {
-    background-color: #b0d918;
-    color: white;
-}
-QPushButton:disabled
- {
-    background-color: #858585;
-    color: white;
-}
-</string>
+                   <string notr="true"/>
                   </property>
                   <property name="text">
                    <string>Stop</string>
@@ -1556,22 +1435,7 @@ QPushButton:disabled
                        </font>
                       </property>
                       <property name="styleSheet">
-                       <string notr="true">QPushButton:enabled
- {
-    background-color: #8dae10;
-    color: white;
-}
-QPushButton:enabled:hover
- {
-    background-color: #b0d918;
-    color: white;
-}
-QPushButton:disabled
- {
-    background-color: #858585;
-    color: white;
-}
-</string>
+                       <string notr="true"/>
                       </property>
                       <property name="text">
                        <string>tare distance</string>
@@ -1660,94 +1524,151 @@ QPushButton:disabled
          <attribute name="title">
           <string>CONFIGURATION</string>
          </attribute>
-         <widget class="QWidget" name="horizontalLayoutWidget">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>10</y>
-            <width>891</width>
-            <height>271</height>
-           </rect>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_13" stretch="1,1,1">
-           <item>
-            <widget class="QGroupBox" name="groupBox">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QGroupBox {
-	border: 2px solid #8c8751;
-	top-margin: 4px;
-}</string>
-             </property>
-             <property name="title">
-              <string>FPGA-Sequence</string>
-             </property>
-             <widget class="QWidget" name="gridLayoutWidget_2">
-              <property name="geometry">
-               <rect>
-                <x>10</x>
-                <y>20</y>
-                <width>271</width>
-                <height>241</height>
-               </rect>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_2">
-               <property name="sizeConstraint">
-                <enum>QLayout::SetMaximumSize</enum>
+         <layout class="QGridLayout" name="gridLayout_9" rowstretch="3,4,0">
+          <item row="0" column="2">
+           <widget class="QGroupBox" name="groupBox_3">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="title">
+             <string>FPGA-Configuration</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_7">
+             <item row="0" column="1">
+              <widget class="QLabel" name="label_25">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
                </property>
-               <property name="spacing">
-                <number>6</number>
+               <property name="styleSheet">
+                <string notr="true">color: red
+</string>
                </property>
-               <item row="0" column="1">
-                <widget class="QComboBox" name="length_edit">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <item>
-                  <property name="text">
-                   <string>8160</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>16080</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>32640</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>64320</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>92460</string>
-                  </property>
-                 </item>
-                </widget>
-               </item>
-               <item row="8" column="1">
-                <widget class="QPushButton" name="refresh_config">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">QPushButton:enabled
+               <property name="text">
+                <string>In the making!</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_24">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Samples per sequence:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="lineEdit_7">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_27">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Sequence repititions:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QLineEdit" name="lineEdit_9">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_28">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Shifts:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QLineEdit" name="lineEdit_2">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="label_26">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Offset:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QSpinBox" name="spinBox_2">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1">
+              <spacer name="verticalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>72</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="6" column="1">
+              <widget class="QPushButton" name="pushButton_2">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton:enabled
  {
     background-color: #8dae10;
     color: white;
@@ -1763,204 +1684,73 @@ QPushButton:disabled
     color: white;
 }
 </string>
-                 </property>
-                 <property name="text">
-                  <string>Refresh Configuration</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="1">
-                <widget class="QLineEdit" name="sps_edit">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="inputMask">
-                  <string/>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_23">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Shifts:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="0">
-                <widget class="QLabel" name="label_5">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Samples per sequence:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="0">
-                <widget class="QLabel" name="label_6">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Sequence repititions:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QLineEdit" name="shifts_edit">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="inputMask">
-                  <string/>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_13">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Length:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="6" column="0">
-                <widget class="QLabel" name="label_7">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Offset:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="6" column="1">
-                <widget class="QSpinBox" name="offset_edit">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="1">
-                <widget class="QLineEdit" name="sr_edit">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="inputMask">
-                  <string/>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item row="7" column="1">
-                <spacer name="verticalSpacer_3">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </widget>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupBox_2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="title">
-              <string>Interpretation</string>
-             </property>
-             <widget class="QWidget" name="gridLayoutWidget_5">
-              <property name="geometry">
-               <rect>
-                <x>10</x>
-                <y>20</y>
-                <width>271</width>
-                <height>241</height>
-               </rect>
-              </property>
-              <property name="font">
-               <font>
-                <family>RubFlama</family>
-                <pointsize>9</pointsize>
-                <weight>50</weight>
-                <bold>false</bold>
-               </font>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_8">
-               <property name="sizeConstraint">
-                <enum>QLayout::SetMaximumSize</enum>
                </property>
-               <item row="0" column="1">
-                <widget class="QSpinBox" name="interpolation_value">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QPushButton" name="interpolation_button">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">QPushButton:enabled
+               <property name="text">
+                <string>Update FPGA</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QGroupBox" name="groupBox_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="title">
+             <string>Interpretation</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_8">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_30">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Interpolation</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QSpinBox" name="interpolation_value">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <spacer name="verticalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>178</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="2" column="1">
+              <widget class="QPushButton" name="interpolation_button">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton:enabled
  {
     background-color: #8dae10;
     color: white;
@@ -1976,143 +1766,212 @@ QPushButton:disabled
     color: white;
 }
 </string>
-                 </property>
-                 <property name="text">
-                  <string>Change</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_30">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Interpolation</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <spacer name="verticalSpacer_4">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </widget>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupBox_3">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="title">
-              <string>FPGA-Configuration</string>
-             </property>
-             <widget class="QWidget" name="gridLayoutWidget_4">
-              <property name="geometry">
-               <rect>
-                <x>10</x>
-                <y>20</y>
-                <width>271</width>
-                <height>241</height>
-               </rect>
-              </property>
-              <property name="font">
-               <font>
-                <family>RubFlama</family>
-                <pointsize>9</pointsize>
-                <weight>50</weight>
-                <bold>false</bold>
-               </font>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_7">
-               <property name="sizeConstraint">
-                <enum>QLayout::SetMaximumSize</enum>
                </property>
-               <item row="3" column="1">
-                <widget class="QLineEdit" name="lineEdit_2">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                </widget>
+               <property name="text">
+                <string>Change</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QGroupBox" name="groupBox">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">
+</string>
+            </property>
+            <property name="title">
+             <string>FPGA-Sequence</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_2">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_13">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Length:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QComboBox" name="length_edit">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <item>
+                <property name="text">
+                 <string>8160</string>
+                </property>
                </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="label_27">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Sequence repititions:</string>
-                 </property>
-                </widget>
+               <item>
+                <property name="text">
+                 <string>16080</string>
+                </property>
                </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_24">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Samples per sequence:</string>
-                 </property>
-                </widget>
+               <item>
+                <property name="text">
+                 <string>32640</string>
+                </property>
                </item>
-               <item row="4" column="0">
-                <widget class="QLabel" name="label_26">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Offset:</string>
-                 </property>
-                </widget>
+               <item>
+                <property name="text">
+                 <string>64320</string>
+                </property>
                </item>
-               <item row="4" column="1">
-                <widget class="QSpinBox" name="spinBox_2">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                </widget>
+               <item>
+                <property name="text">
+                 <string>92460</string>
+                </property>
                </item>
-               <item row="6" column="1">
-                <widget class="QPushButton" name="pushButton_2">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">QPushButton:enabled
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_23">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Shifts:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="shifts_edit">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="inputMask">
+                <string/>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="label_5">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Samples per sequence:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QLineEdit" name="sps_edit">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="inputMask">
+                <string/>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_6">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Sequence repititions:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QLineEdit" name="sr_edit">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="inputMask">
+                <string/>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="label_7">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Offset:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QSpinBox" name="offset_edit">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1">
+              <spacer name="verticalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>68</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="6" column="1">
+              <widget class="QPushButton" name="refresh_config">
+               <property name="font">
+                <font>
+                 <family>RubFlama</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton:enabled
  {
     background-color: #8dae10;
     color: white;
@@ -2128,91 +1987,29 @@ QPushButton:disabled
     color: white;
 }
 </string>
-                 </property>
-                 <property name="text">
-                  <string>Update FPGA</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QWidget" name="widget_3" native="true">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QLineEdit" name="lineEdit_7">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QLabel" name="label_25">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">color: red
-</string>
-                 </property>
-                 <property name="text">
-                  <string>In the making!</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QLabel" name="label_28">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Shifts:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QLineEdit" name="lineEdit_9">
-                 <property name="font">
-                  <font>
-                   <family>RubFlama</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                </widget>
-               </item>
-               <item row="5" column="1">
-                <spacer name="verticalSpacer_5">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </widget>
-            </widget>
-           </item>
-          </layout>
-         </widget>
+               </property>
+               <property name="text">
+                <string>Refresh Configuration</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <spacer name="verticalSpacer_6">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
         </widget>
         <widget class="QWidget" name="tab_3">
          <property name="font">

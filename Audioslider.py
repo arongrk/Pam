@@ -38,35 +38,26 @@ class MainWindow(QMainWindow):
 
         self.SAMPLE_DURATION = 1000
         self.SAMPLE_RATE = 96000
-        self.SAMPLE_SIZE = int(self.SAMPLE_RATE / 1000 * self.SAMPLE_DURATION)
+        self.FREQUENCY = self.freq_slider.value()
+        self.VOLUME = self.volume_slider.value() / 100
 
-        # self.stream = self.pyaudio.open(rate=self.SAMPLE_RATE,
-        #                                 format=paFloat32,
-        #                                 channels=1,
-        #                                 output=True,
-        #                                 frames_per_buffer=self.SAMPLE_SIZE)
+        plot_sine_wave = True
+        if plot_sine_wave:
+            freq = self.FREQUENCY
+            vol = self.VOLUME
+            wave = np.sin(np.arange(int(self.SAMPLE_RATE/freq))/self.SAMPLE_RATE*np.pi*2*freq)*vol
+            pen = mkPen(color=(0, 0, 0), width=1)
+            self.sine_plot.setBackground('w')
+            self.line = self.sine_plot.plot(wave, pen=pen)
 
-        self.sound = np.sin((np.arange(0, self.SAMPLE_SIZE)/self.SAMPLE_RATE)*np.pi*2*self.freq_slider.value(), dtype=np.float32)
-        '''
-        self.write_timer = QTimer()
-        self.write_timer.timeout.connect(self.write_data)
-        self.write_timer.start(100)
-        self.stop_button.clicked.connect(self.write_timer.stop)
-        '''
-        pen = mkPen(color=(0, 0, 0), width=1)
-        self.sine_plot.setBackground('w')
-        self.line = self.sine_plot.plot(self.sound, pen=pen)
-
-        self.sinSender = Emitter(self.SAMPLE_RATE, self.freq_slider.value(), self.volume_slider.value())
-        self.start_button.clicked.connect(self.sinSender.start)
-        self.sinSender.sin_ready.connect(self.change_plot)
-        self.freq_slider.valueChanged.connect(self.sinSender.set_frequency)
-        self.freq_slider.valueChanged.connect(self.change_freq_label)
-        self.volume_slider.valueChanged.connect(self.sinSender.set_volume)
-        self.volume_slider.valueChanged.connect(self.change_vol_label)
-
-    def change_freq_label(self, new_value):
-        self.freq_label.setText(f'{new_value} Hz')
+        if True: # Emitter class setup
+            self.sinSender = Emitter(self.SAMPLE_RATE, self.freq_slider.value(), self.volume_slider.value()/100)
+            self.start_button.clicked.connect(self.sinSender.start)
+            self.stop_button.clicked.connect(self.sinSender.stop)
+            self.sinSender.sin_ready.connect(self.change_plot)
+            self.freq_slider.valueChanged.connect(self.sinSender.set_frequency)
+            self.volume_slider.valueChanged.connect(self.sinSender.set_volume)
+            self.volume_slider.valueChanged.connect(self.change_vol_label)
 
     def change_vol_label(self, new_value):
         self.vol_label.setText(f'{new_value} %')
@@ -126,18 +117,32 @@ class Emitter(QThread):
         self.volume = volume/100
 
     def run(self):
+        self.stop_sender = False
+        t0 = time.time()
         stream = self.p.open(rate=self.SAMPLE_RATE,
                              format=paFloat32,
                              channels=1,
                              output=True,
-                             frames_per_buffer=2019)
+                             frames_per_buffer=500)
+        print(f'Opened output stream after {time.time() - t0} seconds:\n'
+              f'   Samplerate: {stream._rate}\n'
+              f'   Format: {stream._format}\n'
+              f'   Channels: {stream._channels}\n'
+              f'   Frames per buffer: {stream._frames_per_buffer}')
         while not self.stop_sender:
             samprate = self.SAMPLE_RATE
             frequency = self.frequency
             num_samp = int(samprate/frequency)
-            sinewave = np.sin(np.arange(num_samp)/samprate*np.pi*2*frequency, dtype=np.float32) * self.volume
-            stream.write(sinewave, num_frames=num_samp)
+            sinewave = np.sin(np.arange(num_samp)/(samprate)*np.pi*2*frequency, dtype=np.float32) * self.volume
+            stream.write(sinewave, num_frames=int(num_samp))
             self.sin_ready.emit((sinewave, num_samp))
+        stream.close()
+        self.quit()
+        self.wait()
+
+    def stop(self):
+        self.stop_sender = True
+
 
 def main():
     app = QApplication(sys.argv)

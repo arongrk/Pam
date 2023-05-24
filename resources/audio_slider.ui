@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>758</width>
-    <height>672</height>
+    <width>750</width>
+    <height>664</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -181,7 +181,14 @@
          <attribute name="title">
           <string>Audio Slider</string>
          </attribute>
-         <layout class="QGridLayout" name="gridLayout_2" rowstretch="1,1,1,10,0,0,15,0">
+         <layout class="QGridLayout" name="gridLayout_2" rowstretch="0,0,0,3,0,0,5">
+          <item row="5" column="1">
+           <widget class="Line" name="line">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
           <item row="4" column="1">
            <widget class="QLabel" name="label">
             <property name="font">
@@ -194,13 +201,6 @@
             </property>
             <property name="text">
              <string>Emitted Sine Wave:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="1">
-           <widget class="Line" name="line">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
             </property>
            </widget>
           </item>
@@ -251,28 +251,15 @@
             </item>
            </layout>
           </item>
-          <item row="3" column="1">
-           <spacer name="verticalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="6" column="1">
-           <widget class="PlotWidget" name="sine_plot" native="true"/>
-          </item>
           <item row="0" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <layout class="QHBoxLayout" name="volume_layout" stretch="10,1">
             <item>
              <widget class="QSlider" name="volume_slider">
               <property name="maximum">
                <number>100</number>
+              </property>
+              <property name="value">
+               <number>50</number>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -295,15 +282,21 @@
                 <bold>false</bold>
                </font>
               </property>
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
               <property name="text">
-               <string>TextLabel</string>
+               <string>50 %</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
               </property>
              </widget>
             </item>
            </layout>
           </item>
           <item row="1" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0">
+           <layout class="QHBoxLayout" name="frequency_layout" stretch="14,1,0">
             <item>
              <widget class="QSlider" name="freq_slider">
               <property name="sizePolicy">
@@ -316,16 +309,16 @@
                <number>200</number>
               </property>
               <property name="maximum">
-               <number>4000</number>
+               <number>10000</number>
               </property>
               <property name="singleStep">
-               <number>10</number>
+               <number>1</number>
               </property>
               <property name="pageStep">
                <number>10</number>
               </property>
               <property name="value">
-               <number>2000</number>
+               <number>500</number>
               </property>
               <property name="tracking">
                <bool>true</bool>
@@ -348,7 +341,25 @@
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="freq_label">
+             <widget class="QSpinBox" name="frequency_box">
+              <property name="font">
+               <font>
+                <family>RubFlama</family>
+                <pointsize>8</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+              <property name="value">
+               <number>500</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_2">
               <property name="font">
                <font>
                 <family>RubFlama</family>
@@ -358,11 +369,27 @@
                </font>
               </property>
               <property name="text">
-               <string>TextLabel</string>
+               <string>Hz</string>
               </property>
              </widget>
             </item>
            </layout>
+          </item>
+          <item row="6" column="1">
+           <widget class="PlotWidget" name="sine_plot" native="true"/>
+          </item>
+          <item row="3" column="1">
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </widget>
@@ -418,6 +445,38 @@
     <hint type="destinationlabel">
      <x>319</x>
      <y>239</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>freq_slider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>frequency_box</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>351</x>
+     <y>142</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>710</x>
+     <y>142</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>frequency_box</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>freq_slider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>710</x>
+     <y>142</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>142</y>
     </hint>
    </hints>
   </connection>

@@ -15,7 +15,7 @@ QToolButton {
 }
 
 QToolButton:hover {
-    background-color: #FF4D4D;
+    background-color: #426ca1;
 }
 
 QToolButton:clicked {
@@ -44,10 +44,22 @@ QTabWidget::pane {
 }
 
 /*-----QPushButton-----*/
-QPushButton {
-    background-color: #00ADB5;
-    color: #EEEEEE;
+QPushButton:enabled
+ {
+    background-color: #^                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ;
+    color: white;
 }
+QPushButton:enabled:hover
+ {
+    background-color: #b0d918;
+    color: white;
+}
+QPushButton:disabled
+ {
+    background-color: #858585;
+    color: white;
+}
+
 
 /*-----QPlotWidget-----*/
 /*PlotWidget {*/
