@@ -222,7 +222,6 @@ class UI(QMainWindow):
             self.line1 = self.graph1.plot(self.xData, np.zeros(len(self.xData)), pen=pen)
             self.graph1.enableAutoRange(axis=ViewBox.XYAxes)
             self.graph1.hideButtons()
-            print(type(self.graph1))
 
             self.graph2.setBackground('w')
             self.graph2.setAxisItems(axisItems={'bottom': CustomAxis(orientation='bottom'),
@@ -341,69 +340,30 @@ class UI(QMainWindow):
             tabcount = self.tabBar.count()
             self.tab_animations = [list(), list(), list()]
             for i in range(tabcount):
+
+                # Creating the rectangle
                 tabrect = self.tabBar.tabRect(i)
                 rect = QRect(tabrect.x(), tabrect.y()+tabrect.height(), tabrect.width(), 5)
+                hover_bar = QWidget(self.tabBar)
+                hover_bar.setGeometry(rect)
+                hover_bar.setStyleSheet('background-color: #8dae10')
+                self.tab_animations[0].append(hover_bar)
 
+                # Creating the up-animation
+                tab_animation = QPropertyAnimation(self.tab_animations[0][i], b"pos")
+                tab_animation.setDuration(100)
+                tab_animation.setStartValue(QPoint(tabrect.x(), tabrect.height()))
+                tab_animation.setEndValue(QPoint(tabrect.x(), tabrect.height() - 5))
+                self.tab_animations[1].append(tab_animation)
 
+                # Creating the down-animation
+                tab_antimation = QPropertyAnimation(self.tab_animations[0][i], b"pos")
+                tab_antimation.setDuration(100)
+                tab_antimation.setStartValue(tab_animation.endValue())
+                tab_antimation.setEndValue(tab_animation.startValue())
+                self.tab_animations[2].append(tab_antimation)
 
-            # First rectangle:
-            self.tabRect1 = self.tabBar.tabRect(0)
-            self.rect1 = QRect(self.tabRect1.x(), self.tabRect1.y()+self.tabRect1.height(), self.tabRect1.width(), 5)
-            self.hover_bar1 = QWidget(self.tabBar)
-            self.hover_bar1.setStyleSheet('background-color:  #8dae10')
-            self.hover_bar1.setGeometry(self.rect1)
-
-            # First animation:
-            self.tab_animation1 = QPropertyAnimation(self.hover_bar1, b"pos")
-            self.tab_animation1.setDuration(100)
-            self.tab_animation1.setStartValue(QPoint(self.tabRect1.x(), self.tabRect1.height()))
-            self.tab_animation1.setEndValue(QPoint(self.tabRect1.x(), self.tabRect1.height() - 5))
-
-            # First antimation:
-            self.tab_antimation1 = QPropertyAnimation(self.hover_bar1, b"pos")
-            self.tab_antimation1.setDuration(0)
-            self.tab_antimation1.setStartValue(QPoint(self.tabRect1.x(), self.tabRect1.height() - 5))
-            self.tab_antimation1.setEndValue(QPoint(self.tabRect1.x(), self.tabRect1.height()))
-
-            # Second rectangle:
-            self.tabRect2 = self.tabBar.tabRect(1)
-            self.rect2 = QRect(self.tabRect2.x(), self.tabRect2.y()+self.tabRect2.height(), self.tabRect2.width(), 5)
-            self.hover_bar2 = QWidget(self.tabBar)
-            self.hover_bar2.setStyleSheet('background-color:  #8dae10')
-            self.hover_bar2.setGeometry(self.rect2)
-
-            # Second animation
-            self.tab_animation2 = QPropertyAnimation(self.hover_bar2, b"pos")
-            self.tab_animation2.setDuration(100)
-            self.tab_animation2.setStartValue(QPoint(self.tabRect2.x(), self.tabRect2.height()))
-            self.tab_animation2.setEndValue(QPoint(self.tabRect2.x(), self.tabRect2.height() - 5))
-
-            # Second antimation:
-            self.tab_antimation2 = QPropertyAnimation(self.hover_bar2, b"pos")
-            self.tab_antimation2.setDuration(0)
-            self.tab_antimation2.setStartValue(QPoint(self.tabRect2.x(), self.tabRect2.height() - 5))
-            self.tab_antimation2.setEndValue(QPoint(self.tabRect2.x(), self.tabRect2.height()))
-            self.tabIndex = -1
-
-            # Third rectangle:
-            self.tabRect3 = self.tabBar.tabRect(2)
-            self.rect3 = QRect(self.tabRect3.x(), self.tabRect3.y()+self.tabRect3.height(), self.tabRect3.width(), 5)
-            self.hover_bar3 = QWidget(self.tabBar)
-            self.hover_bar3.setStyleSheet('background-color:  #8dae10')
-            self.hover_bar3.setGeometry(self.rect3)
-
-            # Third animation
-            self.tab_animation3 = QPropertyAnimation(self.hover_bar3, b"pos")
-            self.tab_animation3.setDuration(100)
-            self.tab_animation3.setStartValue(QPoint(self.tabRect3.x(), self.tabRect3.height()))
-            self.tab_animation3.setEndValue(QPoint(self.tabRect3.x(), self.tabRect3.height() - 5))
-
-            # Second antimation:
-            self.tab_antimation3 = QPropertyAnimation(self.hover_bar3, b"pos")
-            self.tab_antimation3.setDuration(0)
-            self.tab_antimation3.setStartValue(QPoint(self.tabRect3.x(), self.tabRect3.height() - 5))
-            self.tab_antimation3.setEndValue(QPoint(self.tabRect3.x(), self.tabRect3.height()))
-            self.tabIndex = -1
+                self.old_tab_index = None
 
         # Setting up the fonts
         if True:
@@ -413,7 +373,10 @@ class UI(QMainWindow):
             flama10 = QFont('RubFlama', 10)
             flama10u = QFont('RubFlama', 10)
             flama10u.setUnderline(True)
-            self.tabBar.setFont(QFont('RubFlama Bold', 12))
+            flamaBold12 = QFont('RubFlama', 12)
+            flamaBold12.setBold(True)
+            self.tabWidget.setFont(flamaBold12)
+            # self.tabBar.setFont(QFont('RubFlama Bold', 12))
             for i in self.groupBox, self.groupBox_2, self.groupBox_3:
                 i.setFont(flama10u)
             for i in self.findChildren(QPushButton):
@@ -421,6 +384,7 @@ class UI(QMainWindow):
             for _ in QLabel, QLineEdit, QSpinBox, QComboBox, QCheckBox:
                 for i in self.findChildren(_):
                     i.setFont(flama9)
+
             self.label_31.setFont(QFont('RubFlama Light', 14))
             self.plot_home1.setIcon(QIcon('resources/icons8-home.svg'))
             self.plot_home2.setIcon(QIcon('resources/icons8-home.svg'))
@@ -868,11 +832,12 @@ class UI(QMainWindow):
             self.maximize_button.setIcon(self.med_ic)
             self.showFullScreen()
 
+    # The following three methods overwrite members of QMainWindow. Used to move the window.
     def mousePressEvent(self, event):
         self.__mousePos = event.globalPos()
 
     def mouseMoveEvent(self, event):
-        if self.__mousePos:
+        if self.__mousePos.y()-self.pos().y() <= 40:
             delta = event.globalPos() - self.__mousePos
             self.move(self.x() + delta.x(), self.y() + delta.y())
             self.__mousePos = event.globalPos()
@@ -887,60 +852,36 @@ class UI(QMainWindow):
             self.showMaximized()
 
     def eventFilter(self, object, event):
+    # Overwrites the eventFilter of the QMainWindow. Only used to animate the tab-bar's boxes.
         if object == self.tabWidget.tabBar():
             match event.type():
+            # Comparing the event type. The numbers stand for different event.type(), see:
+            # https://doc.qt.io/qt-5/qevent.html#Type-enum
                 case  10 | 129:
                     tab_index = object.tabAt(event.pos())
-                    if tab_index not in [self.tabIndex, self.tabWidget.currentIndex()]:
-                        self.animation_starter(tab_index)
-                    if self.tabIndex not in [self.tabWidget.currentIndex(), tab_index]:
-                        self.antimation_starter(self.tabIndex)
-                    self.tabIndex = tab_index
+                    if tab_index not in [self.old_tab_index, self.tabWidget.currentIndex()]:
+                        self.tab_animations[1][tab_index].start()
+                    if self.old_tab_index not in [self.tabWidget.currentIndex(), tab_index]:
+                        try:
+                            self.tab_animations[2][self.old_tab_index].start()
+                        except TypeError:
+                            pass
+                    self.old_tab_index = tab_index
                     return True
                 case 11 | 2:
-                    if self.tabIndex != self.tabWidget.currentIndex():
-                        self.antimation_starter(self.tabIndex)
-                        self.tabIndex = -1
+                    if self.old_tab_index != self.tabWidget.currentIndex():
+                        try:
+                            self.tab_animations[2][self.old_tab_index].start()
+                        except TypeError:
+                            pass
+                        self.old_tab_index = None
         return False
-
-    def animation_starter(self, index):
-        match index:
-            case 0:
-                self.tab_animation1.start()
-            case 1:
-                self.tab_animation2.start()
-            case 2:
-                self.tab_animation3.start()
-
-    def antimation_starter(self, index):
-        match index:
-            case 0:
-                self.tab_antimation1.start()
-            case 1:
-                self.tab_antimation2.start()
-            case 2:
-                self.tab_antimation3.start()
 
     def close(self):
         with open('resources/configurations.bin', 'wb') as f:
             pickle.dump(change_dict(self.values, self.shifts, self.samples_per_sequence, self.sequence_reps,
                                     self.length, self.last_n_values1, self.last_n_values2, self.cable_const), f)
         super().close()
-
-
-'''
-class SplashScreen(QSplashScreen):
-    def __init__(self):
-        super().__init__()
-        self.widget = QWidget()
-        self.widget.resize(300, 300)
-        self.widget.setStyleSheet('background: green')
-        self.layout1 = QHBoxLayout()
-        self.layout1.addWidget(self.widget)
-        self.setLayout(self.layout1)
-        pixmap = QPixmap(self.widget())
-        self.setPixmap(pixmap)
-'''
 
 
 def main():

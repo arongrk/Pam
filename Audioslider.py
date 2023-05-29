@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
         # self.pyaudio = PyAudio()
 
         self.SAMPLE_DURATION = 1000
-        self.SAMPLE_RATE = 96000
+        self.SAMPLE_RATE = 48000
         self.FREQUENCY = self.freq_slider.value()
         self.VOLUME = self.volume_slider.value() / 100
 
@@ -48,6 +48,9 @@ class MainWindow(QMainWindow):
             wave = np.sin(np.arange(int(self.SAMPLE_RATE/freq))/self.SAMPLE_RATE*np.pi*2*freq)*vol
             pen = mkPen(color=(0, 0, 0), width=1)
             self.sine_plot.setBackground('w')
+            self.sine_plot.disableAutoRange()
+            self.sine_plot.setYRange(-1, 1)
+            self.sine_plot.setXRange(0, self.SAMPLE_RATE/100)
             self.line = self.sine_plot.plot(wave, pen=pen)
 
         if True: # Emitter class setup
@@ -57,13 +60,23 @@ class MainWindow(QMainWindow):
             self.sinSender.sin_ready.connect(self.change_plot)
             self.freq_slider.valueChanged.connect(self.sinSender.set_frequency)
             self.volume_slider.valueChanged.connect(self.sinSender.set_volume)
-            self.volume_slider.valueChanged.connect(self.change_vol_label)
 
-    def change_vol_label(self, new_value):
-        self.vol_label.setText(f'{new_value} %')
+        if True: # Device choose setup
+            # print(self.sinSender.p.get_device_info_by_index(1))
+            for i in range(self.sinSender.p.get_device_count()):
+                device_info = self.sinSender.p.get_device_info_by_index(i)
+                if device_info['maxOutputChannels'] > 0:
+                    self.devices_box.addItem(str(device_info['name']))
+            current_device_info = self.sinSender.p.get_default_output_device_info()
+            self.name_label.setText(str(current_device_info['name']))
+            self.index_label.setText(str(current_device_info['index']))
+            self.channels_label.setText(str(current_device_info['maxOutputChannels']))
+            self.samprate_label.setText(str(current_device_info['defaultSampleRate']))
 
     def change_plot(self, data: tuple):
         self.line.setData(np.arange(data[1]), data[0])
+        self.sine_plot.setXRange(0, data[1])
+        # print(f'First 3: {[round(i, 3) for i in data[0][0:3]]}, Last 3: {[round(i, 3) for i in data[0][-3:]]}')
 
     def close_button_hover(self, event):
         self.close_button.setIcon(self.clos_ic_white)
@@ -123,19 +136,42 @@ class Emitter(QThread):
                              format=paFloat32,
                              channels=1,
                              output=True,
-                             frames_per_buffer=500)
+                             frames_per_buffer=0)
         print(f'Opened output stream after {time.time() - t0} seconds:\n'
               f'   Samplerate: {stream._rate}\n'
               f'   Format: {stream._format}\n'
               f'   Channels: {stream._channels}\n'
               f'   Frames per buffer: {stream._frames_per_buffer}')
+        pi = np.pi
+        pi2 = pi*2
+        samprate = self.SAMPLE_RATE
+        num_samp = int(samprate/100)
+        npfloat32 = np.float32
+        volume = self.volume
+        frequency = self.frequency
+        values = np.arange(1, num_samp+1, dtype=npfloat32)/samprate*pi*2*frequency
+        volume_array = np.linspace(0, volume, num_samp, dtype=npfloat32)
+        sinewave = np.sin(values, dtype=npfloat32) * volume_array
+        stream.write(sinewave, num_frames=num_samp)
+        self.sin_ready.emit((sinewave, num_samp))
         while not self.stop_sender:
-            samprate = self.SAMPLE_RATE
+            if volume == self.volume:
+                volume_array = np.array([volume]*num_samp, dtype=npfloat32)
+            else:
+                volume_array = np.linspace(volume, self.volume, num_samp, dtype=npfloat32)
+            volume = self.volume
+            if frequency == self.frequency:
+                values = np.arange(1, num_samp+1, dtype=npfloat32)/samprate*pi*2*frequency + (values[-1]%pi2)
+            else:
+                values = pi2 * np.cumsum(np.linspace(frequency, self.frequency, num_samp)) / samprate + (values[-1]%pi2)
             frequency = self.frequency
-            num_samp = int(samprate/frequency)
-            sinewave = np.sin(np.arange(num_samp)/(samprate)*np.pi*2*frequency, dtype=np.float32) * self.volume
-            stream.write(sinewave, num_frames=int(num_samp))
+            sinewave = np.sin(values, dtype=npfloat32) * volume_array
+            stream.write(sinewave, num_frames=num_samp)
             self.sin_ready.emit((sinewave, num_samp))
+        sinewave = np.sin(values, dtype=npfloat32)
+        sinewave = np.append(sinewave, sinewave) * np.linspace(volume, 0, num_samp*2, dtype=npfloat32)
+        stream.write(sinewave, num_frames=num_samp*2)
+        self.sin_ready.emit((sinewave, num_samp*2))
         stream.close()
         self.quit()
         self.wait()
