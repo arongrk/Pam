@@ -66,13 +66,23 @@ class MainWindow(QMainWindow):
             for i in range(self.sinSender.p.get_device_count()):
                 device_info = self.sinSender.p.get_device_info_by_index(i)
                 if device_info['maxOutputChannels'] > 0:
-                    self.devices_box.addItem(str(device_info['name']))
+                    self.devices_box.addItem(str(device_info['name'].encode('latin-1').decode('utf-8')))
             current_device_info = self.sinSender.p.get_default_output_device_info()
-            self.name_label.setText(str(current_device_info['name']))
-            self.index_label.setText(str(current_device_info['index']))
-            self.channels_label.setText(str(current_device_info['maxOutputChannels']))
-            self.samprate_label.setText(str(current_device_info['defaultSampleRate']))
+            print(current_device_info)
+            self.devices_box.setCurrentText(current_device_info['name'].encode('latin-1').decode('utf-8'))
+            self.display_device_info(current_device_info)
+            self.change_dev_button.clicked.connect(self.refresh_current_device)
 
+    def display_device_info(self, device_info):
+        d_inf = device_info
+        self.name_label.setText(str(d_inf['name'].encode('latin-1').decode('utf-8')))
+        self.index_label.setText(str(d_inf['index']))
+        self.channels_label.setText(str(d_inf['maxOutputChannels']))
+        self.samprate_label.setText(str(int(d_inf['defaultSampleRate'])))
+
+    def refresh_current_device(self):
+        self.sinSender.stop()
+        self.sinSender.device_index = 1
     def change_plot(self, data: tuple):
         self.line.setData(np.arange(data[1]), data[0])
         self.sine_plot.setXRange(0, data[1])
@@ -114,9 +124,9 @@ class MainWindow(QMainWindow):
 class Emitter(QThread):
     sin_ready = pyqtSignal(tuple)
 
-    def __init__(self, sample_rate, frequency, volume, make_single_sine_wave=True):
+    def __init__(self, sample_rate, frequency, volume, device_index=None):
         QThread.__init__(self)
-        single_sin = make_single_sine_wave
+        self.device_index = device_index
         self.SAMPLE_RATE = sample_rate
         self.stop_sender = False
         self.p = pyaudio.PyAudio()
@@ -136,6 +146,7 @@ class Emitter(QThread):
                              format=paFloat32,
                              channels=1,
                              output=True,
+                             output_device_index=self.device_index,
                              frames_per_buffer=0)
         print(f'Opened output stream after {time.time() - t0} seconds:\n'
               f'   Samplerate: {stream._rate}\n'
