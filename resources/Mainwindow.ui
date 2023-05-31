@@ -1516,6 +1516,9 @@ border-top: 1px solid #122b4a;</string>
          <property name="font">
           <font>
            <family>RUB Scala TZ</family>
+           <pointsize>8</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="styleSheet">
@@ -1524,7 +1527,7 @@ border-top: 1px solid #122b4a;</string>
          <attribute name="title">
           <string>CONFIGURATION</string>
          </attribute>
-         <layout class="QGridLayout" name="gridLayout_9" rowstretch="3,4,0">
+         <layout class="QGridLayout" name="gridLayout_9" rowstretch="3,4">
           <item row="0" column="2">
            <widget class="QGroupBox" name="groupBox_3">
             <property name="sizePolicy">
@@ -1784,8 +1787,7 @@ QPushButton:disabled
              </sizepolicy>
             </property>
             <property name="styleSheet">
-             <string notr="true">
-</string>
+             <string notr="true"/>
             </property>
             <property name="title">
              <string>FPGA-Sequence</string>
@@ -2148,6 +2150,44 @@ QPushButton:disabled
            </item>
           </layout>
          </widget>
+        </widget>
+        <widget class="QWidget" name="tab_4">
+         <attribute name="title">
+          <string>AUDIO</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout_10" rowstretch="1,1">
+          <item row="0" column="0">
+           <widget class="QSlider" name="frequency_slider">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <widget class="QPushButton" name="start_sound_button">
+              <property name="text">
+               <string>Start</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="stop_sound_button">
+              <property name="text">
+               <string>Stop</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </widget>
        </widget>
       </item>

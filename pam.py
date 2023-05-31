@@ -14,12 +14,12 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QSizePolicy, QSp
     QBoxLayout, QCheckBox, QLabel, QLineEdit, QComboBox, QSpinBox
 from PyQt5.QtGui import QIcon, QPixmap, QColor, QFontDatabase, QFont
 from PyQt5 import uic
-from PyQt5.QtMultimedia import QAudio
 
 from pyqtgraph import mkPen, AxisItem, PlotWidget, InfiniteLine, ViewBox
 from collections import deque
 import definitions
 from pams_functions import Handler, averager, change_dict, exact_polynom_interp_max, unconnect, zero_padding
+from Audioslider import SineAudioEmitter
 
 
 resource_path = "C:/Users/dasa/PycharmProjects/MatlabData/resources/"
@@ -127,6 +127,7 @@ class SecondData(QObject):
     package3aReady = pyqtSignal(tuple)
     package3bReady = pyqtSignal(tuple)
     package4Ready = pyqtSignal(tuple)
+    package5Ready = pyqtSignal(int)
 
     def __init__(self, samples_per_sequence, shifts, sequence_reps, length, last_n_values_plot1, last_n_values_plot2,
                  cable_length_constant):
@@ -179,8 +180,10 @@ class SecondData(QObject):
         # self.package4Ready.emit((xData, 20*np.log10(np.absolute(yData)), exact_max))
         self.package4Ready.emit((xData, yData, exact_max))
 
-    def option_4(self, data):
-        pass
+    def frequency_int_value(self, data):
+        data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts)
+        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), True, self.cable_constant)
+        self.package5Ready.emit(int(exact_max*20000))
 
 
 class UI(QMainWindow):
@@ -290,6 +293,8 @@ class UI(QMainWindow):
             self.distance_const.setValue(self.cable_const)
             self.tare_distance.clicked.connect(self.cable_constant_refresher)
 
+            self.second_data.package5Ready.connect(self.frequency_slider.setValue)
+
         # Setting up the plot timer:
         self.make_plot_timers = True
         if self.make_plot_timers:
@@ -331,6 +336,34 @@ class UI(QMainWindow):
             self.close_button.enterEvent = self.close_button_hover
             self.close_button.leaveEvent = self.close_button_exit
             self.close_button.setStyleSheet('QToolButton:hover {background-color: #FF4D4D}')
+
+        # Set up the auto-range checkboxes and home buttons:
+        if True:
+            self.auto_x1.stateChanged.connect(self.auto_x_changer1)
+            self.auto_y1.stateChanged.connect(self.auto_y_changer1)
+            self.auto_x2.stateChanged.connect(self.auto_x_changer2)
+            self.auto_y2.stateChanged.connect(self.auto_y_changer2)
+            self.plot_home1.clicked.connect(self.auto_graph1)
+            self.plot_home2.clicked.connect(self.auto_graph2)
+
+        # Add the RUB- and EST-logo
+        if True:
+            self.rub_logo = QSvgWidget('resources/Logo_RUB_weiss_rgb.svg')
+            self.rub_logo.setMaximumHeight(40)
+            self.rub_logo.setMaximumWidth(150)
+            self.horizontalLayout_9.insertWidget(3, self.rub_logo)
+            self.est_logo = QSvgWidget('resources/est_logo.svg')
+            self.est_logo.setMaximumHeight(30)
+            self.est_logo.setMaximumWidth(92)
+            self.horizontalLayout_9.insertWidget(3, self.est_logo)
+
+        # Setting up the vertical lines:
+        self.make_infinite_lines = True
+        if self.make_infinite_lines:
+            self.inf_line1 = InfiniteLine(angle=90, pen=mkPen(color=(255, 0, 0), width=1))
+            self.inf_line2 = InfiniteLine(angle=90, pen=mkPen(color=(255, 0, 0), width=1))
+            self.vert_line1.stateChanged.connect(self.inf_line1_refresher)
+            self.vert_line2.stateChanged.connect(self.inf_line2_refresher)
 
         # Setting up the animations for QTabWidget
         self.animate_tab_buttons = True
@@ -389,35 +422,7 @@ class UI(QMainWindow):
             self.plot_home1.setIcon(QIcon('resources/icons8-home.svg'))
             self.plot_home2.setIcon(QIcon('resources/icons8-home.svg'))
 
-        # Set up the auto-range checkboxes and home buttons:
-        if True:
-            self.auto_x1.stateChanged.connect(self.auto_x_changer1)
-            self.auto_y1.stateChanged.connect(self.auto_y_changer1)
-            self.auto_x2.stateChanged.connect(self.auto_x_changer2)
-            self.auto_y2.stateChanged.connect(self.auto_y_changer2)
-            self.plot_home1.clicked.connect(self.auto_graph1)
-            self.plot_home2.clicked.connect(self.auto_graph2)
-
-        # Add the RUB- and EST-logo
-        if True:
-            self.rub_logo = QSvgWidget('resources/Logo_RUB_weiss_rgb.svg')
-            self.rub_logo.setMaximumHeight(40)
-            self.rub_logo.setMaximumWidth(150)
-            self.horizontalLayout_9.insertWidget(3, self.rub_logo)
-            self.est_logo = QSvgWidget('resources/est_logo.svg')
-            self.est_logo.setMaximumHeight(30)
-            self.est_logo.setMaximumWidth(92)
-            self.horizontalLayout_9.insertWidget(3, self.est_logo)
-
-        # Setting up the vertical lines:
-        self.make_infinite_lines = True
-        if self.make_infinite_lines:
-            self.inf_line1 = InfiniteLine(angle=90, pen=mkPen(color=(255, 0, 0), width=1))
-            self.inf_line2 = InfiniteLine(angle=90, pen=mkPen(color=(255, 0, 0), width=1))
-            self.vert_line1.stateChanged.connect(self.inf_line1_refresher)
-            self.vert_line2.stateChanged.connect(self.inf_line2_refresher)
-
-        self.pixmap = QPixmap('resources/est_logo.svg')
+        self.second_data.package2Ready.connect(self.second_data.frequency_int_value)
 
     def plot(self, data):
         if self.log_y1.isChecked():
@@ -665,6 +670,9 @@ class UI(QMainWindow):
         self.distance_const.setValue(self.cable_const)
 
     def data_connector(self):
+        # <<< EXPERIMENTAL >>> #
+        # self.second_data.package2Ready.connect(self.second_data.frequency_int_value)
+
         if self.request1 <= 1 and self.request2 <= 1:
             unconnect(self.receiver.packageReady, self.second_data.irf)
         else:
@@ -693,11 +701,6 @@ class UI(QMainWindow):
             self.second_data.package2Ready.connect(self.second_data.irf_interp)
         else:
             unconnect(self.second_data.package2Ready, self.second_data.irf_interp)
-        if self.request1 == 5 or self.request2 == 5:
-            unconnect(self.second_data.package2Ready, self.second_data.option_4)
-            self.second_data.package2Ready.connect(self.second_data.option_4)
-        else:
-            unconnect(self.second_data.package2Ready, self.second_data.option_4)
 
     def start_receiver(self):
         self.receiver.start()

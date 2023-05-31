@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
         # self.pyaudio = PyAudio()
 
         self.SAMPLE_DURATION = 1000
-        self.SAMPLE_RATE = 48000
+        self.SAMPLE_RATE = 44100
         self.FREQUENCY = self.freq_slider.value()
         self.VOLUME = self.volume_slider.value() / 100
 
@@ -53,8 +53,8 @@ class MainWindow(QMainWindow):
             self.sine_plot.setXRange(0, self.SAMPLE_RATE/100)
             self.line = self.sine_plot.plot(wave, pen=pen)
 
-        if True: # Emitter class setup
-            self.sinSender = Emitter(self.SAMPLE_RATE, self.freq_slider.value(), self.volume_slider.value()/100)
+        if True: # SineAudioEmitter class setup
+            self.sinSender = SineAudioEmitter(self.SAMPLE_RATE, self.freq_slider.value(), self.volume_slider.value() / 100)
             self.start_button.clicked.connect(self.sinSender.start)
             self.stop_button.clicked.connect(self.sinSender.stop)
             self.sinSender.sin_ready.connect(self.change_plot)
@@ -86,7 +86,6 @@ class MainWindow(QMainWindow):
     def change_plot(self, data: tuple):
         self.line.setData(np.arange(data[1]), data[0])
         self.sine_plot.setXRange(0, data[1])
-        # print(f'First 3: {[round(i, 3) for i in data[0][0:3]]}, Last 3: {[round(i, 3) for i in data[0][-3:]]}')
 
     def close_button_hover(self, event):
         self.close_button.setIcon(self.clos_ic_white)
@@ -120,8 +119,13 @@ class MainWindow(QMainWindow):
             self.maximize_button.setIcon(self.med_ic)
             self.showFullScreen()
 
+    def close(self):
+        self.sinSender.stop()
+        self.sinSender.wait()
+        super().close()
 
-class Emitter(QThread):
+
+class SineAudioEmitter(QThread):
     sin_ready = pyqtSignal(tuple)
 
     def __init__(self, sample_rate, frequency, volume, device_index=None):
@@ -156,7 +160,7 @@ class Emitter(QThread):
         pi = np.pi
         pi2 = pi*2
         samprate = self.SAMPLE_RATE
-        num_samp = int(samprate/100)
+        num_samp = int(samprate/1000)
         npfloat32 = np.float32
         volume = self.volume
         frequency = self.frequency
@@ -165,27 +169,35 @@ class Emitter(QThread):
         sinewave = np.sin(values, dtype=npfloat32) * volume_array
         stream.write(sinewave, num_frames=num_samp)
         self.sin_ready.emit((sinewave, num_samp))
+        emit = False
         while not self.stop_sender:
             if volume == self.volume:
                 volume_array = np.array([volume]*num_samp, dtype=npfloat32)
             else:
                 volume_array = np.linspace(volume, self.volume, num_samp, dtype=npfloat32)
+                emit = True
             volume = self.volume
             if frequency == self.frequency:
-                values = np.arange(1, num_samp+1, dtype=npfloat32)/samprate*pi*2*frequency + (values[-1]%pi2)
+                values = np.arange(1, num_samp+1, dtype=npfloat32)/samprate*pi2*frequency + (values[-1] % pi2)
             else:
-                values = pi2 * np.cumsum(np.linspace(frequency, self.frequency, num_samp)) / samprate + (values[-1]%pi2)
+                values = pi2 * np.cumsum(np.linspace(frequency, self.frequency, num_samp)) / samprate+(values[-1] % pi2)
+                emit = True
             frequency = self.frequency
             sinewave = np.sin(values, dtype=npfloat32) * volume_array
             stream.write(sinewave, num_frames=num_samp)
-            self.sin_ready.emit((sinewave, num_samp))
-        sinewave = np.sin(values, dtype=npfloat32)
-        sinewave = np.append(sinewave, sinewave) * np.linspace(volume, 0, num_samp*2, dtype=npfloat32)
-        stream.write(sinewave, num_frames=num_samp*2)
-        self.sin_ready.emit((sinewave, num_samp*2))
+            if emit:
+                self.sin_ready.emit((sinewave, num_samp))
+            emit = False
+        values = np.arange(1, num_samp+1, dtype=npfloat32)/samprate*pi*2*self.frequency + (values[-1] % pi2)
+        sinewave = np.sin(values, dtype=npfloat32) * np.linspace(volume, 0, num_samp, dtype=npfloat32)
+        stream.write(sinewave, num_frames=num_samp)
+        self.sin_ready.emit((sinewave, num_samp))
+        self.stop_sender = False
+        zeros = np.zeros(num_samp, dtype=npfloat32)
+        for i in range(10):
+            stream.write(zeros, num_frames=num_samp)
         stream.close()
         self.quit()
-        self.wait()
 
     def stop(self):
         self.stop_sender = True
