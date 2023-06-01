@@ -2159,7 +2159,7 @@ QPushButton:disabled
           <item row="0" column="0">
            <widget class="QSlider" name="frequency_slider">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="maximum">
              <number>10000</number>

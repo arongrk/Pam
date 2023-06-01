@@ -423,6 +423,9 @@ class UI(QMainWindow):
             self.plot_home2.setIcon(QIcon('resources/icons8-home.svg'))
 
         self.second_data.package2Ready.connect(self.second_data.frequency_int_value)
+        self.sinSender = SineAudioEmitter(44100, 1, self.frequency_slider.value(), 5)
+        self.start_sound_button.clicked.connect(self.sinSender.start)
+        self.frequency_slider.valueChanged.connect(self.sinSender.set_frequency)
 
     def plot(self, data):
         if self.log_y1.isChecked():
@@ -771,14 +774,16 @@ class UI(QMainWindow):
 
     def rec_failed(self, error):
         self.con_status.setStyleSheet('color: red')
-        self.con_status.setText('Connection failed: Resetting receiver.')
         self.reconnect_receiver()
         if error == 'os_exists':
             self.con_status.setText('Connection failed: Socket already in use.')
-        if error == 'os_unkown':
+        elif error == 'os_unkown':
             self.con_status.setText('Connection failed: try again later!')
-        if error == 'type':
+        elif error == 'type':
             self.con_status.setText('Connection failed: Check inputs and try again.')
+        else:
+
+            self.con_status.setText('Connection failed: Resetting receiver.')
         self.start_receive.setEnabled(False)
         self.start_plot1.setEnabled(False)
         self.label_11.setText('receiver not bound')
@@ -840,10 +845,13 @@ class UI(QMainWindow):
         self.__mousePos = event.globalPos()
 
     def mouseMoveEvent(self, event):
-        if self.__mousePos.y()-self.pos().y() <= 40:
-            delta = event.globalPos() - self.__mousePos
-            self.move(self.x() + delta.x(), self.y() + delta.y())
-            self.__mousePos = event.globalPos()
+        try:
+            if self.__mousePos.y()-self.pos().y() <= 40:
+                delta = event.globalPos() - self.__mousePos
+                self.move(self.x() + delta.x(), self.y() + delta.y())
+                self.__mousePos = event.globalPos()
+        except:
+            pass
 
     def mouseReleaseEvent(self, event):
         self.__mousePos = None
