@@ -198,7 +198,6 @@ class SineAudioEmitter(QThread):
         for i in range(10):
             stream.write(zeros, num_frames=num_samp)
         stream.close()
-        self.quit()
 
     def stop(self):
         self.stop_sender = True

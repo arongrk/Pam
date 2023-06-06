@@ -63,7 +63,8 @@ class CustomAxis(AxisItem):
 
 
 class Receiver(QThread):
-    packageReady = pyqtSignal(tuple)
+    measurement_ready = pyqtSignal(tuple)
+    irf_measurement_ready = pyqtSignal(tuple)
     st_connecting = pyqtSignal()
     st_connected = pyqtSignal()
     st_connect_failed = pyqtSignal(str)
@@ -109,11 +110,14 @@ class Receiver(QThread):
                 self.packageLost.emit()
             else:
                 time_stamp = round(time.time() - t0, 10)
-                yData = np.frombuffer(r, dtype=np.int32)[:self.set_len] * 8.192 / pow(2, 18)
-                # yData = np.frombuffer(r, dtype=np.int32) * 8.192 / pow(2, 18)
-                # xData = np.arange(0, self.set_len*1000/4.9e+06, 1000/4.9e+06)
-                xData = np.linspace(0, self.mes_len/self.sps*2e-10*self.set_len, self.set_len)
-                self.packageReady.emit((xData, yData, time_stamp))
+                y_mes_data = np.frombuffer(r, dtype=np.int32)[:self.set_len] * 8.192 / pow(2, 18)
+                x_mes_data = np.linspace(0, self.mes_len / self.sps * 2e-10 * self.set_len, self.set_len)
+                self.measurement_ready.emit((x_mes_data, y_mes_data, time_stamp))
+                y_irf_data = averager(y_mes_data, self.shifts, self.sps, self.s_reps)
+                y_irf_data -= np.average(y_irf_data[-100:])
+                x_irf_data = np.arange(1, self.shifts + 1) / 5e+09
+                self.irf_measurement_ready.emit((x_irf_data, y_irf_data, time_stamp))
+
         self.sock.close()
 
     def stop(self):
@@ -123,14 +127,10 @@ class Receiver(QThread):
 
 
 class SecondData(QObject):
-    package2Ready = pyqtSignal(tuple)
-    package3aReady = pyqtSignal(tuple)
-    package3bReady = pyqtSignal(tuple)
-    package4Ready = pyqtSignal(tuple)
-    package5Ready = pyqtSignal(int)
+    distance_ready = pyqtSignal(tuple)
+    irf_interp_ready = pyqtSignal(tuple)
 
-    def __init__(self, samples_per_sequence, shifts, sequence_reps, length, last_n_values_plot1, last_n_values_plot2,
-                 cable_length_constant):
+    def __init__(self, samples_per_sequence, shifts, sequence_reps, length, cable_length_constant):
         QObject.__init__(self)
         self.sps = samples_per_sequence
         self.shifts = shifts
@@ -140,53 +140,28 @@ class SecondData(QObject):
         self.refresh_x2 = False
         self.t0 = time.time()
         self.maxima, self.time_stamps = deque(maxlen=1000), deque(maxlen=1000)
-        self.last_values1 = last_n_values_plot1
-        self.last_values2 = last_n_values_plot2
         self.cable_constant = cable_length_constant
 
-    def irf(self, data):
-        yData = averager(data[1], self.shifts, self.sps, self.sr)
-        yData = yData - np.average(yData[len(yData)-100:])
-        xData = np.arange(1, self.shifts+1) / 5e+09
-        # yData = np.angle(fft(yData), deg=True)
-        # xData, yData = zero_padding(xData, yData, 2.4e+09, 16080)
-        # print(find_peaks(data[1], height=0.05))
-        # self.package2Ready.emit((data[0], data[1]))
-        self.package2Ready.emit((xData, yData, data[2]))
-
     def distance(self, data):
-        self.time_stamps.append(data[2])
+        t = data[2]
         data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts)
-        # print(find_peaks(data[1]))
-        # print(np.argsort(data[1][:5000])[-3:])
-        # self.maxima.append(data[0][data[1].argmax()])
-        # self.maxima.append(polynom_interp_max(data[0][:int(len(data[0])/2)], data[1][:int(len(data[0])/2)], 50))
-        self.maxima.append(exact_polynom_interp_max(data[0], np.absolute(data[1]), True,
-                                                    self.cable_constant))
-        if self.refresh_x1:
-            self.package3aReady.emit((self.time_stamps[-self.last_values1:], self.maxima[-self.last_values1:]))
-        else:
-            self.package3aReady.emit((list(self.time_stamps), list(self.maxima)))
-        if self.refresh_x2:
-            self.package3bReady.emit((self.time_stamps[-self.last_values2:], self.maxima[-self.last_values2:]))
-        else:
-            self.package3bReady.emit((list(self.time_stamps), list(self.maxima)))
+        max = exact_polynom_interp_max(data[0], np.absolute(data[1]), True, self.cable_constant)
+        self.distance_ready.emit((t, max))
 
     def irf_interp(self, data):
         data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts)
         yData = data[1]
         xData = data[0]
         exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), False)
-        # self.package4Ready.emit((xData, 20*np.log10(np.absolute(yData)), exact_max))
-        self.package4Ready.emit((xData, yData, exact_max))
+        self.irf_interp_ready.emit((xData, yData, exact_max))
 
-    def frequency_int_value(self, data):
-        data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts)
-        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), True, self.cable_constant)
-        self.package5Ready.emit(int(exact_max*20000))
+    def return_functions(self):
+        return self.distance, self.irf_interp
 
 
 class UI(QMainWindow):
+    distance_ready = pyqtSignal(tuple)
+
     def __init__(self):
         super(UI, self).__init__()
 
@@ -195,7 +170,6 @@ class UI(QMainWindow):
 
         # Loading the values and getting the parameters for data interpreting
         if True:
-
             with open('resources/configurations.bin', 'rb') as f:
                 self.values = pickle.load(f)
             self.samples_per_sequence = self.values['samples_per_sequence']
@@ -204,7 +178,7 @@ class UI(QMainWindow):
             self.length = self.values['length']
             self.last_n_values1 = self.values['last_values1']
             self.last_n_values2 = self.values['last_values2']
-            self.cable_const = self.values['cable_length_constant']
+            cable_const = self.values['cable_length_constant']
             self.sps_edit.setText(str(self.samples_per_sequence))
             self.sr_edit.setText(str(self.sequence_reps))
             self.shifts_edit.setText(str(self.shifts))
@@ -268,7 +242,7 @@ class UI(QMainWindow):
         if True:
             self.second_thread = QThread()
             self.second_data = SecondData(self.samples_per_sequence, self.shifts, self.sequence_reps, self.length,
-                                          self.last_n_values1, self.last_n_values2, self.cable_const)
+                                          cable_const)
             self.second_data.moveToThread(self.second_thread)
             self.second_thread.start()
             self.start_plot2.clicked.connect(self.plot_starter2)
@@ -284,16 +258,15 @@ class UI(QMainWindow):
             self.refresh_x1.stateChanged.connect(self.refresh_x1_refresher)
             self.refresh_x2.stateChanged.connect(self.refresh_x2_refresher)
 
-            # Refreshing how many last values are displayed
-            self.last_values1.valueChanged.connect(self.last_values_changer1)
-            self.last_values2.valueChanged.connect(self.last_values_changer2)
+            # Refreshing the last_values boxes
+            self.last_values1.valueChanged.connect(lambda value: setattr(self, 'last_n_values1', value))
+            self.last_values2.valueChanged.connect(lambda value: setattr(self, 'last_n_values2', value))
 
             # Setting up the distance calibration:
             self.distance_const.setDecimals(5)
-            self.distance_const.setValue(self.cable_const)
+            self.distance_const.setValue(cable_const)
             self.tare_distance.clicked.connect(self.cable_constant_refresher)
-
-            self.second_data.package5Ready.connect(self.frequency_slider.setValue)
+            self.distance_const.valueChanged.connect(lambda value: setattr(self.second_data, 'cable_constant', value))
 
         # Setting up the plot timer:
         self.make_plot_timers = True
@@ -365,6 +338,23 @@ class UI(QMainWindow):
             self.vert_line1.stateChanged.connect(self.inf_line1_refresher)
             self.vert_line2.stateChanged.connect(self.inf_line2_refresher)
 
+        # Setting up the Audio Emitter:
+        if True:
+            self.sinSender = SineAudioEmitter(44100, 1, self.frequency_slider.value(), self.volume_slider.value())
+            self.start_sound_button.clicked.connect(self.sinSender.start)
+            self.frequency_slider.valueChanged.connect(self.sinSender.set_frequency)
+            self.volume_slider.valueChanged.connect(self.sinSender.set_volume)
+            self.second_data.distance_ready.connect(self.set_audio_frequency)
+            self.stop_sound_button.clicked.connect(self.sinSender.stop)
+
+        # Setting up the distance plot calculation
+        if True:
+            self.distance_values = deque()
+            self.distance_time_values = deque()
+
+            # refresh_distance_button
+            self.refresh_distance_button.clicked.connect(self.refresh_distance_array)
+
         # Setting up the animations for QTabWidget
         self.animate_tab_buttons = True
         if self.animate_tab_buttons:
@@ -421,11 +411,6 @@ class UI(QMainWindow):
             self.label_31.setFont(QFont('RubFlama Light', 14))
             self.plot_home1.setIcon(QIcon('resources/icons8-home.svg'))
             self.plot_home2.setIcon(QIcon('resources/icons8-home.svg'))
-
-        self.second_data.package2Ready.connect(self.second_data.frequency_int_value)
-        self.sinSender = SineAudioEmitter(44100, 1, self.frequency_slider.value(), 5)
-        self.start_sound_button.clicked.connect(self.sinSender.start)
-        self.frequency_slider.valueChanged.connect(self.sinSender.set_frequency)
 
     def plot(self, data):
         if self.log_y1.isChecked():
@@ -486,7 +471,7 @@ class UI(QMainWindow):
                 self.vert_line1.setEnabled(True)
                 self.log_y1.setEnabled(True)
         self.data_connector()
-        self.plot_connector1()
+        self.plot_connector(self.request1, self.plot)
         self.stop_plot1.setEnabled(True)
 
     def plot_starter2(self):
@@ -531,56 +516,39 @@ class UI(QMainWindow):
                 self.vert_line2.setEnabled(True)
                 self.log_y2.setEnabled(True)
         self.data_connector()
-        self.plot_connector2()
+        self.plot_connector(self.request2, self.plot_2)
         self.stop_plot2.setEnabled(True)
 
     def plot_breaker1(self):
         self.stop_plot1.setEnabled(False)
         self.request1 = 0
-        self.plot_disconnector1()
+        self.plot_disconnector(self.plot)
         self.data_connector()
         self.start_plot1.setEnabled(True)
 
     def plot_breaker2(self):
         self.stop_plot2.setEnabled(False)
         self.request2 = 0
-        self.plot_disconnector2()
+        self.plot_disconnector(self.plot_2)
         self.data_connector()
         self.start_plot2.setEnabled(True)
 
-    def plot_connector1(self):
-        match self.request1:
+    def plot_connector(self, request, plot):
+        match request:
             case 1:
-                self.receiver.packageReady.connect(self.plot)
+                self.receiver.measurement_ready.connect(plot)
             case 2:
-                self.second_data.package2Ready.connect(self.plot)
+                self.receiver.irf_measurement_ready.connect(plot)
             case 3:
-                self.second_data.package3aReady.connect(self.plot)
+                self.second_data.distance_ready.connect(self.make_distance_array)
             case 4:
-                self.second_data.package4Ready.connect(self.plot)
+                self.second_data.irf_interp_ready.connect(plot)
 
-    def plot_connector2(self):
-        match self.request2:
-            case 1:
-                self.receiver.packageReady.connect(self.plot_2)
-            case 2:
-                self.second_data.package2Ready.connect(self.plot_2)
-            case 3:
-                self.second_data.package3bReady.connect(self.plot_2)
-            case 4:
-                self.second_data.package4Ready.connect(self.plot_2)
-
-    def plot_disconnector1(self):
-        unconnect(self.receiver.packageReady, self.plot)
-        unconnect(self.second_data.package2Ready, self.plot)
-        unconnect(self.second_data.package3aReady, self.plot)
-        unconnect(self.second_data.package4Ready, self.plot)
-
-    def plot_disconnector2(self):
-        unconnect(self.receiver.packageReady, self.plot_2)
-        unconnect(self.second_data.package2Ready, self.plot_2)
-        unconnect(self.second_data.package3bReady, self.plot_2)
-        unconnect(self.second_data.package4Ready, self.plot_2)
+    def plot_disconnector(self, plot):
+        unconnect(self.receiver.measurement_ready, plot)
+        unconnect(self.receiver.irf_measurement_ready, plot)
+        unconnect(self.second_data.distance_ready, plot)
+        unconnect(self.second_data.irf_interp_ready, plot)
 
     def running_refresher1(self):
         if self.stop_plot1.isEnabled():
@@ -619,12 +587,6 @@ class UI(QMainWindow):
         if not self.start_plot2.isEnabled():
             self.plot_breaker2()
             self.plot_starter2()
-
-    def last_values_changer1(self, value):
-        self.second_data.last_values1 = value
-
-    def last_values_changer2(self, value):
-        self.second_data.last_values2 = value
 
     def auto_x_changer1(self):
         if self.auto_x1.isChecked():
@@ -669,41 +631,32 @@ class UI(QMainWindow):
             self.graph2.removeItem(self.inf_line2)
 
     def cable_constant_refresher(self):
-        self.cable_const = self.second_data.cable_constant = np.average(np.array(self.second_data.maxima)[-20:])+self.cable_const
-        self.distance_const.setValue(self.cable_const)
+        self.second_data.cable_constant += np.average(np.array(self.distance_values)[-20:])
+        self.distance_const.setValue(self.second_data.cable_constant)
+
+    def make_distance_array(self, data):
+        self.distance_values.append(data[1])
+        self.distance_time_values.append(data[0])
+        l1 = self.last_n_values1
+        l2 = self.last_n_values2
+        # print((len(list(self.distance_values)[-l2:]), len(list(self.distance_time_values)[-l2:])))
+        if self.request1 == 3:
+            self.plot((np.array(self.distance_time_values)[-l1:], np.array(self.distance_values)[-l1:]))
+        if self.request2 == 3:
+            self.plot_2((np.array(self.distance_time_values)[-l2:], np.array(self.distance_values)[-l2:]))
+
+    def refresh_distance_array(self):
+        self.distance_values = deque()
+        self.distance_time_values = deque()
 
     def data_connector(self):
-        # <<< EXPERIMENTAL >>> #
-        # self.second_data.package2Ready.connect(self.second_data.frequency_int_value)
-
-        if self.request1 <= 1 and self.request2 <= 1:
-            unconnect(self.receiver.packageReady, self.second_data.irf)
-        else:
-            unconnect(self.receiver.packageReady, self.second_data.irf)
-            self.receiver.packageReady.connect(self.second_data.irf)
-        if self.request1 == 3 or self.request2 == 3:
-            self.second_data.t0 = time.time()
-            if self.refresh_x1.isChecked():
-                self.second_data.refresh_x1 = True
-                self.last_values1.setEnabled(True)
-            else:
-                self.second_data.refresh_x1 = False
-                self.last_values1.setEnabled(False)
-            if self.refresh_x2.isChecked():
-                self.second_data.refresh_x2 = True
-                self.last_values2.setEnabled(True)
-            else:
-                self.second_data.refresh_x2 = False
-                self.last_values2.setEnabled(False)
-            unconnect(self.second_data.package2Ready, self.second_data.distance)
-            self.second_data.package2Ready.connect(self.second_data.distance)
-        else:
-            unconnect(self.second_data.package2Ready, self.second_data.distance)
-        if self.request1 == 4 or self.request2 == 4:
-            unconnect(self.second_data.package2Ready, self.second_data.irf_interp)
-            self.second_data.package2Ready.connect(self.second_data.irf_interp)
-        else:
-            unconnect(self.second_data.package2Ready, self.second_data.irf_interp)
+        for i in self.second_data.return_functions():
+            unconnect(self.receiver.measurement_ready, i)
+        match self.request1, self.request2:
+            case (3, _) | (_, 3):
+                self.receiver.irf_measurement_ready.connect(self.second_data.distance)
+            case (4, _) | (_, 4):
+                self.receiver.irf_measurement_ready.connect(self.second_data.irf_interp)
 
     def start_receiver(self):
         self.receiver.start()
@@ -723,7 +676,7 @@ class UI(QMainWindow):
         self.receiver.wait()
         self.receiver = Receiver(self.shifts, self.sequence_reps, self.samples_per_sequence, self.length,
                                  self.port, self.ip)
-        # self.receiver.packageReady.connect(self.plot)
+        # self.receiver.measurement_ready.connect(self.plot)
         self.receiver.st_connecting.connect(self.rec_connecting)
         self.receiver.st_connecting.connect(self.rec_connected)
         self.receiver.st_connect_failed.connect(self.rec_failed)
@@ -808,6 +761,10 @@ class UI(QMainWindow):
         self.ethernet_rate.setText(f'Ethernet 2: {round((byties - self.bytes_received) * 8e-06 * 2, 1)} MBit/s')
         self.bytes_received = byties
 
+    def set_audio_frequency(self, data):
+        freq = data[1] * 20000
+        self.frequency_slider.setValue(int(freq))
+
     def close_button_hover(self, event):
         self.close_button.setIcon(self.clos_ic_white)
 
@@ -891,7 +848,12 @@ class UI(QMainWindow):
     def close(self):
         with open('resources/configurations.bin', 'wb') as f:
             pickle.dump(change_dict(self.values, self.shifts, self.samples_per_sequence, self.sequence_reps,
-                                    self.length, self.last_n_values1, self.last_n_values2, self.cable_const), f)
+                                    self.length, self.last_n_values1, self.last_n_values2,
+                                    self.second_data.cable_constant), f)
+        self.sinSender.stop()
+        self.second_thread.quit()
+        self.receiver.quit()
+        self.sinSender.quit()
         super().close()
 
 
