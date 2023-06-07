@@ -148,8 +148,8 @@ class SecondData(QObject):
 
     def distance(self, data):
         t = data[2]
-        data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts)
-        max = exact_polynom_interp_max(data[0], np.absolute(data[1]), True, self.cable_constant)
+        data = zero_padding(data[0], data[1]-self.YRefPos, 2.5e+09, 2**5*self.shifts)
+        max = exact_polynom_interp_max(data[0], np.absolute(data[1]), True, self.cable_constant, slice(1, 5000))
         self.distance_ready.emit((t, max))
 
     def irf_interp(self, data):
@@ -158,8 +158,10 @@ class SecondData(QObject):
         self.irf_interp_ready.emit((data[0], data[1], exact_max))
 
     def irf_interp_norm(self, data):
-        data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
-        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), False, slice(1, len(data[0])-1))
+        yData = data[1] - self.YRefPos
+        data = zero_padding(data[0], yData, 2.5e+09, 2 ** 5 * self.shifts)
+        # data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
+        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), False, 0, slice(1, 5000))
         self.irf_interp_ready.emit((data[0], data[1], exact_max))
 
     def return_functions(self):
@@ -168,12 +170,12 @@ class SecondData(QObject):
     def refresh_y_ref(self, data):
         self.unconnect_receiver_from_y_ref.emit()
         yData = data[1]
-        yData[150:161] = np.linspace(yData[150], 0, 11)
-        yData[161:] = 0
-        Ly = len(yData)
-        YRefTemp = fft(yData, Ly) / Ly
-        self.YRefPos = YRefTemp[0:trunc(Ly / 2) + 1]
-
+        # yData[150:161] = np.linspace(yData[150], 0, 11)
+        # yData[161:] = 0
+        # Ly = len(yData)
+        # YRefTemp = fft(yData, Ly) / Ly
+        # self.YRefPos = YRefTemp[0:trunc(Ly / 2) + 1]
+        self.YRefPos = yData
 
 
 
