@@ -143,18 +143,18 @@ def polynom_interp_max(t, y, accuracy: int):
     return exact_maximum
 
 
-def exact_polynom_interp_max(t_data, y_data, get_distance: bool, intervall: slice = None, cable_constant=0):
+def exact_polynom_interp_max(t_data, y_data, get_distance: bool, cable_constant=0, intervall: slice = None):
 
     if np.shape(t_data) != np.shape(y_data):
         raise ValueError('t_data and y_data are not the same shape!')
 
-    if intervall:
+    if not intervall:
+        intervall = slice(0, len(y_data))
+    else:
         if intervall.stop > len(y_data):
             raise ValueError('intervall is out of range')
         elif type(intervall) != slice:
             raise TypeError('parameter \'intervall\' is not type slice')
-    else:
-        intervall = slice(0, len(y_data))
 
     t, y = t_data, y_data
 
