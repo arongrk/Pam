@@ -104,8 +104,12 @@ def unconnect(signal, old_slot):
         pass
 
 
-def zero_padding(t, y, fLim, NZP):
+def zero_padding(t, y, fLim, NZP, norm=False, YRef=None):
+    if norm and YRef is None:
+        raise ValueError('YRef is required when using norm!')
+
     Ly = len(y)
+
     fs = 1/(t[1]-t[0])
     df = fs/Ly
     f = np.arange(0, trunc(Ly/2))*df
@@ -115,9 +119,11 @@ def zero_padding(t, y, fLim, NZP):
 
     # Tp = 1/(2*(LidxLim-1))/df
 
-
     Ytemp = fft(y, Ly)/Ly
     YPos = Ytemp[0:trunc(Ly/2)+1]
+
+    if norm:
+        YPos /= YRef
 
     YZP = np.zeros(NZP, dtype=np.complex_)
     YPos[1:-1] = 2 * YPos[1:-1]
@@ -137,14 +143,23 @@ def polynom_interp_max(t, y, accuracy: int):
     return exact_maximum
 
 
-def exact_polynom_interp_max(t_data, y_data, get_distance: bool, cable_constant=0):
+def exact_polynom_interp_max(t_data, y_data, get_distance: bool, intervall: slice = None, cable_constant=0):
+
     if np.shape(t_data) != np.shape(y_data):
         raise ValueError('t_data and y_data are not the same shape!')
+
+    if intervall:
+        if intervall.stop > len(y_data):
+            raise ValueError('intervall is out of range')
+        elif type(intervall) != slice:
+            raise TypeError('parameter \'intervall\' is not type slice')
+    else:
+        intervall = slice(0, len(y_data))
 
     t, y = t_data, y_data
 
     # Get the sorted indexes of the three highest y-Values
-    m = np.argmax(y)
+    m = np.argmax(y[intervall])
     m_i = [m-1, m, m+1]
 
 

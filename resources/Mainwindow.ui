@@ -722,7 +722,7 @@ border-top: 1px solid #122b4a;</string>
               <item>
                <widget class="QCheckBox" name="log_y1">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="font">
                  <font>
@@ -1151,7 +1151,7 @@ border-top: 1px solid #122b4a;</string>
              </widget>
             </item>
             <item row="0" column="0">
-             <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0,0,0,0,0">
+             <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0,0,0,0,0,0,0">
               <item>
                <layout class="QVBoxLayout" name="verticalLayout">
                 <item>
@@ -1352,6 +1352,38 @@ border-top: 1px solid #122b4a;</string>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
+                  <property name="text">
+                   <string>Refresh</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="Line" name="line_13">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_15">
+                <item>
+                 <widget class="QLabel" name="label_37">
+                  <property name="text">
+                   <string>Normation:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="norm_interp_box">
+                  <property name="text">
+                   <string>norm interp</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="normation_button">
                   <property name="text">
                    <string>Refresh</string>
                   </property>

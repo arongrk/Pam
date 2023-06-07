@@ -55,7 +55,7 @@ class MainWindow(QMainWindow):
             self.line = self.sine_plot.plot(wave, pen=pen)
 
         if True: # SineAudioEmitter class setup
-            self.sinSender = SineAudioEmitter(self.SAMPLE_RATE, 1)
+            self.sinSender = SineAudioEmitter(self.SAMPLE_RATE, 10)
             self.start_button.clicked.connect(self.sinSender.start)
             self.stop_button.clicked.connect(self.sinSender.stop)
             # self.sinSender.sin_ready.connect(self.change_plot)
