@@ -7,6 +7,8 @@ from scipy.interpolate import BarycentricInterpolator as bary
 from scipy.constants import speed_of_light
 from socket import socket
 
+from scipy.signal.windows import hann
+
 import definitions
 
 
@@ -122,13 +124,14 @@ def zero_padding(t, y, fLim, NZP, norm=False, YRef=None):
     Ytemp = fft(y, Ly)/Ly
     YPos = Ytemp[0:trunc(Ly/2)+1]
 
+    window = hann(2*LidxLim-1)
+
     if norm:
         YPos /= YRef
 
     YZP = np.zeros(NZP, dtype=np.complex_)
     YPos[1:-1] = 2 * YPos[1:-1]
-    YZP[idxLim] = YPos[idxLim]
-
+    YZP[idxLim] = YPos[idxLim] * window[LidxLim-1:]
     yData = np.real(ifft(YZP)*NZP)
     tData = (np.arange(0, NZP) / fs * Ly/NZP + t[0])
 
@@ -143,7 +146,7 @@ def polynom_interp_max(t, y, accuracy: int):
     return exact_maximum
 
 
-def exact_polynom_interp_max(t_data, y_data, get_distance: bool, cable_constant=0, intervall: slice = None):
+def exact_polynom_interp_max(t_data, y_data, get_distance: bool, cable_constant=0, intervall: slice=None):
 
     if np.shape(t_data) != np.shape(y_data):
         raise ValueError('t_data and y_data are not the same shape!')
@@ -151,15 +154,15 @@ def exact_polynom_interp_max(t_data, y_data, get_distance: bool, cable_constant=
     if not intervall:
         intervall = slice(0, len(y_data))
     else:
-        if intervall.stop > len(y_data):
+        if type(intervall) != slice:
+            raise TypeError('intervall is not type slice')
+        elif intervall.stop > len(y_data):
             raise ValueError('intervall is out of range')
-        elif type(intervall) != slice:
-            raise TypeError('parameter \'intervall\' is not type slice')
 
     t, y = t_data, y_data
 
     # Get the sorted indexes of the three highest y-Values
-    m = np.argmax(y[intervall])
+    m = np.argmax(y[intervall])+intervall.start
     m_i = [m-1, m, m+1]
 
 
@@ -187,10 +190,11 @@ def change_dict(dictionary: dict, *args):
     d = dictionary
     k_list = list(d.keys())
     if len(d) != len(args):
-        raise ValueError(f'Dictionary length and args must be the same, found: {len(d), len(args)}')
-    for i in range(len(args)):
-        d[k_list[i]] = args[i]
-    return d
+        raise ValueError(f'Dictionary length and argument count must be the same, found: {len(d), len(args)}')
+    else:
+        for i in range(len(args)):
+            d[k_list[i]] = args[i]
+        return d
 
 
 

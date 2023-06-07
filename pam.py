@@ -148,8 +148,8 @@ class SecondData(QObject):
 
     def distance(self, data):
         t = data[2]
-        data = zero_padding(data[0], data[1]-self.YRefPos, 2.5e+09, 2**5*self.shifts)
-        max = exact_polynom_interp_max(data[0], np.absolute(data[1]), True, self.cable_constant, slice(1, 5000))
+        data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts)
+        max = exact_polynom_interp_max(data[0], np.absolute(data[1]), True, self.cable_constant)
         self.distance_ready.emit((t, max))
 
     def irf_interp(self, data):
@@ -158,11 +158,19 @@ class SecondData(QObject):
         self.irf_interp_ready.emit((data[0], data[1], exact_max))
 
     def irf_interp_norm(self, data):
-        yData = data[1] - self.YRefPos
-        data = zero_padding(data[0], yData, 2.5e+09, 2 ** 5 * self.shifts)
-        # data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
-        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), False, 0, slice(1, 5000))
+        data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
+        idx_start = np.absolute(data[0]-1.0e-09).argmin()
+        idx_stop = np.absolute(data[0]-12.0e-09).argmin()
+        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), True, intervall=slice(idx_start, idx_stop))
         self.irf_interp_ready.emit((data[0], data[1], exact_max))
+
+    def distance_norm(self, data):
+        t = data[2]
+        data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
+        idx_start = np.absolute(data[0]-1.0e-09).argmin()
+        idx_stop = np.absolute(data[0]-12.0e-09).argmin()
+        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), True, intervall=slice(idx_start, idx_stop))
+        self.distance_ready.emit((t, exact_max))
 
     def return_functions(self):
         return self.distance, self.irf_interp,  self.irf_interp_norm
@@ -170,13 +178,11 @@ class SecondData(QObject):
     def refresh_y_ref(self, data):
         self.unconnect_receiver_from_y_ref.emit()
         yData = data[1]
-        # yData[150:161] = np.linspace(yData[150], 0, 11)
-        # yData[161:] = 0
-        # Ly = len(yData)
-        # YRefTemp = fft(yData, Ly) / Ly
-        # self.YRefPos = YRefTemp[0:trunc(Ly / 2) + 1]
-        self.YRefPos = yData
-
+        yData[150:161] = np.linspace(yData[150], 0, 11)
+        yData[161:] = 0
+        Ly = len(yData)
+        YRefTemp = fft(yData, Ly) / Ly
+        self.YRefPos = YRefTemp[0:trunc(Ly / 2) + 1]
 
 
 class UI(QMainWindow):
@@ -304,6 +310,7 @@ class UI(QMainWindow):
 
         self.request1 = 0
         self.request2 = 0
+        self.requests = [0, 0]
 
         # Setting up the qss style sheet
         with open('resources/pams_style.qss', 'r') as f:
@@ -355,8 +362,10 @@ class UI(QMainWindow):
         if self.make_infinite_lines:
             self.inf_line1 = InfiniteLine(angle=90, pen=mkPen(color=(255, 0, 0), width=1))
             self.inf_line2 = InfiniteLine(angle=90, pen=mkPen(color=(255, 0, 0), width=1))
-            self.vert_line1.stateChanged.connect(self.inf_line1_refresher)
-            self.vert_line2.stateChanged.connect(self.inf_line2_refresher)
+            self.inf_line_box1.stateChanged.connect(self.inf_line1_refresher)
+            self.inf_line_box2.stateChanged.connect(self.inf_line2_refresher)
+            self.inf_lines = [self.inf_line1, self.inf_line2]
+            self.inf_line_boxes = [self.inf_line_box1, self.inf_line_box2]
 
         # Setting up the Audio Emitter:
         if True:
@@ -434,6 +443,7 @@ class UI(QMainWindow):
 
         self.normation_button.clicked.connect(self.connect_receiver_to_refresh_y_ref)
         self.second_data.unconnect_receiver_from_y_ref.connect(self.unconnect_receiver_from_refresh_y_ref)
+        self.graphs = [self.graph1, self.graph2]
 
     def connect_receiver_to_refresh_y_ref(self):
         self.receiver.irf_measurement_ready.connect(self.second_data.refresh_y_ref)
@@ -442,22 +452,72 @@ class UI(QMainWindow):
         unconnect(self.receiver.irf_measurement_ready, self.second_data.refresh_y_ref)
 
     def plot(self, data):
-        if self.log_y1.isChecked():
+        if self.log_y_box1.isChecked():
             self.line1.setData(data[0], np.log10(np.absolute(data[1])))
         else:
             self.line1.setData(data[0], data[1])
-        if self.vert_line1.isChecked():
+        if self.inf_line_box1.isChecked():
             self.inf_line1.setPos(data[2])
         self.counter1 += 1
 
     def plot_2(self, data):
-        if self.log_y2.isChecked():
+        if self.log_y_box2.isChecked():
             self.line2.setData(data[0], np.log10(np.absolute(data[1])))
         else:
             self.line2.setData(data[0], data[1])
-        if self.vert_line2.isChecked():
+        if self.inf_line_box2.isChecked():
             self.inf_line2.setPos(data[2])
         self.counter2 += 1
+
+    '''
+    def plot_starter(self, plot=1):
+        plot = plot-1
+        match plot:
+            case 0:
+                self.start_plot1.setEnabled(False)
+                box = self.QComboBox_1.currentText()
+                self.plot1_label.setText('Plot 1: ' + box)
+            case 1:
+                self.start_plot2.setEnabled(False)
+                box = self.QComboBox_2.currentText()
+                self.plot2_label.setText('Plot 2: ' + box)
+        match box:
+            case 'Raw data':
+                self.requests[plot] = 1
+
+                self.graphs[plot].setTitle('Raw data')
+                self.graphs[plot].getAxis('bottom').setLabel('Time', units='s')
+                self.graphs[plot].getAxis('left').setLabel('Voltage', units='v')
+                self.inf_line_boxes[plot].setEnabled(False)
+                self.inf_line_boxes[plot].setChecked(False)
+                self.log_y_box1.setChecked(False)
+            case 'IRF':
+                self.request1 = 2
+                self.graph1.setTitle('IRF data')
+                self.graph1.getAxis('bottom').setLabel('Time', units='ms')
+                self.graph1.getAxis('left').setLabel('Voltage', units='v')
+                self.inf_line_box1.setEnabled(False)
+                self.inf_line_box1.setChecked(False)
+                self.log_y_box1.setChecked(False)
+            case 'Distance':
+                self.request1 = 3
+                self.graph1.setTitle('Distance')
+                self.graph1.getAxis('bottom').setLabel('Time', units='s')
+                self.graph1.getAxis('left').setLabel('Distance', units='m')
+                self.auto_x1.setChecked(True)
+                self.auto_y1.setChecked(True)
+                self.inf_line_box1.setEnabled(False)
+                self.inf_line_box1.setChecked(False)
+                self.log_y_box1.setChecked(False)
+            case 'IRF Interpolated':
+                self.request1 = 4
+                self.graph1.getAxis('bottom').setLabel('Time', units='s')
+                self.graph1.getAxis('left').setLabel('Voltage', units='v')
+                self.inf_line_box1.setEnabled(True)
+        self.data_connector()
+        self.plot_connector(self.request1, self.plot)
+        self.stop_plot1.setEnabled(True)
+    '''
 
     def plot_starter1(self):
         self.start_plot1.setEnabled(False)
@@ -469,17 +529,17 @@ class UI(QMainWindow):
                 self.graph1.setTitle('Raw data')
                 self.graph1.getAxis('bottom').setLabel('Time', units='s')
                 self.graph1.getAxis('left').setLabel('Voltage', units='v')
-                self.vert_line1.setEnabled(False)
-                self.vert_line1.setChecked(False)
-                self.log_y1.setChecked(False)
+                self.inf_line_box1.setEnabled(False)
+                self.inf_line_box1.setChecked(False)
+                self.log_y_box1.setChecked(False)
             case 'IRF':
                 self.request1 = 2
                 self.graph1.setTitle('IRF data')
                 self.graph1.getAxis('bottom').setLabel('Time', units='ms')
                 self.graph1.getAxis('left').setLabel('Voltage', units='v')
-                self.vert_line1.setEnabled(False)
-                self.vert_line1.setChecked(False)
-                self.log_y1.setChecked(False)
+                self.inf_line_box1.setEnabled(False)
+                self.inf_line_box1.setChecked(False)
+                self.log_y_box1.setChecked(False)
             case 'Distance':
                 self.request1 = 3
                 self.graph1.setTitle('Distance')
@@ -487,14 +547,14 @@ class UI(QMainWindow):
                 self.graph1.getAxis('left').setLabel('Distance', units='m')
                 self.auto_x1.setChecked(True)
                 self.auto_y1.setChecked(True)
-                self.vert_line1.setEnabled(False)
-                self.vert_line1.setChecked(False)
-                self.log_y1.setChecked(False)
+                self.inf_line_box1.setEnabled(False)
+                self.inf_line_box1.setChecked(False)
+                self.log_y_box1.setChecked(False)
             case 'IRF Interpolated':
                 self.request1 = 4
                 self.graph1.getAxis('bottom').setLabel('Time', units='s')
                 self.graph1.getAxis('left').setLabel('Voltage', units='v')
-                self.vert_line1.setEnabled(True)
+                self.inf_line_box1.setEnabled(True)
         self.data_connector()
         self.plot_connector(self.request1, self.plot)
         self.stop_plot1.setEnabled(True)
@@ -510,17 +570,17 @@ class UI(QMainWindow):
                 self.graph2.getAxis('left').setLabel('Voltage')
                 self.graph2.getAxis('bottom').setLabel('Time', units='s')
                 self.graph2.getAxis('left').setLabel('Voltage', units='v')
-                self.vert_line2.setEnabled(False)
-                self.vert_line2.setChecked(False)
-                self.log_y2.setChecked(False)
+                self.inf_line_box2.setEnabled(False)
+                self.inf_line_box2.setChecked(False)
+                self.log_y_box2.setChecked(False)
             case 'IRF':
                 self.request2 = 2
                 self.graph2.setTitle('IRF Data')
                 self.graph2.getAxis('bottom').setLabel('Time', units='s')
                 self.graph2.getAxis('left').setLabel('Voltage', units='v')
-                self.vert_line2.setEnabled(False)
-                self.vert_line2.setChecked(False)
-                self.log_y2.setChecked(False)
+                self.inf_line_box2.setEnabled(False)
+                self.inf_line_box2.setChecked(False)
+                self.log_y_box2.setChecked(False)
             case 'Distance':
                 self.request2 = 3
                 self.graph2.setTitle('Distance')
@@ -528,14 +588,14 @@ class UI(QMainWindow):
                 self.graph2.getAxis('left').setLabel('Distance', units='m')
                 self.auto_x2.setChecked(True)
                 self.auto_y2.setChecked(True)
-                self.vert_line2.setEnabled(False)
-                self.vert_line2.setChecked(False)
-                self.log_y2.setChecked(False)
+                self.inf_line_box2.setEnabled(False)
+                self.inf_line_box2.setChecked(False)
+                self.log_y_box2.setChecked(False)
             case 'IRF Interpolated':
                 self.request2 = 4
                 self.graph2.getAxis('bottom').setLabel('Time', units='s')
                 self.graph2.getAxis('left').setLabel('Voltage', units='v')
-                self.vert_line2.setEnabled(True)
+                self.inf_line_box2.setEnabled(True)
         self.data_connector()
         self.plot_connector(self.request2, self.plot_2)
         self.stop_plot2.setEnabled(True)
@@ -675,7 +735,7 @@ class UI(QMainWindow):
             unconnect(self.receiver.irf_measurement_ready, i)
         match self.request1, self.request2:
             case (3, _) | (_, 3):
-                self.receiver.irf_measurement_ready.connect(self.second_data.distance)
+                self.receiver.irf_measurement_ready.connect(self.second_data.distance_norm)
             case (4, _) | (_, 4):
                 if self.norm_interp_box.isChecked():
                     self.receiver.irf_measurement_ready.connect(self.second_data.irf_interp_norm)
