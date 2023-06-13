@@ -137,7 +137,6 @@ class SineAudioEmitter(QThread):
         self.frequency = frequency
         self.volume = volume / 100
         self.num_samp = int(sample_rate * refresh_rate / 1000)
-        print(self.num_samp)
 
         self.stop_sender = False
         self.p = pyaudio.PyAudio()

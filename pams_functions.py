@@ -2,10 +2,13 @@ import time
 from socket import *
 import numpy as np
 from math import trunc
+
+from pyqtgraph import AxisItem
 from scipy.fft import fft, ifft
 from scipy.interpolate import BarycentricInterpolator as bary
 from scipy.constants import speed_of_light
 from socket import socket
+from PyQt5.QtCore import QPointF
 
 from scipy.signal.windows import hann
 
@@ -196,6 +199,42 @@ def change_dict(dictionary: dict, *args):
             d[k_list[i]] = args[i]
         return d
 
+
+class CustomAxis(AxisItem):
+    @property
+    def nudge(self):
+        if not hasattr(self, "_nudge"):
+            self._nudge = -5
+        return self._nudge
+
+    @nudge.setter
+    def nudge(self, nudge):
+        self._nudge = nudge
+        s = self.size()
+        # call resizeEvent indirectly
+        self.resize(s + QSizeF(1, 1))
+        self.resize(s)
+
+    def resizeEvent(self, ev=None):
+        # s = self.size()
+
+        ## Set the position of the label
+        br = self.label.boundingRect()
+        p = QPointF(0, 0)
+        if self.orientation == "left":
+            p.setY(int(self.size().height() / 2 + br.width() / 2))
+            p.setX(-self.nudge)
+        elif self.orientation == "right":
+            p.setY(int(self.size().height() / 2 + br.width() / 2))
+            p.setX(int(self.size().width() - br.height() + self.nudge))
+        elif self.orientation == "top":
+            p.setY(-self.nudge)
+            p.setX(int(self.size().width() / 2.0 - br.width() / 2.0))
+        elif self.orientation == "bottom":
+            p.setX(int(self.size().width() / 2.0 - br.width() / 2.0))
+            p.setY(int(self.size().height() - br.height() + self.nudge))
+        self.label.setPos(p)
+        self.picture = None
 
 
 if __name__ == '__main__':

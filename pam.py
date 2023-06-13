@@ -9,6 +9,7 @@ from math import ceil
 import psutil
 from math import trunc
 from scipy.fft import fft, ifft
+from scipy.constants import speed_of_light
 
 from PyQt5.QtCore import *
 from PyQt5.QtSvg import QSvgWidget
@@ -17,51 +18,15 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QSizePolicy, QSp
 from PyQt5.QtGui import QIcon, QPixmap, QColor, QFontDatabase, QFont
 from PyQt5 import uic
 
-from pyqtgraph import mkPen, AxisItem, PlotWidget, InfiniteLine, ViewBox
+from pyqtgraph import mkPen, PlotWidget, InfiniteLine, ViewBox
 from collections import deque
 import definitions
-from pams_functions import Handler, averager, change_dict, exact_polynom_interp_max, unconnect, zero_padding
+from pams_functions import Handler, averager, change_dict, exact_polynom_interp_max, unconnect, zero_padding, CustomAxis
 from Audioslider import SineAudioEmitter
 
 
 resource_path = "C:/Users/dasa/PycharmProjects/MatlabData/resources/"
 
-
-class CustomAxis(AxisItem):
-    @property
-    def nudge(self):
-        if not hasattr(self, "_nudge"):
-            self._nudge = -5
-        return self._nudge
-
-    @nudge.setter
-    def nudge(self, nudge):
-        self._nudge = nudge
-        s = self.size()
-        # call resizeEvent indirectly
-        self.resize(s + QSizeF(1, 1))
-        self.resize(s)
-
-    def resizeEvent(self, ev=None):
-        # s = self.size()
-
-        ## Set the position of the label
-        br = self.label.boundingRect()
-        p = QPointF(0, 0)
-        if self.orientation == "left":
-            p.setY(int(self.size().height() / 2 + br.width() / 2))
-            p.setX(-self.nudge)
-        elif self.orientation == "right":
-            p.setY(int(self.size().height() / 2 + br.width() / 2))
-            p.setX(int(self.size().width() - br.height() + self.nudge))
-        elif self.orientation == "top":
-            p.setY(-self.nudge)
-            p.setX(int(self.size().width() / 2.0 - br.width() / 2.0))
-        elif self.orientation == "bottom":
-            p.setX(int(self.size().width() / 2.0 - br.width() / 2.0))
-            p.setY(int(self.size().height() - br.height() + self.nudge))
-        self.label.setPos(p)
-        self.picture = None
 
 
 class Receiver(QThread):
@@ -88,6 +53,8 @@ class Receiver(QThread):
 
         self.stop_receive = False
 
+        self.t0 = 0
+
     def connect(self):
         try:
             self.st_connecting.emit()
@@ -105,13 +72,13 @@ class Receiver(QThread):
         handler = Handler(self.sock, shifts=ceil(self.shifts/80)*80, sequence_reps=self.s_reps,
                           samples_per_sequence=self.sps)
         g = handler.assembler_2()
-        t0 = time.time()
+        self.t0 = time.time()
         while not self.stop_receive:
             r = next(g)
             if not r:
                 self.packageLost.emit()
             else:
-                time_stamp = round(time.time() - t0, 10)
+                time_stamp = round(time.time() - self.t0, 10)
                 y_mes_data = np.frombuffer(r, dtype=np.int32)[:self.set_len] * 8.192 / pow(2, 18)
                 x_mes_data = np.linspace(0, self.mes_len / self.sps * 2e-10 * self.set_len, self.set_len)
                 self.measurement_ready.emit((x_mes_data, y_mes_data, time_stamp))
@@ -139,9 +106,6 @@ class SecondData(QObject):
         self.shifts = shifts
         self.sr = sequence_reps
         self.mes_len = length
-        self.refresh_x1 = False
-        self.refresh_x2 = False
-        self.t0 = time.time()
         self.maxima, self.time_stamps = deque(maxlen=1000), deque(maxlen=1000)
         self.cable_constant = cable_length_constant
         self.YRefPos = np.array([])
@@ -161,7 +125,7 @@ class SecondData(QObject):
         data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
         idx_start = np.absolute(data[0]-1.0e-09).argmin()
         idx_stop = np.absolute(data[0]-12.0e-09).argmin()
-        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), True, intervall=slice(idx_start, idx_stop))
+        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), False, intervall=slice(idx_start, idx_stop))
         self.irf_interp_ready.emit((data[0], data[1], exact_max))
 
     def distance_norm(self, data):
@@ -173,7 +137,7 @@ class SecondData(QObject):
         self.distance_ready.emit((t, exact_max))
 
     def return_functions(self):
-        return self.distance, self.irf_interp,  self.irf_interp_norm
+        return self.distance, self.irf_interp,  self.irf_interp_norm, self.distance_norm
 
     def refresh_y_ref(self, data):
         self.unconnect_receiver_from_y_ref.emit()
@@ -264,7 +228,7 @@ class UI(QMainWindow):
         self.start_plot1.clicked.connect(self.plot_starter1)
         self.stop_plot1.clicked.connect(self.plot_breaker1)
 
-        # Setting up the SecondData class
+        # Setting up the SecondData classes
         if True:
             self.second_thread = QThread()
             self.second_data = SecondData(self.samples_per_sequence, self.shifts, self.sequence_reps, self.length,
@@ -277,12 +241,8 @@ class UI(QMainWindow):
         # Other Connections:
         if True:
             # Refreshing the chosen plot option
-            self.QComboBox_1.currentTextChanged.connect(self.running_refresher1)
-            self.QComboBox_2.currentTextChanged.connect(self.running_refresher2)
-
-            # Refreshing weather x should be refreshed or not
-            self.refresh_x1.stateChanged.connect(self.refresh_x1_refresher)
-            self.refresh_x2.stateChanged.connect(self.refresh_x2_refresher)
+            self.x_data_box1.currentTextChanged.connect(self.running_refresher1)
+            self.x_data_box2.currentTextChanged.connect(self.running_refresher2)
 
             # Refreshing the last_values boxes
             self.last_values1.valueChanged.connect(lambda value: setattr(self, 'last_n_values1', value))
@@ -313,8 +273,8 @@ class UI(QMainWindow):
         self.requests = [0, 0]
 
         # Setting up the qss style sheet
-        with open('resources/pams_style.qss', 'r') as f:
-            self.setStyleSheet(f.read())
+        f = open('resources/pams_style.qss', 'r')
+        self.setStyleSheet(f.read())
 
         # Setting up the three window buttons and hiding the frame
         self.make_own_window_buttons = True
@@ -471,15 +431,15 @@ class UI(QMainWindow):
 
     '''
     def plot_starter(self, plot=1):
-        plot = plot-1
+        plot -= 1
         match plot:
             case 0:
                 self.start_plot1.setEnabled(False)
-                box = self.QComboBox_1.currentText()
+                box = self.x_data_box1.currentText()
                 self.plot1_label.setText('Plot 1: ' + box)
             case 1:
                 self.start_plot2.setEnabled(False)
-                box = self.QComboBox_2.currentText()
+                box = self.x_data_box2.currentText()
                 self.plot2_label.setText('Plot 2: ' + box)
         match box:
             case 'Raw data':
@@ -521,7 +481,7 @@ class UI(QMainWindow):
 
     def plot_starter1(self):
         self.start_plot1.setEnabled(False)
-        box = self.QComboBox_1.currentText()
+        box = self.x_data_box1.currentText()
         self.plot1_label.setText('Plot 1: ' + box)
         match box:
             case 'Raw data':
@@ -535,7 +495,7 @@ class UI(QMainWindow):
             case 'IRF':
                 self.request1 = 2
                 self.graph1.setTitle('IRF data')
-                self.graph1.getAxis('bottom').setLabel('Time', units='ms')
+                self.graph1.getAxis('bottom').setLabel('Time', units='s')
                 self.graph1.getAxis('left').setLabel('Voltage', units='v')
                 self.inf_line_box1.setEnabled(False)
                 self.inf_line_box1.setChecked(False)
@@ -561,7 +521,7 @@ class UI(QMainWindow):
 
     def plot_starter2(self):
         self.start_plot2.setEnabled(False)
-        box = self.QComboBox_2.currentText()
+        box = self.x_data_box2.currentText()
         self.plot2_label.setText('Plot 2: ' + box)
         match box:
             case 'Raw data':
@@ -635,13 +595,11 @@ class UI(QMainWindow):
         if self.stop_plot1.isEnabled():
             self.plot_breaker1()
             self.plot_starter1()
-        if self.QComboBox_1.currentText() == 'Distance':
-            self.refresh_x1.setEnabled(True)
+        if self.x_data_box1.currentText() == 'Distance':
             self.tare_distance.setEnabled(True)                     # <- I might wanna put these in an extra function
             self.distance_const.setEnabled(True)
         else:
-            self.refresh_x1.setEnabled(False)
-            if self.QComboBox_2.currentText() != 'Distance':        # <-
+            if self.x_data_box2.currentText() != 'Distance':        # <-
                 self.tare_distance.setEnabled(False)
                 self.distance_const.setEnabled(False)
 
@@ -649,13 +607,11 @@ class UI(QMainWindow):
         if self.stop_plot2.isEnabled():
             self.plot_breaker2()
             self.plot_starter2()
-        if self.QComboBox_2.currentText() == 'Distance':
-            self.refresh_x2.setEnabled(True)
+        if self.x_data_box2.currentText() == 'Distance':
             self.tare_distance.setEnabled(True)                     # <-
             self.distance_const.setEnabled(True)
         else:
-            self.refresh_x2.setEnabled(False)
-            if self.QComboBox_1.currentText() != 'Distance':        # <-
+            if self.x_data_box1.currentText() != 'Distance':        # <-
                 self.tare_distance.setEnabled(False)
                 self.distance_const.setEnabled(False)
 
@@ -720,7 +676,6 @@ class UI(QMainWindow):
         self.distance_time_values.append(data[0])
         l1 = self.last_n_values1
         l2 = self.last_n_values2
-        # print((len(list(self.distance_values)[-l2:]), len(list(self.distance_time_values)[-l2:])))
         if self.request1 == 3:
             self.plot((np.array(self.distance_time_values)[-l1:], np.array(self.distance_values)[-l1:]))
         if self.request2 == 3:
@@ -729,18 +684,24 @@ class UI(QMainWindow):
     def refresh_distance_array(self):
         self.distance_values = deque()
         self.distance_time_values = deque()
+        self.receiver.t0 = time.time()
 
     def data_connector(self):
         for i in self.second_data.return_functions():
             unconnect(self.receiver.irf_measurement_ready, i)
         match self.request1, self.request2:
             case (3, _) | (_, 3):
-                self.receiver.irf_measurement_ready.connect(self.second_data.distance_norm)
+                match self.norm_interp_box.isChecked():
+                    case True:
+                        self.receiver.irf_measurement_ready.connect(self.second_data.distance_norm)
+                    case False:
+                        self.receiver.irf_measurement_ready.connect(self.second_data.distance)
             case (4, _) | (_, 4):
-                if self.norm_interp_box.isChecked():
-                    self.receiver.irf_measurement_ready.connect(self.second_data.irf_interp_norm)
-                else:
-                    self.receiver.irf_measurement_ready.connect(self.second_data.irf_interp)
+                match self.norm_interp_box.isChecked():
+                    case True:
+                        self.receiver.irf_measurement_ready.connect(self.second_data.irf_interp_norm)
+                    case False:
+                        self.receiver.irf_measurement_ready.connect(self.second_data.irf_interp)
 
     def start_receiver(self):
         self.receiver.start()
