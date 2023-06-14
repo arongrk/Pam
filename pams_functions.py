@@ -1,5 +1,7 @@
 import time
 from socket import *
+
+import PyQt5
 import numpy as np
 from math import trunc
 
@@ -198,6 +200,21 @@ def change_dict(dictionary: dict, *args):
         for i in range(len(args)):
             d[k_list[i]] = args[i]
         return d
+
+
+def compare_sender(sender: PyQt5.QtCore.QObject, names: tuple, print_sender_if_none: bool = False):
+    name = sender.sender().objectName()
+    n = 0
+    for i in names:
+        if type(i) is not str:
+            print(f'i: {i}, type(i): {type(i)}, n: {n}')
+            raise ValueError('expected tuple of strings!')
+        if i == name:
+            return n
+        n += 1
+    if print_sender_if_none:
+        print(name)
+    return None
 
 
 class CustomAxis(AxisItem):
