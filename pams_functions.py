@@ -1,3 +1,5 @@
+import ast
+import pickle
 import time
 from socket import *
 
@@ -215,6 +217,66 @@ def compare_sender(sender: PyQt5.QtCore.QObject, names: tuple, print_sender_if_n
     if print_sender_if_none:
         print(name)
     return None
+
+
+def change_pickled_data(location='resources/configurations.bin',
+                        values=None):
+    if values is None:
+        values = dict(shifts=0, samples_per_sequence=0, sequence_reps=0, length=0, last_values1=0,
+                      last_values2=0, cable_length_constant=0)
+    new_values = None
+    with open(location, 'r+b') as file:
+        try:
+            values = pickle.load(file)
+        except EOFError:
+            values = values
+        keys = values.keys()
+        print('Leave empty to keep the current value')
+        for key in keys:
+            new = input(f'{key}({values[key]}):')
+            if len(new) > 0:
+                new = ast.literal_eval(new)
+                match new:
+                    case str():
+                        values[key] = int(new)
+                    case _:
+                        values[key] = new
+        add_keys =  input('Do you want to add any keys? (y/n): ')
+        if add_keys == 'y' or add_keys == 'Y':
+            while True:
+                key = input('Key: ')
+                if len(key) == 0:
+                    break
+                value = ast.literal_eval(input('Value: '))
+                values[key] = value
+        keys = values.keys()
+        change_keys = input('Do you want to change any keywords? (y/n): ')
+        if change_keys == 'y' or change_keys == 'Y':
+            print('Leave empty to keep the current key')
+            addables = list()
+            deletables = list()
+            for key in keys:
+                new = input(f'{key}: ')
+                if len(new) > 0:
+                    addables.append(new)
+                    deletables.append(key)
+            for i in range(len(addables)):
+                values[addables[i]] = values[deletables[i]]
+                del values[deletables[i]]
+        delete_keys = input('Do you want to delete any keys? (y/n): ')
+        if delete_keys == 'y' or delete_keys == 'Y':
+            print('Leave empty to skip')
+            while True:
+                key = input('Enter the keyword to delete from the dict: ')
+                if len(key) == 0:
+                    break
+                del values[key]
+        new_values = values
+    with open(location, 'wb') as file:
+        pickle.dump(new_values, file)
+
+
+
 
 
 class CustomAxis(AxisItem):
