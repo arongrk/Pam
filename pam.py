@@ -517,20 +517,6 @@ class UI(QMainWindow):
         self.data_connector(plot)
         self.start_plot_buttons[plot].setEnabled(True)
 
-    def plot_breaker1(self, plot):
-        self.stop_plot1.setEnabled(False)
-        self.request1 = 0
-        self.plot_disconnector(0)
-        self.data_connector(0)
-        self.start_plot1.setEnabled(True)
-
-    def plot_breaker2(self):
-        self.stop_plot2.setEnabled(False)
-        self.request2 = 0
-        self.plot_disconnector(1)
-        self.data_connector(1)
-        self.start_plot2.setEnabled(True)
-
     def data_connector(self, plot):
         for i in self.second_data_classes[plot][0].return_functions():
             unconnect(self.receiver.irf_measurement_ready, i)
@@ -566,6 +552,17 @@ class UI(QMainWindow):
         unconnect(self.receiver.irf_measurement_ready, self.plot_slots[plot])
         unconnect(self.second_data_classes[plot][0].distance_ready, self.plot_slots[plot])
         unconnect(self.second_data_classes[plot][0].irf_interp_ready, self.plot_slots[plot])
+
+    def running_x_data_refresher(self, plot):                   # Work in progress!
+        if self.stop_plot_buttons[plot].isEnabled():
+            self.plot_breaker(plot)
+            self.plot_starter(plot)
+        if self.x_data_box1.currentText() == 'Distance':
+            self.tare_distance_button_1.setEnabled(True)
+            self.distance_const_box_1.setEnabled(True)
+        else:      # <-
+            self.tare_distance_button_1.setEnabled(False)
+            self.distance_const_box_1.setEnabled(False)
 
     def running_refresher1(self):
         if self.stop_plot1.isEnabled():
