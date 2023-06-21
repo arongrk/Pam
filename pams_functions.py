@@ -113,7 +113,7 @@ def unconnect(signal, old_slot):
         pass
 
 
-def zero_padding(t, y, fLim, NZP, norm=False, YRef=None):
+def zero_padding(t, y, fLim, NZP, norm=False, YRef=None, return_distance=False):
     if norm and YRef is None:
         raise ValueError('YRef is required when using norm!')
 
@@ -141,7 +141,8 @@ def zero_padding(t, y, fLim, NZP, norm=False, YRef=None):
     YZP[idxLim] = YPos[idxLim] * window[LidxLim-1:]
     yData = np.real(ifft(YZP)*NZP)
     tData = (np.arange(0, NZP) / fs * Ly/NZP + t[0])
-
+    if return_distance:
+        tData *= speed_of_light/2
     return tData, yData
 
 

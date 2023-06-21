@@ -84,7 +84,7 @@ class Receiver(QThread):
                 self.measurement_ready.emit((x_mes_data, y_mes_data, time_stamp))
                 y_irf_data = averager(y_mes_data, self.shifts, self.sps, self.s_reps)
                 y_irf_data -= np.average(y_irf_data[-100:])
-                x_irf_data = np.arange(1, self.shifts + 1) / 5e+09
+                x_irf_data = np.arange(1, self.shifts + 1) / 4.975e+09
                 self.irf_measurement_ready.emit((x_irf_data, y_irf_data, time_stamp))
         self.sock.close()
 
@@ -105,9 +105,9 @@ class SecondData(QObject):
         self.shifts = shifts
         self.sr = sequence_reps
         self.mes_len = length
-        self.maxima, self.time_stamps = deque(maxlen=1000), deque(maxlen=1000)
         self.cable_constant = cable_length_constant
         self.YRefPos = np.array([])
+        self.idx_start, self.idx_stop = None, None
 
     def distance(self, data):
         t = data[2]
@@ -122,30 +122,37 @@ class SecondData(QObject):
 
     def irf_interp_norm(self, data):
         data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
-        idx_start = np.absolute(data[0]-1.0e-09).argmin()
-        idx_stop = np.absolute(data[0]-12.0e-09).argmin()
-        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), False, intervall=slice(idx_start, idx_stop))
+        exact_max = exact_polynom_interp_max(
+            data[0], np.absolute(data[1]), False, intervall=slice(self.idx_start, self.idx_stop)
+        )
         self.irf_interp_ready.emit((data[0], data[1], exact_max))
 
     def distance_norm(self, data):
         t = data[2]
         data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
-        idx_start = np.absolute(data[0]-1.0e-09).argmin()
-        idx_stop = np.absolute(data[0]-12.0e-09).argmin()
-        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), True, intervall=slice(idx_start, idx_stop))
+        exact_max = exact_polynom_interp_max(
+            data[0], np.absolute(data[1]), True, intervall=slice(self.idx_start, self.idx_stop)
+        )
         self.distance_ready.emit((t, exact_max))
 
     def return_functions(self):
         return self.distance, self.irf_interp,  self.irf_interp_norm, self.distance_norm
 
-    def refresh_y_ref(self, data):
+    def refresh_y_ref(self, data, interval):
         self.unconnect_receiver_from_y_ref.emit()
+        print(21)
+        self.refresh_idx_lim(data, interval)
         yData = data[1]
         yData[150:161] = np.linspace(yData[150], 0, 11)
         yData[161:] = 0
         Ly = len(yData)
         YRefTemp = fft(yData, Ly) / Ly
         self.YRefPos = YRefTemp[0:trunc(Ly / 2) + 1]
+
+    def refresh_idx_lim(self, data, interval):
+        xData = data[0]
+        self.idx_start = np.argwhere(xData > interval[0]*1e-09)[0][0]
+        self.idx_stop = np.argwhere(xData > interval[0]*1e-09)[0][0]
 
 
 class UI(QMainWindow):
@@ -213,6 +220,16 @@ class UI(QMainWindow):
         self.ip_label.setText(f' IP:   {self.ip}')
         self.port_label.setText(f' Port: {self.port}')
 
+        # Setting up double widget arrays:
+        if True:
+            self.graphs = [self.graph1, self.graph2]
+            self.log_y_boxes = self.log_y_box1, self.log_y_box2
+            self.auto_range_boxes = ((self.auto_x1, self.auto_x2), (self.auto_y1, self.auto_y2))
+            self.x_data_boxes = [self.x_data_box1, self.x_data_box2]
+            self.y_data_boxes = [self.y_data_box1, self.y_data_box2]
+            self.tare_distance_buttons = [self.tare_distance_button_1, self.tare_distance_button_2]
+            self.distance_const_boxes = [self.distance_const_box_1, self.distance_const_box_2]
+
         # Setting up the Receiver class
         if True:
             self.receiver = Receiver(self.shifts, self.sequence_reps, self.samples_per_sequence,
@@ -239,9 +256,9 @@ class UI(QMainWindow):
 
         # Start and stop Plot 1 and 2
         self.start_plot1.clicked.connect(self.plot_starter_func)
-        self.stop_plot1.clicked.connect(self.plot_breaker1)
+        self.stop_plot1.clicked.connect(self.plot_breaker_func)
         self.start_plot2.clicked.connect(self.plot_starter_func)
-        self.stop_plot2.clicked.connect(self.plot_breaker2)
+        self.stop_plot2.clicked.connect(self.plot_breaker_func)
         self.start_plot_buttons = [self.start_plot1, self.start_plot2]
         self.stop_plot_buttons = [self.stop_plot1, self.stop_plot2]
 
@@ -263,8 +280,12 @@ class UI(QMainWindow):
         # Other Connections:
         if True:
             # Refreshing the chosen plot option
-            self.x_data_box1.currentTextChanged.connect(self.running_refresher1)
-            self.x_data_box2.currentTextChanged.connect(self.running_refresher2)
+            for box in self.y_data_boxes:
+                box.currentTextChanged.connect(self.y_data_refresher_func)
+
+            # Refreshing the corresponding X-Axis option
+            for box in self.x_data_boxes:
+                box.currentTextChanged.connect(self.x_data_refresher)
 
             # Refreshing the last_values boxes
             self.last_values1.valueChanged.connect(lambda value: setattr(self, 'last_n_values1', value))
@@ -278,9 +299,19 @@ class UI(QMainWindow):
             self.tare_distance_button_1.clicked.connect(self.cable_constant_refresher)
             self.tare_distance_button_2.clicked.connect(self.cable_constant_refresher)
             self.distance_const_box_1.valueChanged.connect(lambda value: setattr(self.second_data_classes[0][0],
-                                                                           'cable_constant', value))
+                                                                                 'cable_constant', value))
             self.distance_const_box_2.valueChanged.connect(lambda value: setattr(self.second_data_classes[1][0],
-                                                                           'cable_constant', value))
+                                                                                 'cable_constant', value))
+
+            # Setting up the normalised measurement refresh:
+            self.normation_button.clicked.connect(lambda: self.receiver.irf_measurement_ready.connect(
+                lambda data, interval=(self.norm_mes_start_box.value(), self.norm_mes_end_box.value()):
+                    self.second_data_classes[0][0].refresh_y_ref(data, interval)
+                )
+            )
+            self.second_data_classes[0][0].unconnect_receiver_from_y_ref.connect(
+                lambda: self.receiver.irf_measurement_ready.disconnect(self.second_data_classes[0][0].refresh_y_ref)
+            )
 
         # Setting up the plot timer:
         self.make_plot_timers = True
@@ -431,10 +462,6 @@ class UI(QMainWindow):
             self.plot_home1.setIcon(QIcon('resources/icons8-home.svg'))
             self.plot_home2.setIcon(QIcon('resources/icons8-home.svg'))
 
-        self.graphs = [self.graph1, self.graph2]
-        self.log_y_boxes = self.log_y_box1, self.log_y_box2
-        self.auto_range_boxes = ((self.auto_x1, self.auto_x2), (self.auto_y1, self.auto_y2))
-
     @pyqtSlot(tuple, int)
     def plot(self, data, plot):
         match plot:
@@ -442,7 +469,10 @@ class UI(QMainWindow):
                 if self.log_y_box1.isChecked():
                     self.line1.setData(data[0], np.log10(np.absolute(data[1])))
                 else:
-                    self.line1.setData(data[0], data[1])
+                    if self.x_data_box1.currentIndex() == 1:
+                        self.line1.setData(data[0]*speed_of_light/2, data[1])
+                    else:
+                        self.line1.setData(data[0], data[1])
                 if self.inf_line_box1.isChecked():
                     self.inf_line1.setPos(data[2])
                 self.counter1 += 1
@@ -450,7 +480,10 @@ class UI(QMainWindow):
                 if self.log_y_box2.isChecked():
                     self.line2.setData(data[0], np.log10(np.absolute(data[1])))
                 else:
-                    self.line2.setData(data[0], data[1])
+                    if self.x_data_box2.currentIndex() == 1:
+                        self.line2.setData(data[0]*speed_of_light/2, data[1])
+                    else:
+                        self.line2.setData(data[0], data[1])
                 if self.inf_line_box2.isChecked():
                     self.inf_line2.setPos(data[2])
                 self.counter2 += 1
@@ -465,11 +498,11 @@ class UI(QMainWindow):
         match plot:
             case 0:
                 self.start_plot1.setEnabled(False)
-                box = self.x_data_box1.currentText()
+                box = self.y_data_box1.currentText()
                 self.plot1_label.setText('Plot 1: ' + box)
             case 1:
                 self.start_plot2.setEnabled(False)
-                box = self.x_data_box2.currentText()
+                box = self.y_data_box2.currentText()
                 self.plot2_label.setText('Plot 2: ' + box)
         match box:
             case 'Raw data':
@@ -483,7 +516,10 @@ class UI(QMainWindow):
             case 'IRF':
                 self.requests[plot] = 2
                 self.graphs[plot].setTitle('IRF data')
-                self.graphs[plot].getAxis('bottom').setLabel('Time', units='ms')
+                if self.x_data_boxes[plot].currentIndex() == 1:
+                    self.graphs[plot].getAxis('bottom').setLabel('Distance', units='m')
+                else:
+                    self.graphs[plot].getAxis('bottom').setLabel('time', units='s')
                 self.graphs[plot].getAxis('left').setLabel('Voltage', units='v')
                 self.inf_line_boxes[plot].setEnabled(False)
                 self.inf_line_boxes[plot].setChecked(False)
@@ -500,14 +536,20 @@ class UI(QMainWindow):
                 self.log_y_boxes[plot].setChecked(False)
             case 'IRF Interpolated':
                 self.requests[plot] = 4
-                self.graphs[plot].getAxis('bottom').setLabel('Time', units='s')
+                if self.x_data_boxes[plot].currentIndex() == 1:
+                    self.graphs[plot].getAxis('bottom').setLabel('Distance', units='m')
+                else:
+                    self.graphs[plot].getAxis('bottom').setLabel('time', units='s')
                 self.graphs[plot].getAxis('left').setLabel('Voltage', units='v')
                 self.inf_line_boxes[plot].setEnabled(True)
         self.data_connector(plot)
         self.plot_connector(self.requests[plot], plot)
         self.stop_plot_buttons[plot].setEnabled(True)
 
-    def plot_breaker(self, plot=None):
+    def plot_breaker_func(self):
+        self.plot_breaker()
+
+    def plot_breaker(self, plot: tuple or int = None):
         if plot is None:
             plot = compare_sender(self, ('stop_plot1', 'stop_plot2'), True)
         print(f'plot_breaker on plot: {plot}')
@@ -518,26 +560,26 @@ class UI(QMainWindow):
         self.start_plot_buttons[plot].setEnabled(True)
 
     def data_connector(self, plot):
+        print(f'data connector on plot: {plot}')
         for i in self.second_data_classes[plot][0].return_functions():
             unconnect(self.receiver.irf_measurement_ready, i)
         match self.requests:
             case (3, _) | (_, 3):
-                match self.norm_interp_box.isChecked():
-                    case True:
-                        self.receiver.irf_measurement_ready.connect(self.second_data_classes[plot][0].distance_norm)
-                    case False:
-                        self.receiver.irf_measurement_ready.connect(self.second_data_classes[plot][0].distance)
+                if self.norm_interp_box.isChecked():
+                    self.receiver.irf_measurement_ready.connect(self.second_data_classes[plot][0].distance_norm)
+                else:
+                    self.receiver.irf_measurement_ready.connect(self.second_data_classes[plot][0].distance)
             case (4, _) | (_, 4):
-                match self.norm_interp_box.isChecked():
-                    case True:
-                        self.receiver.irf_measurement_ready.connect(self.second_data_classes[plot][0].irf_interp_norm)
-                    case False:
-                        self.receiver.irf_measurement_ready.connect(self.second_data_classes[plot][0].irf_interp)
+                if self.norm_interp_box.isChecked():
+                    self.receiver.irf_measurement_ready.connect(self.second_data_classes[plot][0].irf_interp_norm)
+                else:
+                    self.receiver.irf_measurement_ready.connect(self.second_data_classes[plot][0].irf_interp)
 
     def plot_connector(self, request, plot):
         print(f'plot_connector on plot: {plot}')
         match request:
             case 1:
+                print('1')
                 self.receiver.measurement_ready.connect(self.plot_slots[plot])
             case 2:
                 self.receiver.irf_measurement_ready.connect(self.plot_slots[plot])
@@ -553,23 +595,42 @@ class UI(QMainWindow):
         unconnect(self.second_data_classes[plot][0].distance_ready, self.plot_slots[plot])
         unconnect(self.second_data_classes[plot][0].irf_interp_ready, self.plot_slots[plot])
 
-    def running_x_data_refresher(self, plot):                   # Work in progress!
+    def y_data_refresher_func(self, item):
+        plot = compare_sender(self, ('y_data_box1', 'y_data_box2'))
+        self.y_data_refresher(item, plot)
+
+    def y_data_refresher(self, item, plot):
+        self.x_data_boxes[plot].clear()
+        match item:
+            case 'Raw data':
+                self.x_data_boxes[plot].addItems(['time'])
+                self.tare_distance_buttons[plot].setEnabled(False)
+                self.distance_const_boxes[plot].setEnabled(False)
+            case 'IRF' | 'IRF Interpolated':
+                self.x_data_boxes[plot].addItems(['time', 'distance'])
+                self.tare_distance_buttons[plot].setEnabled(False)
+                self.distance_const_boxes[plot].setEnabled(False)
+            case 'Distance':
+                self.x_data_boxes[plot].addItems(['duration'])
+                self.tare_distance_buttons[plot].setEnabled(True)
+                self.distance_const_boxes[plot].setEnabled(True)
+        self.x_data_boxes[plot].setCurrentIndex(0)
         if self.stop_plot_buttons[plot].isEnabled():
             self.plot_breaker(plot)
             self.plot_starter(plot)
-        if self.x_data_box1.currentText() == 'Distance':
-            self.tare_distance_button_1.setEnabled(True)
-            self.distance_const_box_1.setEnabled(True)
-        else:      # <-
-            self.tare_distance_button_1.setEnabled(False)
-            self.distance_const_box_1.setEnabled(False)
+
+    def x_data_refresher(self):
+        plot = compare_sender(self, ('x_data_box1', 'x_data_box2'))
+        if self.stop_plot_buttons[plot].isEnabled():
+            self.plot_breaker(plot)
+            self.plot_starter(plot)
 
     def running_refresher1(self):
         if self.stop_plot1.isEnabled():
             self.plot_breaker(0)
             self.plot_starter(0)
-        if self.x_data_box1.currentText() == 'Distance':
-            self.tare_distance_button_1.setEnabled(True)                     # <- I might wanna put these in an extra function
+        if self.y_data_box1.currentText() == 'Distance':
+            self.tare_distance_button_1.setEnabled(True)               # <- I might wanna put these in an extra function
             self.distance_const_box_1.setEnabled(True)
         else:      # <-
             self.tare_distance_button_1.setEnabled(False)
@@ -579,7 +640,7 @@ class UI(QMainWindow):
         if self.stop_plot2.isEnabled():
             self.plot_breaker(1)
             self.plot_starter(1)
-        if self.x_data_box2.currentText() == 'Distance':
+        if self.y_data_box2.currentText() == 'Distance':
             self.tare_distance_button_2.setEnabled(True)                     # <-
             self.distance_const_box_2.setEnabled(True)
         else:        # <-
@@ -588,13 +649,13 @@ class UI(QMainWindow):
 
     def refresh_x1_refresher(self):
         if not self.start_plot1.isEnabled():
-            self.plot_breaker1()
+            self.plot_breaker(0)
             self.plot_starter(0)
 
     def refresh_x2_refresher(self):
         if not self.start_plot2.isEnabled():
-            self.plot_breaker2()
-            self.plot_starter2(1)
+            self.plot_breaker(1)
+            self.plot_starter(1)
 
     def auto_x_changer1(self):
         if self.auto_x1.isChecked():
@@ -672,8 +733,8 @@ class UI(QMainWindow):
         self.label_11.setText('Receiving data')
 
     def reconnect_receiver(self):
-        self.plot_breaker1()
-        self.plot_breaker2()
+        self.plot_breaker(0)
+        self.plot_breaker(1)
         self.receiver.stop()
         self.receiver.quit()
         self.receiver.wait()
@@ -880,3 +941,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
