@@ -154,23 +154,28 @@ def polynom_interp_max(t, y, accuracy: int):
     return exact_maximum
 
 
-def exact_polynom_interp_max(t_data, y_data, get_distance: bool, cable_constant=0, intervall: slice=None):
+def exact_polynom_interp_max(t_data,
+                             y_data,
+                             get_distance: bool = False,
+                             get_y: bool = False,
+                             cable_constant=0,
+                             interval: slice=None):
 
     if np.shape(t_data) != np.shape(y_data):
         raise ValueError('t_data and y_data are not the same shape!')
 
-    if not intervall:
-        intervall = slice(0, len(y_data))
+    if not interval:
+        interval = slice(0, len(y_data))
     else:
-        if type(intervall) != slice:
+        if type(interval) != slice:
             raise TypeError('intervall is not type slice')
-        elif intervall.stop > len(y_data):
+        elif interval.stop > len(y_data):
             raise ValueError('intervall is out of range')
 
     t, y = t_data, y_data
 
     # Get the sorted indexes of the three highest y-Values
-    m = np.argmax(y[intervall])+intervall.start
+    m = np.argmax(y[interval]) + interval.start
     m_i = [m-1, m, m+1]
 
 
@@ -188,10 +193,14 @@ def exact_polynom_interp_max(t_data, y_data, get_distance: bool, cable_constant=
     x = -factors[1]/(factors[2]*2)
 
     # Return the time if not asked for speed:
-    if not get_distance:
-        return x
-    x = x/2 * speed_of_light - cable_constant
-    return x
+    if get_distance:
+        x_value = x / 2 * speed_of_light - cable_constant
+    else:
+        x_value = x
+    if get_y:
+        return x_value, factors[2]*(x**2)+factors[1]*x+factors[0]
+    else:
+        return x_value
 
 
 def change_dict(dictionary: dict, *args):

@@ -108,6 +108,7 @@ class SecondData(QObject):
         self.cable_constant = cable_length_constant
         self.YRefPos = np.array([])
         self.idx_start, self.idx_stop = None, None
+        self.lim_distance = 25
 
     def distance(self, data):
         t = data[2]
@@ -122,18 +123,27 @@ class SecondData(QObject):
 
     def irf_interp_norm(self, data):
         data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
-        exact_max = exact_polynom_interp_max(
-            data[0], np.absolute(data[1]), False, intervall=slice(self.idx_start, self.idx_stop)
-        )
-        self.irf_interp_ready.emit((data[0], data[1], exact_max))
+        idx_start, idx_stop = np.argwhere(data[0] > self.idx_start)[0][0], np.argwhere(data[0] > self.idx_stop)[0][0]
+        exact_max = exact_polynom_interp_max(data[0],
+                                             np.absolute(data[1]),
+                                             get_y=True,
+                                             interval=slice(idx_start, idx_stop))
+        self.irf_interp_ready.emit((data[0], data[1], exact_max[0], exact_max[1]))
 
     def distance_norm(self, data):
         t = data[2]
         data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
-        exact_max = exact_polynom_interp_max(
-            data[0], np.absolute(data[1]), True, intervall=slice(self.idx_start, self.idx_stop)
-        )
-        self.distance_ready.emit((t, exact_max))
+        idx_start, idx_stop = np.argwhere(data[0] > self.idx_start)[0][0], np.argwhere(data[0] > self.idx_stop)[0][0]
+        exact_max = exact_polynom_interp_max(data[0],
+                                             np.absolute(data[1]),
+                                             get_distance=True,
+                                             get_y=True,
+                                             interval=slice(idx_start, idx_stop))
+        print(exact_max[1])
+        if exact_max[1] < self.lim_distance:
+            self.distance_ready.emit((t, 0, exact_max[1]))
+        else:
+            self.distance_ready.emit((t, exact_max[0], exact_max[1]))
 
     def return_functions(self):
         return self.distance, self.irf_interp,  self.irf_interp_norm, self.distance_norm
@@ -151,8 +161,9 @@ class SecondData(QObject):
 
     def refresh_idx_lim(self, data, interval):
         xData = data[0]
-        self.idx_start = np.argwhere(xData > interval[0]*1e-09)[0][0]
-        self.idx_stop = np.argwhere(xData > interval[0]*1e-09)[0][0]
+        self.idx_start = interval[0]*1e-09
+        self.idx_stop = interval[1]*1e-09
+        print(f'idx_start: {self.idx_start}, idx_stop: {self.idx_stop}')
 
 
 class UI(QMainWindow):
@@ -304,13 +315,11 @@ class UI(QMainWindow):
                                                                                  'cable_constant', value))
 
             # Setting up the normalised measurement refresh:
-            self.normation_button.clicked.connect(lambda: self.receiver.irf_measurement_ready.connect(
-                lambda data, interval=(self.norm_mes_start_box.value(), self.norm_mes_end_box.value()):
-                    self.second_data_classes[0][0].refresh_y_ref(data, interval)
-                )
-            )
+            lambi = lambda data, interval=(1, 12):\
+                self.second_data_classes[0][0].refresh_y_ref(data, interval)
+            self.normation_button.clicked.connect(lambda: self.receiver.irf_measurement_ready.connect(lambi))
             self.second_data_classes[0][0].unconnect_receiver_from_y_ref.connect(
-                lambda: self.receiver.irf_measurement_ready.disconnect(self.second_data_classes[0][0].refresh_y_ref)
+                lambda: self.receiver.irf_measurement_ready.disconnect(lambi)
             )
 
         # Setting up the plot timer:
@@ -393,8 +402,8 @@ class UI(QMainWindow):
             self.frequency_slider.valueChanged.connect(self.sinSender.set_frequency)
             self.volume_slider.valueChanged.connect(self.sinSender.set_volume)
             self.stop_sound_button.clicked.connect(self.sinSender.stop)
-            for i in range(self.plot_count):
-                self.second_data_classes[i][0].distance_ready.connect(self.set_audio_frequency)
+            self.second_data_classes[0][0].distance_ready.connect(self.set_audio_frequency)
+            self.second_data_classes[0][0].distance_ready.connect(self.set_audio_volume)
 
 
         # Setting up the distance plot calculation
@@ -827,8 +836,12 @@ class UI(QMainWindow):
         self.bytes_received = byties
 
     def set_audio_frequency(self, data):
-        freq = data[1] * 20000
+        freq = (data[1] - 0.15) * 5000
         self.frequency_slider.setValue(int(freq))
+
+    def set_audio_volume(self, data):
+        vol = 0 if data[2] - 25 < 0 else (data[2] - 25) * 2
+        self.volume_slider.setValue(int(vol))
 
     def close_button_hover(self, event):
         self.close_button.setIcon(self.clos_ic_white)
