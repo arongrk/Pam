@@ -1,4 +1,5 @@
 import ast
+import inspect
 import pickle
 import time
 from socket import *
@@ -13,6 +14,7 @@ from scipy.interpolate import BarycentricInterpolator as bary
 from scipy.constants import speed_of_light
 from socket import socket
 from PyQt5.QtCore import QPointF
+import inspect
 
 from scipy.signal.windows import hann
 
@@ -286,7 +288,17 @@ def change_pickled_data(location='resources/configurations.bin',
         pickle.dump(new_values, file)
 
 
-
+def check_args(func, arg, return_other_args=False, removable_item=None):
+    args = inspect.getfullargspec(func).args
+    try:
+        args.remove(removable_item)
+    except ValueError:
+        pass
+    try:
+        args.remove(arg)
+        return (True, args) if return_other_args else True
+    except ValueError:
+        return (False, None) if return_other_args else False
 
 
 class CustomAxis(AxisItem):

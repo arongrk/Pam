@@ -52,7 +52,7 @@ class MainWindow(QMainWindow):
             self.sine_plot.disableAutoRange()
             self.sine_plot.setYRange(-1, 1)
             self.sine_plot.setXRange(0, self.SAMPLE_RATE/100)
-            self.line = self.sine_plot.plot(wave, pen=pen)
+            self.line = self.sine_plot.plot_signal(wave, )
 
         if True: # SineAudioEmitter class setup
             self.sinSender = SineAudioEmitter(self.SAMPLE_RATE, 10)

@@ -1,7 +1,9 @@
+import inspect
 import os
 import socket
 import pickle
 import sys
+import weakref
 
 import numpy as np
 import time
@@ -21,8 +23,8 @@ from PyQt5 import uic
 from pyqtgraph import mkPen, PlotWidget, InfiniteLine, ViewBox
 from collections import deque
 import definitions
-from pams_functions import Handler, averager, change_dict, exact_polynom_interp_max, unconnect, zero_padding, \
-    CustomAxis, compare_sender
+from pams_functions import Handler, averager, exact_polynom_interp_max, unconnect, zero_padding, \
+    CustomAxis, compare_sender, check_args
 from Audioslider import SineAudioEmitter
 
 
@@ -167,7 +169,6 @@ class SecondData(QObject):
 
 
 class UI(QMainWindow):
-    distance_ready = pyqtSignal(tuple)
 
     def __init__(self):
         super(UI, self).__init__()
@@ -240,6 +241,10 @@ class UI(QMainWindow):
             self.y_data_boxes = [self.y_data_box1, self.y_data_box2]
             self.tare_distance_buttons = [self.tare_distance_button_1, self.tare_distance_button_2]
             self.distance_const_boxes = [self.distance_const_box_1, self.distance_const_box_2]
+            self.start_plot_buttons = [self.start_plot1, self.start_plot2]
+            self.stop_plot_buttons = [self.stop_plot1, self.stop_plot2]
+            self.plot_home_buttons = [self.plot_home1, self.plot_home2]
+            self.plot_rate_labels = [self.plot_rate_1, self.plot_rate_2]
 
         # Setting up the Receiver class
         if True:
@@ -257,21 +262,23 @@ class UI(QMainWindow):
         # Setting up the ip and port changer:
         self.refresh.clicked.connect(self.refresh_connect)
 
-        # Setting up the plot slots:
-        self.plot_slots = []
-        plot_indices = [i for i in range(self.plot_count)]
-        for plot in plot_indices:
-            slot = lambda data, index=plot: self.plot(data, index)
-            self.plot_slots.append(slot)
+        # Setting up the slots for the different plots as lambda functions:
+        for name, method in [(n, f) for n, f in vars(self.__class__).items() if callable(f) and not n.startswith('__')]:
+            plot_is_argument, other_args = check_args(method, 'plot', True, 'self')
+            if plot_is_argument:
+                exec(f'self.{name}_slots = list()')
+                arg_string = ', '.join(other_args) + ', ' if len(other_args) > 0 else ''
+                for index in range(self.plot_count):
+                    exec(f'lambda_slot = lambda {arg_string}plot=index, self=self: self.{name}({arg_string}plot)')
+                    exec(f'self.{name}_slots.append(lambda_slot)')
 
+        print(self.plot_starter_slots)
 
         # Start and stop Plot 1 and 2
-        self.start_plot1.clicked.connect(self.plot_starter_func)
+        self.start_plot1.clicked.connect(self.plot_starter_slots[0])
         self.stop_plot1.clicked.connect(self.plot_breaker_func)
-        self.start_plot2.clicked.connect(self.plot_starter_func)
+        self.start_plot2.clicked.connect(self.plot_starter_slots[1])
         self.stop_plot2.clicked.connect(self.plot_breaker_func)
-        self.start_plot_buttons = [self.start_plot1, self.start_plot2]
-        self.stop_plot_buttons = [self.stop_plot1, self.stop_plot2]
 
         # Setting up the SecondData classes
         if True:
@@ -471,8 +478,8 @@ class UI(QMainWindow):
             self.plot_home1.setIcon(QIcon('resources/icons8-home.svg'))
             self.plot_home2.setIcon(QIcon('resources/icons8-home.svg'))
 
-    @pyqtSlot(tuple, int)
-    def plot(self, data, plot):
+    # @pyqtSlot(tuple, int)
+    def plot_signal(self, data, plot):
         match plot:
             case 0:
                 if self.log_y_box1.isChecked():
@@ -498,11 +505,11 @@ class UI(QMainWindow):
                 self.counter2 += 1
 
     def plot_starter_func(self):
-        self.plot_starter()
+        plot = compare_sender(self, ('start_plot1', 'start_plot2'), True)
+        print(plot)
+        self.plot_starter_slots[plot]()
 
-    def plot_starter(self, plot=None):
-        if plot is None:
-            plot = compare_sender(self, ('start_plot1', 'start_plot2'), True)
+    def plot_starter(self, plot):
         print(f'plot_starter on plot: {plot}')
         match plot:
             case 0:
@@ -589,20 +596,20 @@ class UI(QMainWindow):
         match request:
             case 1:
                 print('1')
-                self.receiver.measurement_ready.connect(self.plot_slots[plot])
+                self.receiver.measurement_ready.connect(self.plot_signal_slots[plot])
             case 2:
-                self.receiver.irf_measurement_ready.connect(self.plot_slots[plot])
+                self.receiver.irf_measurement_ready.connect(self.plot_signal_slots[plot])
             case 3:
                 self.second_data_classes[plot][0].distance_ready.connect(self.make_distance_array)
             case 4:
-                self.second_data_classes[plot][0].irf_interp_ready.connect(self.plot_slots[plot])
+                self.second_data_classes[plot][0].irf_interp_ready.connect(self.plot_signal_slots[plot])
 
     def plot_disconnector(self, plot):
-        print('disconnector')
-        unconnect(self.receiver.measurement_ready, self.plot_slots[plot])
-        unconnect(self.receiver.irf_measurement_ready, self.plot_slots[plot])
-        unconnect(self.second_data_classes[plot][0].distance_ready, self.plot_slots[plot])
-        unconnect(self.second_data_classes[plot][0].irf_interp_ready, self.plot_slots[plot])
+        print(f'plot_disconnector on plot: {plot}')
+        unconnect(self.receiver.measurement_ready, self.plot_signal_slots[plot])
+        unconnect(self.receiver.irf_measurement_ready, self.plot_signal_slots[plot])
+        unconnect(self.second_data_classes[plot][0].distance_ready, self.plot_signal_slots[plot])
+        unconnect(self.second_data_classes[plot][0].irf_interp_ready, self.plot_signal_slots[plot])
 
     def y_data_refresher_func(self, item):
         plot = compare_sender(self, ('y_data_box1', 'y_data_box2'))
@@ -628,7 +635,7 @@ class UI(QMainWindow):
             self.plot_breaker(plot)
             self.plot_starter(plot)
 
-    def x_data_refresher(self):
+    def x_data_refresher(self, plot):
         plot = compare_sender(self, ('x_data_box1', 'x_data_box2'))
         if self.stop_plot_buttons[plot].isEnabled():
             self.plot_breaker(plot)
@@ -722,9 +729,9 @@ class UI(QMainWindow):
         l1 = self.last_n_values1
         l2 = self.last_n_values2
         if self.requests[0] == 3:
-            self.plot((np.array(self.distance_time_values)[-l1:], np.array(self.distance_values)[-l1:]), 0)
+            self.plot_signal((np.array(self.distance_time_values)[-l1:], np.array(self.distance_values)[-l1:]), 0)
         if self.requests[1] == 3:
-            self.plot((np.array(self.distance_time_values)[-l2:], np.array(self.distance_values)[-l2:]), 1)
+            self.plot_signal((np.array(self.distance_time_values)[-l2:], np.array(self.distance_values)[-l2:]), 1)
 
     def refresh_distance_array(self):
         self.distance_values = deque()
@@ -819,11 +826,11 @@ class UI(QMainWindow):
         self.counter_lost += 1
 
     def plot1_timer(self):
-        self.label_12.setText(f'Plot 1: {self.counter1*2} P/s')
+        self.plot_rate_1.setText(f'Plot 1: {self.counter1*2} P/s')
         self.counter1 = 0
 
     def plot2_timer(self):
-        self.label_22.setText(f'Plot 2: {self.counter2*2} P/s')
+        self.plot_rate_2.setText(f'Plot 2: {self.counter2*2} P/s')
         self.counter2 = 0
 
     def receiver_timer(self):
@@ -939,6 +946,9 @@ class UI(QMainWindow):
         self.receiver.quit()
         self.sinSender.quit()
         super().close()
+
+    def return_methods(self):
+        return [name for name, _ in self.__dict__.items() if callable(_) and not name.startswith('__')]
 
 
 def main():
