@@ -1,24 +1,18 @@
 import ast
-import inspect
 import pickle
 import time
-from socket import *
-
-import PyQt5
+import inspect
 import numpy as np
 from math import trunc
 
-from pyqtgraph import AxisItem
 from scipy.fft import fft, ifft
 from scipy.interpolate import BarycentricInterpolator as bary
 from scipy.constants import speed_of_light
-from socket import socket
-from PyQt5.QtCore import QPointF
-import inspect
-
 from scipy.signal.windows import hann
 
-import definitions
+import PyQt5
+from PyQt5.QtCore import QPointF
+from pyqtgraph import AxisItem
 
 
 class Handler:
@@ -221,13 +215,13 @@ def compare_sender(sender: PyQt5.QtCore.QObject, names: tuple, print_sender_if_n
     n = 0
     for i in names:
         if type(i) is not str:
-            print(f'i: {i}, type(i): {type(i)}, n: {n}')
-            raise ValueError('expected tuple of strings!')
+            # print(f'i: {i}, type(i): {type(i)}, n: {n}')
+            raise ValueError(f'expected tuple of strings, got {names} with type {type(names)} instead.')
         if i == name:
             return n
         n += 1
     if print_sender_if_none:
-        print(name)
+        print(f'real sender was: {name}')
     return None
 
 
