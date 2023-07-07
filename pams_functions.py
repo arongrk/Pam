@@ -102,11 +102,11 @@ def averager(data_set, shifts, samples_per_sequence, sequence_reps):
 
 
 def unconnect(signal, old_slot):
-    try:
-        while True:
+    while True:
+        try:
             signal.disconnect(old_slot)
-    except TypeError:
-        pass
+        except TypeError:
+            break
 
 
 def zero_padding(t, y, fLim, NZP, norm=False, YRef=None, return_distance=False):

@@ -111,12 +111,13 @@ class SecondData(QObject):
         self.YRefPos = np.array([])
         self.idx_start, self.idx_stop = None, None
         self.lim_distance = 25
+        self.block_norm_signals = False
 
     def distance(self, data):
         t = data[2]
         data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts)
-        max = exact_polynom_interp_max(data[0], np.absolute(data[1]), True, self.cable_constant)
-        self.distance_ready.emit((t, max))
+        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), True, self.cable_constant)
+        self.distance_ready.emit((t, exact_max[0], exact_max[1]))
 
     def irf_interp(self, data):
         data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts)
@@ -124,28 +125,30 @@ class SecondData(QObject):
         self.irf_interp_ready.emit((data[0], data[1], exact_max))
 
     def irf_interp_norm(self, data):
-        data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
-        idx_start, idx_stop = np.argwhere(data[0] > self.idx_start)[0][0], np.argwhere(data[0] > self.idx_stop)[0][0]
-        exact_max = exact_polynom_interp_max(data[0],
-                                             np.absolute(data[1]),
-                                             get_y=True,
-                                             interval=slice(idx_start, idx_stop))
-        self.irf_interp_ready.emit((data[0], data[1], exact_max[0], exact_max[1]))
+        if not self.block_norm_signals:
+            data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
+            idx_start, idx_stop = np.argwhere(data[0] > self.idx_start)[0][0], np.argwhere(data[0] > self.idx_stop)[0][0]
+            exact_max = exact_polynom_interp_max(data[0],
+                                                 np.absolute(data[1]),
+                                                 get_y=True,
+                                                 interval=slice(idx_start, idx_stop))
+            self.irf_interp_ready.emit((data[0], data[1], exact_max[0], exact_max[1]))
 
     def distance_norm(self, data):
-        t = data[2]
-        data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
-        idx_start, idx_stop = np.argwhere(data[0] > self.idx_start)[0][0], np.argwhere(data[0] > self.idx_stop)[0][0]
-        exact_max = exact_polynom_interp_max(data[0],
-                                             np.absolute(data[1]),
-                                             get_distance=True,
-                                             get_y=True,
-                                             interval=slice(idx_start, idx_stop))
-        # logging.info(exact_max[1])
-        if exact_max[1] < self.lim_distance:
-            self.distance_ready.emit((t, 0, exact_max[1]))
-        else:
-            self.distance_ready.emit((t, exact_max[0], exact_max[1]))
+        if not self.block_norm_signals:
+            t = data[2]
+            data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
+            idx_start, idx_stop = np.argwhere(data[0] > self.idx_start)[0][0], np.argwhere(data[0] > self.idx_stop)[0][0]
+            exact_max = exact_polynom_interp_max(data[0],
+                                                 np.absolute(data[1]),
+                                                 get_distance=True,
+                                                 get_y=True,
+                                                 interval=slice(idx_start, idx_stop))
+            # logging.info(exact_max[1])
+            if exact_max[1] < self.lim_distance:
+                self.distance_ready.emit((t, 0, exact_max[1]))
+            else:
+                self.distance_ready.emit((t, exact_max[0], exact_max[1]))
 
     def return_functions(self):
         return self.distance, self.irf_interp,  self.irf_interp_norm, self.distance_norm
@@ -159,6 +162,7 @@ class SecondData(QObject):
         Ly = len(yData)
         YRefTemp = fft(yData, Ly) / Ly
         self.YRefPos = YRefTemp[0:trunc(Ly / 2) + 1]
+        self.block_norm_signals = False
 
     def refresh_idx_lim(self, data, interval):
         xData = data[0]
@@ -188,15 +192,14 @@ class UI(QMainWindow):
             self.sequence_reps = self.values['sequence_reps']
             self.shifts = self.values['shifts']
             self.length = self.values['length']
-            self.last_n_values1 = self.values['last_values1']
-            self.last_n_values2 = self.values['last_values2']
+            self.last_n_values = self.values['last_values1'], self.values['last_values2']
             cable_constants = self.values['cable_length_constants']
             self.sps_edit.setText(str(self.samples_per_sequence))
             self.sr_edit.setText(str(self.sequence_reps))
             self.shifts_edit.setText(str(self.shifts))
             self.length_edit.setCurrentText(str(self.length))
-            self.last_values1.setValue(self.last_n_values1)
-            self.last_values2.setValue(self.last_n_values2)
+            self.last_values1.setValue(self.last_n_values[0])
+            self.last_values2.setValue(self.last_n_values[1])
             self.refresh_config.clicked.connect(self.refresh_configuration)
             self.xData = np.arange(1, self.shifts * self.sequence_reps * self.samples_per_sequence + 1) / 5 * 10 ** 9
             self.xData2 = np.arange(0, 1280) / 5 * 10 ** 9
@@ -326,20 +329,12 @@ class UI(QMainWindow):
             self.distance_const_box_2.setDecimals(5)
             self.distance_const_box_1.setValue(cable_constants[0])
             self.distance_const_box_2.setValue(cable_constants[1])
-            self.tare_distance_button_1.clicked.connect(self.cable_constant_refresher)
-            self.tare_distance_button_2.clicked.connect(self.cable_constant_refresher)
+            self.tare_distance_button_1.clicked.connect(self.cable_constant_refresher_slots[0])
+            self.tare_distance_button_2.clicked.connect(self.cable_constant_refresher_slots[1])
             self.distance_const_box_1.valueChanged.connect(lambda value: setattr(self.second_data_classes[0][0],
                                                                                  'cable_constant', value))
             self.distance_const_box_2.valueChanged.connect(lambda value: setattr(self.second_data_classes[1][0],
                                                                                  'cable_constant', value))
-
-            # Setting up the normalised measurement refresh:
-            lambi = lambda data, interval=(1, 12): \
-                self.second_data_classes[0][0].refresh_y_ref(data, interval)
-            self.normation_button.clicked.connect(lambda: self.receiver.irf_measurement_ready.connect(lambi))
-            self.second_data_classes[0][0].unconnect_receiver_from_y_ref.connect(
-                lambda: self.receiver.irf_measurement_ready.disconnect(lambi)
-            )
 
         # Setting up the auto range and plot home feature:
         for i in range(self.plot_count):
@@ -502,6 +497,7 @@ class UI(QMainWindow):
             self.inf_lines[plot].setPos(data[2])
         self.counters_plot[plot] += 1
         if self.plot_home_requests[plot]:
+            logging.info(f'autoRange requested on plot: {plot}, autoRanging now')
             self.graphs[plot].autoRange()
             self.plot_home_requests[plot] = False
 
@@ -510,7 +506,6 @@ class UI(QMainWindow):
         self.start_plot_buttons[plot].setEnabled(False)
         box = self.y_data_boxes[plot].currentText()
         self.plot_labels[plot].setText(f'Plot {plot}: {box}')
-        self.plot_home_requests[plot] = True
         match box:
             case 'Raw data':
                 self.requests[plot] = 1
@@ -520,6 +515,7 @@ class UI(QMainWindow):
                 self.inf_line_boxes[plot].setEnabled(False)
                 self.inf_line_boxes[plot].setChecked(False)
                 self.log_y_boxes[plot].setChecked(False)
+                self.plot_home_requests[plot] = True
             case 'IRF':
                 self.requests[plot] = 2
                 self.graphs[plot].setTitle('IRF data')
@@ -531,6 +527,7 @@ class UI(QMainWindow):
                 self.inf_line_boxes[plot].setEnabled(False)
                 self.inf_line_boxes[plot].setChecked(False)
                 self.log_y_boxes[plot].setChecked(False)
+                self.plot_home_requests[plot] = True
             case 'Distance':
                 self.requests[plot] = 3
                 self.graphs[plot].setTitle('Distance')
@@ -539,18 +536,32 @@ class UI(QMainWindow):
                 self.inf_line_boxes[plot].setEnabled(False)
                 self.inf_line_boxes[plot].setChecked(False)
                 self.log_y_boxes[plot].setChecked(False)
-            case 'IRF Interpolated':
+                self.graphs[plot].enableAutoRange()
+            case 'Distance Norm':
                 self.requests[plot] = 4
+                y_ref = lambda data, interval=(1, 12): self.second_data_classes[plot][0].refresh_y_ref(data, interval)
+                self.second_data_classes[plot][0].unconnect_receiver_from_y_ref.connect(
+                    lambda: unconnect(self.receiver.irf_measurement_ready, y_ref))
+                self.receiver.irf_measurement_ready.connect(y_ref)
+                self.second_data_classes[plot][0].block_norm_signals = True
+                self.graphs[plot].enableAutoRange()
+            case 'IRF Interpolated':
+                self.requests[plot] = 5
                 if self.x_data_boxes[plot].currentIndex() == 1:
                     self.graphs[plot].getAxis('bottom').setLabel('Distance', units='m')
                 else:
                     self.graphs[plot].getAxis('bottom').setLabel('time', units='s')
                 self.graphs[plot].getAxis('left').setLabel('Voltage', units='v')
                 self.inf_line_boxes[plot].setEnabled(True)
-            case 'Irf Interpolated Norm':
-                self.requests[plot] = 5
-                # !!! To be continued !!!
-
+                self.plot_home_requests[plot] = True
+            case 'IRF Interpolated Norm':
+                self.requests[plot] = 6
+                y_ref = lambda data, interval=(1, 12): self.second_data_classes[plot][0].refresh_y_ref(data, interval)
+                self.second_data_classes[plot][0].unconnect_receiver_from_y_ref.connect(
+                    lambda: unconnect(self.receiver.irf_measurement_ready, y_ref))
+                self.receiver.irf_measurement_ready.connect(y_ref)
+                self.second_data_classes[plot][0].block_norm_signals = True
+                self.plot_home_requests[plot] = True
         self.data_connector(plot)
         self.plot_connector(self.requests[plot], plot)
         self.stop_plot_buttons[plot].setEnabled(True)
@@ -560,35 +571,40 @@ class UI(QMainWindow):
         self.stop_plot_buttons[plot].setEnabled(False)
         self.requests[plot] = 0
         self.plot_disconnector(plot)
-        self.data_connector(plot)
+        self.data_disconnector(plot)
         self.start_plot_buttons[plot].setEnabled(True)
 
     def data_connector(self, plot):
-        logging.info(f'data connector on plot: {plot}')
+        logging.info(f'data connector on plot: {plot}, requests[{plot}] = {self.requests[plot]}')
+        match self.requests[plot]:
+            case 3:
+                self.receiver.irf_measurement_ready.connect(self.second_data_classes[plot][0].distance)
+            case 4:
+                self.receiver.irf_measurement_ready.connect(self.second_data_classes[plot][0].distance_norm)
+            case 5:
+                self.receiver.irf_measurement_ready.connect(self.second_data_classes[plot][0].irf_interp)
+            case 6:
+                self.receiver.irf_measurement_ready.connect(self.second_data_classes[plot][0].irf_interp_norm)
+
+    def data_disconnector(self, plot):
+        logging.info(f'data_disconnector on plot: {plot}, requests[{plot}] = {self.requests[plot]}')
         for i in self.second_data_classes[plot][0].return_functions():
             unconnect(self.receiver.irf_measurement_ready, i)
-        match self.requests:
-            case (3, _) | (_, 3):
-                if self.norm_interp_box.isChecked():
-                    self.receiver.irf_measurement_ready.connect(self.second_data_classes[plot][0].distance_norm)
-                else:
-                    self.receiver.irf_measurement_ready.connect(self.second_data_classes[plot][0].distance)
-            case (4, _) | (_, 4):
-                if self.norm_interp_box.isChecked():
-                    self.receiver.irf_measurement_ready.connect(self.second_data_classes[plot][0].irf_interp_norm)
-                else:
-                    self.receiver.irf_measurement_ready.connect(self.second_data_classes[plot][0].irf_interp)
 
     def plot_connector(self, request, plot):
-        logging.info(f'plot_connector on plot: {plot}')
+        logging.info(f'plot_connector on plot: {plot}, requests[{plot}] = {self.requests[plot]}')
         match request:
             case 1:
+                unconnect(self.receiver.measurement_ready, self.plot_signal_slots[plot])
                 self.receiver.measurement_ready.connect(self.plot_signal_slots[plot])
             case 2:
+                unconnect(self.receiver.irf_measurement_ready, self.plot_signal_slots[plot])
                 self.receiver.irf_measurement_ready.connect(self.plot_signal_slots[plot])
-            case 3:
-                self.second_data_classes[plot][0].distance_ready.connect(self.make_distance_array)
-            case 4:
+            case 3 | 4:
+                unconnect(self.second_data_classes[plot][0].distance_ready, self.make_distance_array_slots[plot])
+                self.second_data_classes[plot][0].distance_ready.connect(self.make_distance_array_slots[plot])
+            case 5 | 6:
+                unconnect(self.second_data_classes[plot][0].irf_interp_ready, self.plot_signal_slots[plot])
                 self.second_data_classes[plot][0].irf_interp_ready.connect(self.plot_signal_slots[plot])
 
     def plot_disconnector(self, plot):
@@ -611,7 +627,9 @@ class UI(QMainWindow):
                 self.x_data_boxes[plot].addItems(['time', 'distance'])
                 self.tare_distance_buttons[plot].setEnabled(False)
                 self.distance_const_boxes[plot].setEnabled(False)
-            case 'Distance':
+            case 'IRF Interpolated Norm':
+                self.x_data_boxes[plot].addItems(['time'])
+            case 'Distance' | 'Distance Norm':
                 self.x_data_boxes[plot].addItems(['duration'])
                 self.tare_distance_buttons[plot].setEnabled(True)
                 self.distance_const_boxes[plot].setEnabled(True)
@@ -633,23 +651,19 @@ class UI(QMainWindow):
         else:
             self.graphs[plot].removeItem(self.inf_lines[plot])
 
-    def cable_constant_refresher(self):
-        plot = compare_sender(self, ('tare_distance_button_1', 'tare_distance_button_2'))
+    def cable_constant_refresher(self, plot):
         self.second_data_classes[plot][0].cable_constant += np.average(np.array(self.distance_values)[-20:])
         if plot == 0:
             self.distance_const_box_1.setValue(self.second_data_classes[plot][0].cable_constant)
         else:
             self.distance_const_box_2.setValue(self.second_data_classes[plot][0].cable_constant)
 
-    def make_distance_array(self, data):
+    def make_distance_array(self, data, plot):
         self.distance_values.append(data[1])
         self.distance_time_values.append(data[0])
-        l1 = self.last_n_values1
-        l2 = self.last_n_values2
-        if self.requests[0] == 3:
-            self.plot_signal((np.array(self.distance_time_values)[-l1:], np.array(self.distance_values)[-l1:]), 0)
-        if self.requests[1] == 3:
-            self.plot_signal((np.array(self.distance_time_values)[-l2:], np.array(self.distance_values)[-l2:]), 1)
+        l_v = self.last_n_values[plot]
+        if self.requests[0] in (3, 4):
+            self.plot_signal((np.array(self.distance_time_values)[-l_v:], np.array(self.distance_values)[-l_v:]), plot)
 
     def refresh_distance_array(self):
         self.distance_values = deque()
@@ -870,8 +884,8 @@ class UI(QMainWindow):
                              samples_per_sequence=self.samples_per_sequence,
                              sequence_reps=self.sequence_reps,
                              length=self.length,
-                             last_values1=self.last_n_values1,
-                             last_values2=self.last_n_values2,
+                             last_values1=self.last_n_values[0],
+                             last_values2=self.last_n_values[1],
                              cable_length_constants=tuple(i[0].cable_constant for i in self.second_data_classes)), f)
         self.sinSender.stop()
         for i in self.second_data_classes:
