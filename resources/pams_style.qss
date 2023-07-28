@@ -63,17 +63,17 @@ QPushButton:disabled
 QGroupBox:enabled
  {
     background-color: #8dae10;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ;
-    color: white;
+    color: black;
 }
 QGroupBox:enabled:hover
  {
     background-color: #b0d918;
-    color: white;
+    color: black;
 }
 QGroupBox:disabled
  {
     background-color: #858585;
-    color: white;
+    color: black;
 }
 
 /*-----QPlotWidget-----*/

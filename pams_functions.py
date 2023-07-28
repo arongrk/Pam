@@ -155,7 +155,7 @@ def exact_polynom_interp_max(t_data,
                              get_distance: bool = False,
                              get_y: bool = False,
                              cable_constant=0,
-                             interval: slice=None):
+                             interval: slice = None):
 
     if np.shape(t_data) != np.shape(y_data):
         raise ValueError('t_data and y_data are not the same shape!')

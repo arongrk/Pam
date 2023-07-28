@@ -112,6 +112,9 @@ class SecondData(QObject):
         self.idx_start, self.idx_stop = None, None
         self.lim_distance = 25
         self.block_norm_signals = False
+        self.calibration_start = 150
+        self.mes_start = 0
+        self.mes_end = 1
 
     def distance(self, data):
         t = data[2]
@@ -127,23 +130,29 @@ class SecondData(QObject):
     def irf_interp_norm(self, data):
         if not self.block_norm_signals:
             data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
-            idx_start, idx_stop = np.argwhere(data[0] > self.idx_start)[0][0], np.argwhere(data[0] > self.idx_stop)[0][0]
+            idx_start = np.argwhere(data[0] > self.mes_start/speed_of_light*2)[0][0]
+            idx_stop = np.argwhere(data[0] > self.mes_end/speed_of_light*2)[0][0]
             exact_max = exact_polynom_interp_max(data[0],
                                                  np.absolute(data[1]),
+                                                 get_distance=True,
                                                  get_y=True,
                                                  interval=slice(idx_start, idx_stop))
+            logging.info(f'irf_interp_norm: idx_start: {idx_start}, idx_stop: {idx_stop}')
             self.irf_interp_ready.emit((data[0], data[1], exact_max[0], exact_max[1]))
 
     def distance_norm(self, data):
         if not self.block_norm_signals:
             t = data[2]
             data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
-            idx_start, idx_stop = np.argwhere(data[0] > self.idx_start)[0][0], np.argwhere(data[0] > self.idx_stop)[0][0]
+            idx_start = np.argwhere(data[0] > self.mes_start/speed_of_light*2)[0][0]
+            idx_stop = np.argwhere(data[0] > self.mes_end/speed_of_light*2)[0][0]
             exact_max = exact_polynom_interp_max(data[0],
                                                  np.absolute(data[1]),
                                                  get_distance=True,
                                                  get_y=True,
                                                  interval=slice(idx_start, idx_stop))
+
+            logging.info(f'idx_start: {idx_start}, idx_stop: {idx_stop}')
             # logging.info(exact_max[1])
             if exact_max[1] < self.lim_distance:
                 self.distance_ready.emit((t, 0, exact_max[1]))
@@ -153,21 +162,20 @@ class SecondData(QObject):
     def return_functions(self):
         return self.distance, self.irf_interp,  self.irf_interp_norm, self.distance_norm
 
-    def refresh_y_ref(self, data, interval):
+    def refresh_y_ref(self, data):
         self.unconnect_receiver_from_y_ref.emit()
-        self.refresh_idx_lim(data, interval)
+        self.refresh_idx_lim(data)
         yData = data[1]
-        yData[150:161] = np.linspace(yData[150], 0, 11)
-        yData[161:] = 0
+        yData[self.calibration_start:self.calibration_start+11] = np.linspace(yData[self.calibration_start], 0, 11)
+        yData[self.calibration_start+11:] = 0
         Ly = len(yData)
         YRefTemp = fft(yData, Ly) / Ly
         self.YRefPos = YRefTemp[0:trunc(Ly / 2) + 1]
         self.block_norm_signals = False
 
-    def refresh_idx_lim(self, data, interval):
-        xData = data[0]
-        self.idx_start = interval[0]*1e-09
-        self.idx_stop = interval[1]*1e-09
+    def refresh_idx_lim(self, data):
+        self.idx_start = np.argwhere(data[0] > self.mes_start/speed_of_light*2)[0][0]
+        self.idx_stop = np.argwhere(data[0] > self.mes_end/speed_of_light*2)[0][0]
         logging.info(f'idx_start: {self.idx_start}, idx_stop: {self.idx_stop}')
 
 
@@ -226,6 +234,11 @@ class UI(QMainWindow):
             self.plot_home_buttons = [self.plot_home1, self.plot_home2]
             self.plot_rate_labels = [self.plot_rate_1, self.plot_rate_2]
             self.plot_labels = [self.plot_label1, self.plot_label2]
+            self.norm_mes_start_boxes = [self.norm_mes_start_box1, self.norm_mes_start_box2]
+            self.norm_mes_end_boxes = [self.norm_mes_end_box1, self.norm_mes_end_box2]
+            self.calibration_start_boxes = [self.calibration_start_box1, self.calibration_start_box2]
+            self.normation_refresh_buttons = [self.normation_refresh_button1, self.normation_refresh_button2]
+
 
         # Setting up the connections for the log file
         for i in self.findChildren(QPushButton):
@@ -320,6 +333,11 @@ class UI(QMainWindow):
                 self.y_data_boxes[plot].currentTextChanged.connect(self.y_data_refresher_slots[plot])
                 self.x_data_boxes[plot].currentTextChanged.connect(self.x_data_refresher_slots[plot])
 
+                # Refreshing the values for normalized interpolation:
+                self.normation_refresh_buttons[plot].clicked.connect(self.refresh_norm_values_slots[plot])
+
+                self.x_data_boxes[plot].setCurrentIndex(0)
+
             # Refreshing the last_values boxes
             self.last_values1.valueChanged.connect(lambda value: setattr(self, 'last_n_values1', value))
             self.last_values2.valueChanged.connect(lambda value: setattr(self, 'last_n_values2', value))
@@ -380,6 +398,9 @@ class UI(QMainWindow):
             self.min_ic_white = QIcon('resources/minimize_button_white.svg')
             self.clos_ic = QIcon('resources/closing_button.svg')
             self.clos_ic_white = QIcon('resources/closing_button_white.svg')
+            self.close_button.setIcon(self.clos_ic)
+            self.maximize_button.setIcon(self.max_ic)
+            self.minimize_button.setIcon(self.min_ic)
             self.maximize_button.enterEvent = self.maximize_button_hover
             self.maximize_button.leaveEvent = self.maximize_button_exit
             self.minimize_button.enterEvent = self.minimize_button_hover
@@ -474,7 +495,9 @@ class UI(QMainWindow):
             self.tabWidget.setFont(flamaBold12)
             # self.tabBar.setFont(QFont('RubFlama Bold', 12))
             for i in self.findChildren(QGroupBox):
+                # print(i)
                 i.setFont(flama10u)
+                # i.setStyleSheet('color: black')
             for i in self.findChildren(QPushButton):
                 i.setFont(flama10)
             for _ in QLabel, QLineEdit, QSpinBox, QComboBox, QCheckBox:
@@ -489,10 +512,14 @@ class UI(QMainWindow):
         if self.log_y_boxes[plot].isChecked():
             self.lines[plot].setData(data[0], np.log10(np.absolute(data[1])))
         else:
-            if self.x_data_boxes[plot].currentIndex() == 1:
-                self.lines[plot].setData(data[0]*speed_of_light/2, data[1])
-            else:
-                self.lines[plot].setData(data[0], data[1])
+            match self.x_data_boxes[plot].currentText():
+                case 'time' | 'duration':
+                    self.lines[plot].setData(data[0], data[1])
+                case 'distance':
+                    self.lines[plot].setData(data[0]*speed_of_light/2, data[1])
+                case 'value no.':
+                    self.lines[plot].setData(np.arange(len(data[1]))+1, data[1])
+
         if self.inf_line_boxes[plot].isChecked():
             self.inf_lines[plot].setPos(data[2])
         self.counters_plot[plot] += 1
@@ -510,8 +537,8 @@ class UI(QMainWindow):
             case 'Raw data':
                 self.requests[plot] = 1
                 self.graphs[plot].setTitle('Raw data')
-                self.graphs[plot].getAxis('bottom').setLabel('Time', units='s')
-                self.graphs[plot].getAxis('left').setLabel('Voltage', units='v')
+                # self.graphs[plot].getAxis('bottom').setLabel('Time', units='s')
+                # self.graphs[plot].getAxis('left').setLabel('Voltage', units='v')
                 self.inf_line_boxes[plot].setEnabled(False)
                 self.inf_line_boxes[plot].setChecked(False)
                 self.log_y_boxes[plot].setChecked(False)
@@ -519,11 +546,11 @@ class UI(QMainWindow):
             case 'IRF':
                 self.requests[plot] = 2
                 self.graphs[plot].setTitle('IRF data')
-                if self.x_data_boxes[plot].currentIndex() == 1:
-                    self.graphs[plot].getAxis('bottom').setLabel('Distance', units='m')
-                else:
-                    self.graphs[plot].getAxis('bottom').setLabel('time', units='s')
-                self.graphs[plot].getAxis('left').setLabel('Voltage', units='v')
+                # if self.x_data_boxes[plot].currentIndex() == 1:
+                #     self.graphs[plot].getAxis('bottom').setLabel('Distance', units='m')
+                # else:
+                #     self.graphs[plot].getAxis('bottom').setLabel('time', units='s')
+                # self.graphs[plot].getAxis('left').setLabel('Voltage', units='v')
                 self.inf_line_boxes[plot].setEnabled(False)
                 self.inf_line_boxes[plot].setChecked(False)
                 self.log_y_boxes[plot].setChecked(False)
@@ -531,36 +558,41 @@ class UI(QMainWindow):
             case 'Distance':
                 self.requests[plot] = 3
                 self.graphs[plot].setTitle('Distance')
-                self.graphs[plot].getAxis('bottom').setLabel('Time', units='s')
-                self.graphs[plot].getAxis('left').setLabel('Distance', units='m')
+                # self.graphs[plot].getAxis('bottom').setLabel('Time', units='s')
+                # self.graphs[plot].getAxis('left').setLabel('Distance', units='m')
                 self.inf_line_boxes[plot].setEnabled(False)
                 self.inf_line_boxes[plot].setChecked(False)
                 self.log_y_boxes[plot].setChecked(False)
                 self.graphs[plot].enableAutoRange()
             case 'Distance Norm':
                 self.requests[plot] = 4
-                y_ref = lambda data, interval=(1, 12): self.second_data_classes[plot][0].refresh_y_ref(data, interval)
-                self.second_data_classes[plot][0].unconnect_receiver_from_y_ref.connect(
-                    lambda: unconnect(self.receiver.irf_measurement_ready, y_ref))
-                self.receiver.irf_measurement_ready.connect(y_ref)
-                self.second_data_classes[plot][0].block_norm_signals = True
+                # y_ref = lambda data, interval=(1, 12): self.second_data_classes[plot][0].refresh_y_ref(data, interval)
+                # self.second_data_classes[plot][0].unconnect_receiver_from_y_ref.connect(
+                #     lambda: unconnect(self.receiver.irf_measurement_ready, y_ref))
+                # self.receiver.irf_measurement_ready.connect(y_ref)
+                # self.second_data_classes[plot][0].block_norm_signals = True
+                self.refresh_norm_values(plot)
                 self.graphs[plot].enableAutoRange()
+                self.inf_line_boxes[plot].setEnabled(False)
+                self.inf_line_boxes[plot].setChecked(False)
             case 'IRF Interpolated':
                 self.requests[plot] = 5
-                if self.x_data_boxes[plot].currentIndex() == 1:
-                    self.graphs[plot].getAxis('bottom').setLabel('Distance', units='m')
-                else:
-                    self.graphs[plot].getAxis('bottom').setLabel('time', units='s')
-                self.graphs[plot].getAxis('left').setLabel('Voltage', units='v')
+                # if self.x_data_boxes[plot].currentIndex() == 1:
+                #     self.graphs[plot].getAxis('bottom').setLabel('Distance', units='m')
+                # else:
+                #     self.graphs[plot].getAxis('bottom').setLabel('time', units='s')
+                # self.graphs[plot].getAxis('left').setLabel('Voltage', units='v')
                 self.inf_line_boxes[plot].setEnabled(True)
                 self.plot_home_requests[plot] = True
             case 'IRF Interpolated Norm':
                 self.requests[plot] = 6
-                y_ref = lambda data, interval=(1, 12): self.second_data_classes[plot][0].refresh_y_ref(data, interval)
-                self.second_data_classes[plot][0].unconnect_receiver_from_y_ref.connect(
-                    lambda: unconnect(self.receiver.irf_measurement_ready, y_ref))
-                self.receiver.irf_measurement_ready.connect(y_ref)
-                self.second_data_classes[plot][0].block_norm_signals = True
+                self.inf_line_boxes[plot].setEnabled(True)
+                # y_ref = lambda data, interval=(1, 12): self.second_data_classes[plot][0].refresh_y_ref(data, interval)
+                # self.second_data_classes[plot][0].unconnect_receiver_from_y_ref.connect(
+                #     lambda: unconnect(self.receiver.irf_measurement_ready, y_ref))
+                # self.receiver.irf_measurement_ready.connect(y_ref)
+                # self.second_data_classes[plot][0].block_norm_signals = True
+                self.refresh_norm_values(plot)
                 self.plot_home_requests[plot] = True
         self.data_connector(plot)
         self.plot_connector(self.requests[plot], plot)
@@ -620,15 +652,15 @@ class UI(QMainWindow):
         self.x_data_boxes[plot].clear()
         match item:
             case 'Raw data':
-                self.x_data_boxes[plot].addItems(['time'])
+                self.x_data_boxes[plot].addItems(['time', 'value no.'])
                 self.tare_distance_buttons[plot].setEnabled(False)
                 self.distance_const_boxes[plot].setEnabled(False)
             case 'IRF' | 'IRF Interpolated':
-                self.x_data_boxes[plot].addItems(['time', 'distance'])
+                self.x_data_boxes[plot].addItems(['time', 'distance', 'value no.'])
                 self.tare_distance_buttons[plot].setEnabled(False)
                 self.distance_const_boxes[plot].setEnabled(False)
             case 'IRF Interpolated Norm':
-                self.x_data_boxes[plot].addItems(['time'])
+                self.x_data_boxes[plot].addItems(['distance', 'value no.'])
             case 'Distance' | 'Distance Norm':
                 self.x_data_boxes[plot].addItems(['duration'])
                 self.tare_distance_buttons[plot].setEnabled(True)
@@ -669,6 +701,17 @@ class UI(QMainWindow):
         self.distance_values = deque()
         self.distance_time_values = deque()
         self.receiver.t0 = time.time()
+
+    def refresh_norm_values(self, plot):
+        self.second_data_classes[0][plot].calibration_start = self.calibration_start_boxes[plot].value()
+        self.second_data_classes[0][plot].mes_start = self.norm_mes_start_boxes[plot].value()
+        self.second_data_classes[0][plot].mes_end = self.norm_mes_end_boxes[plot].value()
+        y_ref = lambda data: self.second_data_classes[plot][0].refresh_y_ref(data)
+        self.second_data_classes[plot][0].unconnect_receiver_from_y_ref.connect(
+            lambda: unconnect(self.receiver.irf_measurement_ready, y_ref))
+        self.receiver.irf_measurement_ready.connect(y_ref)
+        self.second_data_classes[plot][0].block_norm_signals = True
+
 
     def start_receiver(self):
         self.receiver.start()

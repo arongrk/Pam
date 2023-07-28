@@ -1,5 +1,7 @@
 INFO:root:{'shifts': 1280, 'samples_per_sequence': 16, 'sequence_reps': 2, 'length': 16080, 'last_values1': 1000, 'last_values2': 0, 'cable_length_constants': (3.43652, 0)}
 INFO:root:
+INFO:root:ComboBox x_data_box1 changed to: time
+INFO:root:
 INFO:root:Button clicked: connect_button
 INFO:root:
 INFO:root:Button clicked: start_receive
@@ -10,15 +12,6 @@ INFO:root:data connector on plot: 0, requests[0] = 1
 INFO:root:plot_connector on plot: 0, requests[0] = 1
 INFO:root:autoRange requested on plot: 0, autoRanging now
 INFO:root:
-INFO:root:ComboBox y_data_box1 changed to: IRF Interpolated
-INFO:root:plot_breaker on plot: 0
-INFO:root:plot_disconnector on plot: 0
-INFO:root:data_disconnector on plot: 0, requests[0] = 0
-INFO:root:plot_starter on plot: 0
-INFO:root:data connector on plot: 0, requests[0] = 5
-INFO:root:plot_connector on plot: 0, requests[0] = 5
-INFO:root:autoRange requested on plot: 0, autoRanging now
-INFO:root:
 INFO:root:ComboBox y_data_box1 changed to: IRF Interpolated Norm
 INFO:root:plot_breaker on plot: 0
 INFO:root:plot_disconnector on plot: 0
@@ -26,8 +19,1361 @@ INFO:root:data_disconnector on plot: 0, requests[0] = 0
 INFO:root:plot_starter on plot: 0
 INFO:root:data connector on plot: 0, requests[0] = 6
 INFO:root:plot_connector on plot: 0, requests[0] = 6
-INFO:root:idx_start: 1e-09, idx_stop: 1.2000000000000002e-08
+INFO:root:idx_start: 0, idx_stop: 66
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
 INFO:root:autoRange requested on plot: 0, autoRanging now
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:irf_interp_norm: idx_start: 0, idx_stop: 2093
+INFO:root:
+INFO:root:Button clicked: normation_refresh_button1
+INFO:root:idx_start: 4, idx_stop: 59
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
+INFO:root:irf_interp_norm: idx_start: 128, idx_stop: 1880
 INFO:root:
 INFO:root:ComboBox y_data_box1 changed to: Distance Norm
 INFO:root:plot_breaker on plot: 0
@@ -36,4 +1382,1317 @@ INFO:root:data_disconnector on plot: 0, requests[0] = 0
 INFO:root:plot_starter on plot: 0
 INFO:root:data connector on plot: 0, requests[0] = 4
 INFO:root:plot_connector on plot: 0, requests[0] = 4
-INFO:root:idx_start: 1e-09, idx_stop: 1.2000000000000002e-08
+INFO:root:idx_start: 4, idx_stop: 59
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:idx_start: 128, idx_stop: 1880
+INFO:root:
+INFO:root:Button clicked: stop_plot1
+INFO:root:plot_breaker on plot: 0
+INFO:root:plot_disconnector on plot: 0
+INFO:root:data_disconnector on plot: 0, requests[0] = 0
+INFO:root:idx_start: 128, idx_stop: 1880
