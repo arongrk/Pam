@@ -2,4 +2,4 @@
 - Kalibrierung mit Start und Stop
 - Daten verpicklen
 - Schwellwert für Audio ins Interface
-- Audiofrequenz über die Formel
+- Audiofrequenz über die Formel: n = (Distanz - 0,20) * 0,05 + 49
