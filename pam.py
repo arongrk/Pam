@@ -660,7 +660,7 @@ class UI(QMainWindow):
                 self.tare_distance_buttons[plot].setEnabled(False)
                 self.distance_const_boxes[plot].setEnabled(False)
             case 'IRF Interpolated Norm':
-                self.x_data_boxes[plot].addItems(['distance', 'value no.'])
+                self.x_data_boxes[plot].addItems(['time', 'distance', 'value no.'])
             case 'Distance' | 'Distance Norm':
                 self.x_data_boxes[plot].addItems(['duration'])
                 self.tare_distance_buttons[plot].setEnabled(True)

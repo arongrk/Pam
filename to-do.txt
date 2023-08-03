@@ -1,0 +1,5 @@
+- Kommentierung
+- Kalibrierung mit Start und Stop
+- Daten verpicklen
+- Schwellwert für Audio ins Interface
+- Audiofrequenz über die Formel
