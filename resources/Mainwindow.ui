@@ -1659,6 +1659,36 @@ border-top: 1px solid #122b4a;</string>
                    </property>
                   </widget>
                  </item>
+                 <item row="2" column="1">
+                  <widget class="QDoubleSpinBox" name="calibration_start_box1"/>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="label_41">
+                   <property name="text">
+                    <string>Calibration start (m):</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1">
+                  <spacer name="verticalSpacer_8">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>164</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item row="5" column="0">
+                  <widget class="QLabel" name="label_47">
+                   <property name="text">
+                    <string>1</string>
+                   </property>
+                  </widget>
+                 </item>
                  <item row="1" column="0">
                   <widget class="QLabel" name="label_38">
                    <property name="text">
@@ -1666,17 +1696,7 @@ border-top: 1px solid #122b4a;</string>
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="1">
-                  <widget class="QSpinBox" name="calibration_start_box1">
-                   <property name="maximum">
-                    <number>1000</number>
-                   </property>
-                   <property name="value">
-                    <number>150</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="4" column="1">
+                 <item row="5" column="1">
                   <widget class="QPushButton" name="normation_refresh_button1">
                    <property name="font">
                     <font>
@@ -1728,30 +1748,13 @@ QPushButton:disabled
                  <item row="0" column="1">
                   <widget class="QDoubleSpinBox" name="norm_mes_start_box1"/>
                  </item>
-                 <item row="2" column="0">
-                  <widget class="QLabel" name="label_41">
-                   <property name="text">
-                    <string>Calibration start:</string>
-                   </property>
-                  </widget>
-                 </item>
                  <item row="3" column="1">
-                  <spacer name="verticalSpacer_8">
-                   <property name="orientation">
-                    <enum>Qt::Vertical</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>20</width>
-                     <height>164</height>
-                    </size>
-                   </property>
-                  </spacer>
+                  <widget class="QDoubleSpinBox" name="calibration_end_box1"/>
                  </item>
-                 <item row="4" column="0">
-                  <widget class="QLabel" name="label_47">
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="label_48">
                    <property name="text">
-                    <string>1</string>
+                    <string>Calibration end (m):</string>
                    </property>
                   </widget>
                  </item>
@@ -1759,7 +1762,20 @@ QPushButton:disabled
                </widget>
                <widget class="QWidget" name="page2">
                 <layout class="QGridLayout" name="gridLayout_11">
-                 <item row="4" column="1">
+                 <item row="2" column="1">
+                  <widget class="QDoubleSpinBox" name="calibration_start_box2"/>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QDoubleSpinBox" name="norm_mes_start_box2"/>
+                 </item>
+                 <item row="5" column="0">
+                  <widget class="QLabel" name="label_46">
+                   <property name="text">
+                    <string>2</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="5" column="1">
                   <widget class="QPushButton" name="normation_refresh_button2">
                    <property name="font">
                     <font>
@@ -1808,24 +1824,7 @@ QPushButton:disabled
                    </property>
                   </widget>
                  </item>
-                 <item row="1" column="1">
-                  <widget class="QDoubleSpinBox" name="norm_mes_end_box2">
-                   <property name="value">
-                    <double>2.000000000000000</double>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="1">
-                  <widget class="QSpinBox" name="calibration_start_box2">
-                   <property name="maximum">
-                    <number>1000</number>
-                   </property>
-                   <property name="value">
-                    <number>150</number>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="3" column="1">
+                 <item row="4" column="1">
                   <spacer name="verticalSpacer_9">
                    <property name="orientation">
                     <enum>Qt::Vertical</enum>
@@ -1845,6 +1844,13 @@ QPushButton:disabled
                    </property>
                   </widget>
                  </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="label_43">
+                   <property name="text">
+                    <string>Calibration start (m):</string>
+                   </property>
+                  </widget>
+                 </item>
                  <item row="0" column="0">
                   <widget class="QLabel" name="label_42">
                    <property name="text">
@@ -1852,20 +1858,20 @@ QPushButton:disabled
                    </property>
                   </widget>
                  </item>
-                 <item row="2" column="0">
-                  <widget class="QLabel" name="label_43">
-                   <property name="text">
-                    <string>Calibration start:</string>
+                 <item row="1" column="1">
+                  <widget class="QDoubleSpinBox" name="norm_mes_end_box2">
+                   <property name="value">
+                    <double>2.000000000000000</double>
                    </property>
                   </widget>
                  </item>
-                 <item row="0" column="1">
-                  <widget class="QDoubleSpinBox" name="norm_mes_start_box2"/>
+                 <item row="3" column="1">
+                  <widget class="QDoubleSpinBox" name="calibration_end_box2"/>
                  </item>
-                 <item row="4" column="0">
-                  <widget class="QLabel" name="label_46">
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="label_49">
                    <property name="text">
-                    <string>2</string>
+                    <string>Calibration end (m):</string>
                    </property>
                   </widget>
                  </item>
@@ -2252,7 +2258,7 @@ QPushButton:disabled
                 <string/>
                </property>
                <property name="text">
-                <string/>
+                <string>1280</string>
                </property>
               </widget>
              </item>
@@ -2281,7 +2287,7 @@ QPushButton:disabled
                 <string/>
                </property>
                <property name="text">
-                <string/>
+                <string>16</string>
                </property>
               </widget>
              </item>
@@ -2310,7 +2316,7 @@ QPushButton:disabled
                 <string/>
                </property>
                <property name="text">
-                <string/>
+                <string>2</string>
                </property>
               </widget>
              </item>
@@ -2733,6 +2739,22 @@ QPushButton:disabled
              </widget>
             </item>
            </layout>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="distance_bar">
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+            <property name="value">
+             <number>0</number>
+            </property>
+            <property name="textVisible">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
           <item>
            <spacer name="verticalSpacer_7">

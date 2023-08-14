@@ -102,6 +102,12 @@ def averager(data_set, shifts, samples_per_sequence, sequence_reps):
 
 
 def unconnect(signal, old_slot):
+    '''
+
+    :param signal:
+    :param old_slot:
+    :return:
+    '''
     while True:
         try:
             signal.disconnect(old_slot)
@@ -109,7 +115,24 @@ def unconnect(signal, old_slot):
             break
 
 
-def zero_padding(t, y, fLim, NZP, norm=False, YRef=None, return_distance=False):
+def zero_padding(t, y, fLim, NZP, norm=False, YRef=None, t_data_returned=0):
+    '''
+    parameters:
+
+    * t:        a t-data array
+    * y:        a y-data array with len(t)
+    * fLim:     frequency limit
+    * NZP
+    * norm:     whether a normation should be applied, requires YRef
+    * YRef:     Null-measurement for the normation
+    * t_data_returned: returns different t-data arrays depending on the number:
+
+      * 0: time
+      * 1: distance
+      * 2: value number
+
+
+    '''
     if norm and YRef is None:
         raise ValueError('YRef is required when using norm!')
 
@@ -137,9 +160,13 @@ def zero_padding(t, y, fLim, NZP, norm=False, YRef=None, return_distance=False):
     YZP[idxLim] = YPos[idxLim] * window[LidxLim-1:]
     yData = np.real(ifft(YZP)*NZP)
     tData = (np.arange(0, NZP) / fs * Ly/NZP + t[0])
-    if return_distance:
-        tData *= speed_of_light/2
-    return tData, yData
+    match t_data_returned:
+        case 0:
+            return tData, yData
+        case 1:
+            return tData * speed_of_light/2, yData
+        case 2:
+            return np.arange(len(yData)), yData
 
 
 def polynom_interp_max(t, y, accuracy: int):
@@ -155,7 +182,8 @@ def exact_polynom_interp_max(t_data,
                              get_distance: bool = False,
                              get_y: bool = False,
                              cable_constant=0,
-                             interval: slice = None):
+                             interval: slice = None,
+                             negative_constant: float = 0):
 
     if np.shape(t_data) != np.shape(y_data):
         raise ValueError('t_data and y_data are not the same shape!')
@@ -188,15 +216,17 @@ def exact_polynom_interp_max(t_data,
     # Get the first differentiation
     x = -factors[1]/(factors[2]*2)
 
-    # Return the time if not asked for speed:
+    # Return the time if not asked for distance:
     if get_distance:
         x_value = x / 2 * speed_of_light - cable_constant
     else:
         x_value = x
+
+    # Return the y-coordinate of the maximum as a second value
     if get_y:
-        return x_value, factors[2]*(x**2)+factors[1]*x+factors[0]
+        return x_value - negative_constant, factors[2]*(x**2)+factors[1]*x+factors[0]
     else:
-        return x_value
+        return x_value - negative_constant
 
 
 def change_dict(dictionary: dict, *args):

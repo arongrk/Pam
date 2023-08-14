@@ -1,5 +1,6 @@
 - Kommentierung
-- Kalibrierung mit Start und Stop
-- Daten verpicklen
+- Kalibrierung mit Start und Stop       Check!
+- Daten verpicklen                      Check!
 - Schwellwert für Audio ins Interface
-- Audiofrequenz über die Formel: n = (Distanz - 0,20) * 0,05 + 49
+- Audiofrequenz über die Formel: n = (Distanz - DistanzTon0) / AbstandTöne + TastennummerTon0
+    https://de.wikipedia.org/wiki/Frequenzen_der_gleichstufigen_Stimmung
