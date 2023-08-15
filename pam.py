@@ -97,28 +97,43 @@ class Receiver(QThread):
 
 
 class SecondData(QObject):
-    measurement_ready = pyqtSignal(tuple)
-    irf_measurement_ready = pyqtSignal(tuple)
-    distance_ready = pyqtSignal(tuple)
-    irf_interp_ready = pyqtSignal(tuple)
-    unconnect_receiver_from_y_ref = pyqtSignal()
 
-    def __init__(self, samples_per_sequence, shifts, sequence_reps, length, cable_length_constant):
+    # Signals for SecondData
+    if True:
+        measurement_ready = pyqtSignal(tuple)
+        irf_measurement_ready = pyqtSignal(tuple)
+        distance_ready = pyqtSignal(tuple)
+        irf_interp_ready = pyqtSignal(tuple)
+        unconnect_receiver_from_y_ref = pyqtSignal()
+
+    def __init__(self, samples_per_sequence: int, shifts: int, sequence_reps: int, length: int,
+                 cable_length_constant: float, norm_measurement_start: float, norm_measurement_end: float,
+                 calibration_start: float, calibration_end: float, distance_limit: int, x_data_request: str):
+
         QObject.__init__(self)
+
         self.sps = samples_per_sequence
         self.shifts = shifts
         self.sr = sequence_reps
         self.mes_len = length
-        self.cable_constant = cable_length_constant
-        self.YRefPos = np.array([])
-        self.idx_start, self.idx_stop = None, None
-        self.lim_distance = 25
-        self.block_norm_signals = False
-        self.calibration_start = 150
-        self.mes_start = 0
-        self.mes_end = 1
 
-        self.x_data_request = 'time'
+        self.cable_constant = cable_length_constant
+
+        self.lim_distance = distance_limit
+
+        self.calibration_start = calibration_start
+        self.calibration_end = calibration_end
+
+        self.mes_start = norm_measurement_start
+        self.mes_end = norm_measurement_end
+
+        self.x_data_request = x_data_request
+
+        self.YRefPos = np.array([])
+
+        self.idx_start, self.idx_stop = None, None
+
+        self.block_norm_signals = False
         
     def raw_data(self, data):
         match self.x_data_request:
@@ -195,14 +210,13 @@ class SecondData(QObject):
                                                  negative_constant=self.mes_start)
 
             logging.info(f'idx_start: {idx_start}, idx_stop: {idx_stop}')
-            # logging.info(exact_max[1])
             if exact_max[1] < self.lim_distance:
-                self.distance_ready.emit((t, 0, exact_max[1]))
+                self.distance_ready.emit((t, 0))
             else:
-                self.distance_ready.emit((t, exact_max[0], exact_max[1]))
+                self.distance_ready.emit((t, exact_max[0]))
 
     def return_functions(self):
-        return self.distance, self.irf_interp,  self.irf_interp_norm, self.distance_norm
+        return self.raw_data, self.irf_data, self.distance, self.irf_interp,  self.irf_interp_norm, self.distance_norm
 
     def refresh_y_ref(self, data):
         self.unconnect_receiver_from_y_ref.emit()
@@ -254,7 +268,7 @@ class UI(QMainWindow):
             self.sequence_reps = int(self.sr_edit.text())
             self.shifts = int(self.shifts_edit.text())
             self.length = int(self.length_edit.currentText())
-            self.last_n_values = int(self.last_values1.text()), int(self.last_values2.text())
+            self.last_n_values1, self.last_n_values2 = int(self.last_values1.text()), int(self.last_values2.text())
             cable_constants = int(self.distance_const_box_1.value()), int(self.distance_const_box_1.value())
             self.refresh_config.clicked.connect(self.refresh_configuration)
             self.xData = np.arange(1, self.shifts * self.sequence_reps * self.samples_per_sequence + 1) / 5 * 10 ** 9
@@ -268,7 +282,8 @@ class UI(QMainWindow):
         # ...2
         # everytime
         if True:
-            self.log_y_boxes = self.log_y_box1, self.log_y_box2
+            self.last_n_values_boxes = [self.last_values1, self.last_values2]
+            self.log_y_boxes = [self.log_y_box1, self.log_y_box2]
             self.enableAutoX_buttons = [self.enable_auto_x1, self.enable_auto_x2]
             self.disableAutoX_buttons = [self.disable_auto_x1, self.disable_auto_x2]
             self.enableAutoY_buttons = [self.enable_auto_y1, self.enable_auto_y2]
@@ -286,14 +301,16 @@ class UI(QMainWindow):
             self.norm_mes_end_boxes = [self.norm_mes_end_box1, self.norm_mes_end_box2]
             self.calibration_start_boxes = [self.calibration_start_box1, self.calibration_start_box2]
             self.calibration_end_boxes = [self.calibration_end_box1, self.calibration_end_box2]
-            self.normation_refresh_buttons = [self.normation_refresh_button1, self.normation_refresh_button2]
-
+            self.normalization_refresh_buttons = [self.normation_refresh_button1, self.normation_refresh_button2]
+            self.copy_norm_config_buttons = [self.copy_norm_config_1, self.copy_norm_config_2]
+            self.lim_distance_boxes = [self.lim_distance_box1, self.lim_distance_box2]
 
         # Setting up the connections for the log file
-        for i in self.findChildren(QPushButton):
-            i.clicked.connect(self.button_clicked_log)
-        for i in self.findChildren(QComboBox):
-            i.currentTextChanged.connect(self.combobox_changed_log)
+        if True:
+            for i in self.findChildren(QPushButton):
+                i.clicked.connect(self.button_clicked_log)
+            for i in self.findChildren(QComboBox):
+                i.currentTextChanged.connect(self.combobox_changed_log)
 
         # Configuring both plot-widgets
         if True:
@@ -363,17 +380,24 @@ class UI(QMainWindow):
         # Setting up the SecondData classes
         if True:
             self.second_data_classes = list()
-            for i in range(self.plot_count):
+            for plot in range(self.plot_count):
                 self.second_data_classes.append([
                     SecondData(self.samples_per_sequence,
                                self.shifts,
                                self.sequence_reps,
                                self.length,
-                               cable_constants[i]),
+                               cable_length_constant=cable_constants[plot],
+                               norm_measurement_start=self.norm_mes_start_boxes[plot].value(),
+                               norm_measurement_end=self.norm_mes_end_boxes[plot].value(),
+                               calibration_start=self.calibration_start_boxes[plot].value(),
+                               calibration_end=self.calibration_end_boxes[plot].value(),
+                               distance_limit=self.lim_distance_boxes[plot].value(),
+                               x_data_request=self.x_data_boxes[plot].currentText(),
+                               ),
                     QThread()
                     ])
-                self.second_data_classes[i][0].moveToThread(self.second_data_classes[i][1])
-                self.second_data_classes[i][1].start()
+                self.second_data_classes[plot][0].moveToThread(self.second_data_classes[plot][1])
+                self.second_data_classes[plot][1].start()
 
         # Other Connections:
         if True:
@@ -383,7 +407,7 @@ class UI(QMainWindow):
                 self.x_data_boxes[plot].currentTextChanged.connect(self.x_data_refresher_slots[plot])
 
                 # Refreshing the values for normalized interpolation:
-                self.normation_refresh_buttons[plot].clicked.connect(self.refresh_norm_values_slots[plot])
+                self.normalization_refresh_buttons[plot].clicked.connect(self.refresh_norm_values_slots[plot])
 
                 self.x_data_boxes[plot].setCurrentIndex(0)
 
@@ -426,9 +450,11 @@ class UI(QMainWindow):
             self.counter_received = 0
             self.bytes_received = 0
 
-        self.request1 = 0
-        self.request2 = 0
-        self.requests = [0, 0]
+        # Setting up the requests for the plot widgets
+        if True:
+            self.request1 = 0
+            self.request2 = 0
+            self.requests = [0, 0]
 
         # Setting up the qss style sheet
         f = open('resources/pams_style.qss', 'r')
@@ -481,15 +507,21 @@ class UI(QMainWindow):
 
         # Setting up the Audio Emitter:
         if True:
-            self.sinSender = SineAudioEmitter(44100, 10, self.frequency_slider.value(), self.volume_slider.value())
+            self.sinSender = SineAudioEmitter(44100, 10, self.freq_number.intValue(), self.volume_slider.value())
             # self.start_sound_button.clicked.connect(self.sinSender.start)
-            self.start_sound_button.clicked.connect(self.initialize_audio_player)
-            self.frequency_slider.valueChanged.connect(self.sinSender.set_frequency)
+            self.start_sound_button.clicked.connect(self.start_audio_player)
             self.volume_slider.valueChanged.connect(self.sinSender.set_volume)
-            self.stop_sound_button.clicked.connect(self.sinSender.stop)
-            self.second_data_classes[0][0].distance_ready.connect(self.set_audio_frequency)
-            self.second_data_classes[0][0].distance_ready.connect(self.set_audio_volume)
+            self.stop_sound_button.clicked.connect(self.stop_audio_player)
 
+            self.sound_range_start = self.sound_bar_start_box.value()
+            self.sound_range_stop = self.sound_bar_end_box.value()
+            self.sound_button_number = self.button_number_box.value()
+            self.first_sound_button = self.first_button_box.value()
+            self.sound_range_length = self.sound_range_stop - self.sound_range_start
+            self.sound_button_span = self.sound_range_length / (self.sound_button_number - 1)
+
+            self.refresh_sound_values_button.clicked.connect(self.refresh_sound_values)
+            self.magic_finder_button.clicked.connect(self.magic_sound_values_refresh)
 
         # Setting up the distance plot calculation
         if True:
@@ -499,9 +531,12 @@ class UI(QMainWindow):
             # refresh_distance_button
             self.refresh_distance_button.clicked.connect(self.refresh_distance_array)
 
+        # Setting up the copy to plot x buttons
+        for plot in range(self.plot_count):
+            self.copy_norm_config_buttons[plot].pressed.connect(self.copy_norm_config_slots[plot])
+
         # Setting up the animations for QTabWidget
-        self.animate_tab_buttons = True
-        if self.animate_tab_buttons:
+        if True:
             self.tabWidget.tabBar().installEventFilter(self)
             self.tabBar = self.tabWidget.tabBar()
             tabcount = self.tabBar.count()
@@ -566,6 +601,7 @@ class UI(QMainWindow):
 
         if self.inf_line_boxes[plot].isChecked():
             self.inf_lines[plot].setPos(data[2])
+
         self.counters_plot[plot] += 1
         if self.plot_home_requests[plot]:
             logging.info(f'autoRange requested on plot: {plot}, autoRanging now')
@@ -711,8 +747,8 @@ class UI(QMainWindow):
     def make_distance_array(self, data, plot):
         self.distance_values.append(data[1])
         self.distance_time_values.append(data[0])
-        l_v = self.last_n_values[plot]
-        if self.requests[0] in (3, 4):
+        l_v = self.last_n_values_boxes[plot].value()
+        if self.requests[plot] in (3, 4):
             self.plot_signal((np.array(self.distance_time_values)[-l_v:], np.array(self.distance_values)[-l_v:]), plot)
 
     def refresh_distance_array(self):
@@ -725,12 +761,12 @@ class UI(QMainWindow):
         self.second_data_classes[plot][0].calibration_end = self.calibration_end_boxes[plot].value()
         self.second_data_classes[plot][0].mes_start = self.norm_mes_start_boxes[plot].value()
         self.second_data_classes[plot][0].mes_end = self.norm_mes_end_boxes[plot].value()
+        self.second_data_classes[plot][0].lim_distance = self.lim_distance_boxes[plot].value()
         y_ref = lambda data: self.second_data_classes[plot][0].refresh_y_ref(data)
         self.second_data_classes[plot][0].unconnect_receiver_from_y_ref.connect(
             lambda: unconnect(self.receiver.irf_measurement_ready, y_ref))
         self.receiver.irf_measurement_ready.connect(y_ref)
         self.second_data_classes[plot][0].block_norm_signals = True
-
 
     def start_receiver(self):
         self.receiver.start()
@@ -787,6 +823,59 @@ class UI(QMainWindow):
             self.plot_starter(0)
         if self.stop_plot2.isEnabled():
             self.plot_starter(1)
+
+    def start_audio_player(self):
+        self.start_sound_button.setEnabled(False)
+        self.plot_breaker(plot=1)
+        self.refresh_norm_values(1)
+        self.receiver.irf_measurement_ready.connect(self.second_data_classes[1][0].distance_norm)
+        self.second_data_classes[1][0].distance_ready.connect(self.set_distance_bar)
+        self.second_data_classes[1][0].distance_ready.connect(self.set_audio_frequency)
+        self.sinSender.start()
+        self.stop_sound_button.setEnabled(True)
+
+    def stop_audio_player(self):
+        self.stop_sound_button.setEnabled(False)
+        self.sinSender.stop()
+        unconnect(self.receiver.irf_measurement_ready, self.second_data_classes[1][0].distance_norm)
+        unconnect(self.second_data_classes[1][0].distance_ready, self.set_distance_bar)
+        unconnect(self.second_data_classes[1][0].distance_ready, self.set_audio_frequency)
+        self.start_sound_button.setEnabled(True)
+
+    def refresh_sound_values(self):
+        self.sound_range_start = self.sound_bar_start_box.value()
+        self.sound_range_stop = self.sound_bar_end_box.value()
+        self.sound_button_number = self.button_number_box.value()
+        self.first_sound_button = self.first_button_box.value()
+        self.sound_range_length = self.sound_range_stop - self.sound_range_start
+        self.sound_button_span = self.sound_range_length / (self.sound_button_number - 1)
+
+    def magic_sound_values_refresh(self):
+        pass
+
+    def set_audio_frequency(self, distance):
+        dist = distance[1]
+        n = (dist - self.sound_range_start) / self.sound_button_span + self.first_sound_button
+        freq = int(2**((n - 49) / 12)*440) if dist > 0 else 0
+        self.freq_number.display(freq)
+        self.sinSender.set_frequency(freq)
+        self.dist_number.display(dist)
+
+    def set_audio_volume(self, data):
+        vol = 0 if data[2] - 25 < 0 else 1
+        self.volume_slider.setValue(int(vol))
+
+    def set_distance_bar(self, distance):
+        distance_span = self.norm_mes_end_box1.value() - self.norm_mes_start_box1.value()
+        self.distance_bar.setValue(int(distance[1] / distance_span * 10000))
+
+    def copy_norm_config(self, plot):
+        print(plot)
+        self.norm_mes_start_boxes[~plot & 1].setValue(self.norm_mes_start_boxes[plot].value())
+        self.norm_mes_end_boxes[~plot & 1].setValue(self.norm_mes_end_boxes[plot].value())
+        self.calibration_start_boxes[~plot & 1].setValue(self.calibration_start_boxes[plot].value())
+        self.calibration_end_boxes[~plot & 1].setValue(self.calibration_end_boxes[plot].value())
+        self.lim_distance_boxes[~plot & 1].setValue(self.lim_distance_boxes[plot].value())
 
     def rec_connecting(self):
         self.con_status.setStyleSheet('color: black')
@@ -851,26 +940,6 @@ class UI(QMainWindow):
         byties = psutil.net_io_counters(pernic=True)['Ethernet 2'][1]
         self.ethernet_rate.setText(f'Ethernet 2: {round((byties - self.bytes_received) * 8e-06 * 2, 1)} MBit/s')
         self.bytes_received = byties
-
-    def initialize_audio_player(self):
-        for plot in range(2):
-            self.plot_breaker(plot=plot)
-        self.refresh_norm_values(0)
-        distance_span = self.norm_mes_end_box1.value() - self.norm_mes_start_box1.value()
-        show_distance = lambda distance: print(int(distance[1]/distance_span))
-        self.receiver.irf_measurement_ready.connect(self.second_data_classes[0][0].distance_norm)
-        self.second_data_classes[0][0].distance_ready.connect(show_distance)
-
-
-
-
-    def set_audio_frequency(self, data):
-        freq = (data[1] - 0.15) * 5000
-        self.frequency_slider.setValue(int(freq))
-
-    def set_audio_volume(self, data):
-        vol = 0 if data[2] - 25 < 0 else (data[2] - 25) * 2
-        self.volume_slider.setValue(int(vol))
 
     def close_button_hover(self, event):
         self.close_button.setIcon(self.clos_ic_white)

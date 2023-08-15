@@ -9,6 +9,7 @@ from scipy.fft import fft, ifft
 from scipy.interpolate import BarycentricInterpolator as bary
 from scipy.constants import speed_of_light
 from scipy.signal.windows import hann
+from scipy.signal import argrelmax
 
 import PyQt5
 from PyQt5.QtCore import QPointF
@@ -199,8 +200,9 @@ def exact_polynom_interp_max(t_data,
     t, y = t_data, y_data
 
     # Get the sorted indexes of the three highest y-Values
-    m = np.argmax(y[interval]) + interval.start
-    m_i = [m-1, m, m+1]
+    e_i = argrelmax(y[interval])[0] + interval.start
+    m = e_i[np.argmax(y[e_i])]
+    m_i = [m-1, m, m+1]                                         # if m != 0 else [m, m+1, m+2]
 
 
     # load the x and y values into x_ and y_
