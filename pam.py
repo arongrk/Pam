@@ -26,9 +26,6 @@ from pams_functions import Handler, averager, exact_polynom_interp_max, unconnec
 from Audioslider import SineAudioEmitter
 
 
-resource_path = "C:/Users/dasa/PycharmProjects/MatlabData/resources/"
-
-
 class UI(QMainWindow):
 
     def __init__(self):
@@ -313,6 +310,8 @@ class UI(QMainWindow):
             self.magic_finder_button.clicked.connect(self.magic_sound_values_refresh)
 
             self.audio_player_running = False
+
+            self.signal_filter = 1
 
         # Setting up the distance plot calculation
         if True:
@@ -652,16 +651,34 @@ class UI(QMainWindow):
             self.receiver.irf_measurement_ready.connect(self.second_data_classes[1][0].distance_norm)
         dialog = MagicValuesFinder(self, second_data=self.second_data_classes[1][0])
         dialog.exec()
+
+        self.sound_range_start = dialog.start_value
+        self.sound_range_stop = dialog.end_value
+        self.sound_button_number = dialog.buttons
+        self.first_sound_button = dialog.button0
+        self.sound_range_length = self.sound_range_stop - self.sound_range_start
+        self.sound_button_span = self.sound_range_length / (self.sound_button_number - 1)
+        self.sound_bar_start_box.setValue(self.sound_range_start)
+        self.sound_bar_end_box.setValue(self.sound_range_stop)
+        self.button_number_box.setValue(self.sound_button_number)
+        self.first_button_box.setValue(self.first_sound_button)
+
+        logging.info(f'Magic finder values: \nstart: {dialog.start_value}, end: {dialog.end_value},'
+                     f' buttons: {dialog.buttons}, button0: {dialog.button0}')
+
         if not self.audio_player_running:
             unconnect(self.receiver.irf_measurement_ready, self.second_data_classes[1][0].distance_norm)
 
     def set_audio_frequency(self, distance):
-        dist = distance[1]
-        n = (dist - self.sound_range_start) / self.sound_button_span + self.first_sound_button
-        freq = int(2**((n - 49) / 12)*440) if dist > 0 else 0
-        self.freq_number.display(freq)
-        self.sinSender.set_frequency(freq)
-        self.dist_number.display(dist)
+        self.signal_filter += 1
+        if self.signal_filter == 5:
+            dist = distance[1]
+            n = (dist - self.sound_range_start) / self.sound_button_span + self.first_sound_button
+            freq = int(2**((n - 49) / 12)*440) if dist > 0 else 0
+            self.freq_number.display(freq)
+            self.sinSender.set_frequency(freq)
+            self.dist_number.display(dist)
+            self.signal_filter = 0
 
     def set_audio_volume(self, data):
         vol = 0 if data[2] - 25 < 0 else 1

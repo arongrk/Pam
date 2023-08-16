@@ -52,7 +52,6 @@ class MainWindow(QMainWindow):
             self.sine_plot.disableAutoRange()
             self.sine_plot.setYRange(-1, 1)
             self.sine_plot.setXRange(0, self.SAMPLE_RATE/100)
-            self.line = self.sine_plot.plot_signal(wave, )
 
         if True: # SineAudioEmitter class setup
             self.sinSender = SineAudioEmitter(self.SAMPLE_RATE, 10)
@@ -84,6 +83,7 @@ class MainWindow(QMainWindow):
     def refresh_current_device(self):
         self.sinSender.stop()
         self.sinSender.DEVICE = 1
+
     def change_plot(self, data: tuple):
         self.line.setData(np.arange(data[1]), data[0])
         self.sine_plot.setXRange(0, data[1])
@@ -181,6 +181,8 @@ class SineAudioEmitter(QThread):
             # Set up the frequency values and a sweep in case the frequency changed
             if frequency == self.frequency:
                 values = np.arange(1, num_samp+1, dtype=npfloat32)/samprate*pi2*frequency + (values[-1] % pi2)
+            elif self.frequency == 0:
+                volume_array = np.linspace(volume, self.volume, num_samp, dtype=npfloat32)
             else:
                 values = pi2 * np.cumsum(np.linspace(frequency, self.frequency, num_samp)) / samprate+(values[-1] % pi2)
             frequency = self.frequency

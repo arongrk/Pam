@@ -18,7 +18,7 @@ from scipy.signal.windows import hann
 from scipy.signal import argrelmax
 
 import PyQt5
-from PyQt5.QtCore import QPointF, QSizeF, QTimer, pyqtSignal, QObject, QThread
+from PyQt5.QtCore import QPointF, QSizeF, QTimer, pyqtSignal, QObject, QThread, Qt
 from pyqtgraph import AxisItem
 
 
@@ -551,7 +551,6 @@ class MagicValuesFinder(QDialog):
         super().__init__(parent)
         uic.loadUi('resources/magic_finder_dialogue.ui', self)
 
-        self.step = 0
         self.maximum_page = 0
 
         self.timer = QTimer()
@@ -561,7 +560,9 @@ class MagicValuesFinder(QDialog):
         self.next_button.clicked.connect(self.next_page)
         self.previous_button.clicked.connect(self.previous_page)
         self.start_button.clicked.connect(self.start)
-        self.start_next_button1.clicked.connect(self.start2)
+        self.start_next_button1.clicked.connect(self.start)
+        self.confirm_button.clicked.connect(self.confirm_buttons)
+        self.confirm_and_exit_button.clicked.connect(self.confirm_exit)
 
         self.second_data = second_data
         self.data_array = deque()
@@ -571,91 +572,137 @@ class MagicValuesFinder(QDialog):
         self.buttons = 0
         self.button0 = 0
 
+        self.stacked_widget.currentChanged.connect(self.change_page_number)
+
     def collect_data(self, data):
         self.data_array.append(data[1])
 
     def start(self):
-        print('start')
-        self.stacked_widget.setCurrentIndex(1)
-        self.maximum_page = 1
+        page = self.stacked_widget.currentIndex()
+
+        self.stacked_widget.setCurrentIndex(page + 1)
+        self.maximum_page = page + 1
 
         self.remaining_time = 3
         self.timer.start(1000)
-        p1_label2_settext = lambda: self.p1_label2.setText(str(self.remaining_time))
-        self.timer.timeout.connect(p1_label2_settext)
-        self.timer_ready.connect(lambda: unconnect(self.timer.timeout, p1_label2_settext))
+        self.timer.timeout.connect(self.time_label_text)
+        self.timer_ready.connect(lambda: unconnect(self.timer.timeout, self.time_label_text))
         self.timer_ready.connect(self.mes_start)
 
     def mes_start(self):
-        print('mes_start')
         unconnect(self.timer_ready, self.mes_start)
-        self.p1_label1.setText('')
-        self.p1_label2.setText('Hold!')
+
+        page = self.stacked_widget.currentIndex()
+
+        match page:
+            case 1:
+                self.p1_label1.setText('')
+                self.p1_label2.setText('Hold!')
+            case 4:
+                self.p3_label1.setText('')
+                self.p3_label2.setText('Hold!')
 
         self.second_data.distance_ready.connect(self.collect_data)
 
         self.remaining_time = 1
         self.timer.start(1000)
-        self.timer_ready.connect(self.mes_start_end)
-
-    def mes_start_end(self):
-        print('mes_start_end')
-        unconnect(self.second_data.distance_ready, self.collect_data)
-        unconnect(self.timer_ready, self.mes_start_end)
-        array = np.array(self.data_array)
-        self.data_array.clear()
-
-        self.stacked_widget.setCurrentIndex(2)
-        self.start_value = np.average(np.average(array))
-        self.start_value_box.setValue(self.start_value)
-
-    def start2(self):
-        print('start2')
-        self.stacked_widget.setCurrentIndex(3)
-        self.maximum_page = 3
-
-        self.remaining_time = 3
-        self.timer.start(1000)
-        p2_label2_settext = lambda: self.p3_label2.setText(str(self.remaining_time))
-        self.timer.timeout.connect(p2_label2_settext)
-        self.timer_ready.connect(lambda: unconnect(self.timer.timeout, p2_label2_settext))
         self.timer_ready.connect(self.mes_end)
 
     def mes_end(self):
-        print('mes_end')
-        unconnect(self.timer_ready, self.mes_end)
-        self.p3_label1.setText('')
-        self.p3_label2.setText('Hold!')
-
-        self.second_data.distance_ready.connect(self.collect_data)
-
-        self.remaining_time = 1
-        self.timer.start(1000)
-        self.timer_ready.connect(self.mes_end_end)
-
-    def mes_end_end(self):
-        print('mes_end_end')
         unconnect(self.second_data.distance_ready, self.collect_data)
-        unconnect(self.timer_ready, self.mes_end_end)
+        unconnect(self.timer_ready, self.mes_end)
+
+        page = self.stacked_widget.currentIndex()
+
         array = np.array(self.data_array)
-        print(len(array))
         self.data_array.clear()
 
-        self.stacked_widget.setCurrentIndex(4)
-        self.end_value = np.average(np.average(array))
-        self.end_value_box.setValue(self.end_value)
+        match page:
+            case 1:
+                self.stacked_widget.setCurrentIndex(2)
+
+                self.start_value = np.average(np.average(array))
+                self.start_value_box.setValue(self.start_value)
+
+                self.maximum_page = 3
+                self.previous_button.setEnabled(True)
+                self.next_button.setEnabled(True)
+            case 4:
+                self.stacked_widget.setCurrentIndex(5)
+
+                self.end_value = np.average(np.average(array))
+                self.end_value_box.setValue(self.end_value)
+
+                self.maximum_page = 6
+                self.next_button.setEnabled(True)
+
+    def time_label_text(self):
+        page = self.stacked_widget.currentIndex()
+        if page == 1:
+            self.p1_label2.setText(str(self.remaining_time))
+        if page == 4:
+            self.p3_label2.setText(str(self.remaining_time))
+
+    def confirm_buttons(self):
+        if round(self.start_value, 2) != self.start_value_box.value():
+            self.start_value = self.start_value_box.value()
+        if round(self.end_value, 2) != self.end_value_box.value():
+            self.end_value = self.end_value_box.value()
+
+        self.start_value_box2.setValue(self.start_value_box.value())
+        self.end_value_box2.setValue(self.end_value_box.value())
+        self.button_number_box2.setValue(self.button_number_box.value()+2)
+        self.null_button_box2.setValue(self.null_button_box.value())
+
+        self.stacked_widget.setCurrentIndex(7)
+        self.maximum_page = 7
+
+    def confirm_exit(self):
+        if round(self.start_value, 2) != self.start_value_box2.value():
+            self.start_value = self.start_value_box2.value()
+        if round(self.end_value, 2) != self.end_value_box2.value():
+            self.end_value = self.end_value_box2.value()
+        self.buttons = self.null_button_box2.value()
+        self.button0 = self.button_number_box2.value()
+        self.accept()
+        # self.close()
 
     def next_page(self):
-        self.stacked_widget.setCurrentIndex(self.stacked_widget.currentIndex() + 1)
         self.previous_button.setEnabled(True)
+        index = self.stacked_widget.currentIndex()
+
+        match index:
+            case 0:
+                self.stacked_widget.setCurrentIndex(2)
+            case 3:
+                self.stacked_widget.setCurrentIndex(5)
+            case _:
+                self.stacked_widget.setCurrentIndex(index + 1)
+
         if self.stacked_widget.currentIndex() in (self.stacked_widget.count()-1, self.maximum_page):
             self.next_button.setEnabled(False)
 
     def previous_page(self):
-        self.stacked_widget.setCurrentIndex(self.stacked_widget.currentIndex() - 1)
         self.next_button.setEnabled(True)
+        index = self.stacked_widget.currentIndex()
+
+        match index:
+            case 2:
+                self.stacked_widget.setCurrentIndex(0)
+            case 5:
+                self.stacked_widget.setCurrentIndex(3)
+            case _:
+                self.stacked_widget.setCurrentIndex(index - 1)
+
         if self.stacked_widget.currentIndex() == 0:
             self.previous_button.setEnabled(False)
+
+    def change_page_number(self):
+        index = self.stacked_widget.currentIndex()
+        if index not in (1, 4):
+            self.page_number.setText(f'{index+1}/{self.stacked_widget.count()}')
+        else:
+            self.page_number.setText('')
 
     def update_timer(self):
         self.remaining_time -= 1
@@ -715,6 +762,3 @@ if __name__ == '__main__':
     test_dict = {'name': 'bron', 'age': 18, 'height': 195}
     test_dict_c = change_dict(test_dict, 1, 2, 3)
     print(test_dict_c)
-
-
-    pass
