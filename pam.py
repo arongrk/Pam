@@ -15,229 +15,18 @@ from collections import deque
 from PyQt5.QtCore import *
 from PyQt5.QtSvg import QSvgWidget
 from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QSizePolicy, QSplashScreen, QHBoxLayout, QPushButton, \
-    QBoxLayout, QCheckBox, QLabel, QLineEdit, QComboBox, QSpinBox, QGroupBox, QDoubleSpinBox
+    QBoxLayout, QCheckBox, QLabel, QLineEdit, QComboBox, QSpinBox, QGroupBox, QDoubleSpinBox, QDialog
 from PyQt5.QtGui import QIcon, QPixmap, QColor, QFontDatabase, QFont
 from PyQt5 import uic
 from pyqtgraph import mkPen, PlotWidget, InfiniteLine, ViewBox
 
 import definitions
 from pams_functions import Handler, averager, exact_polynom_interp_max, unconnect, zero_padding, \
-    CustomAxis, compare_sender, check_args
+    CustomAxis, compare_sender, check_args, MagicValuesFinder, SecondData, Receiver
 from Audioslider import SineAudioEmitter
 
 
 resource_path = "C:/Users/dasa/PycharmProjects/MatlabData/resources/"
-
-
-class Receiver(QThread):
-    measurement_ready = pyqtSignal(tuple)
-    irf_measurement_ready = pyqtSignal(tuple)
-    st_connecting = pyqtSignal()
-    st_connected = pyqtSignal()
-    st_connect_failed = pyqtSignal(str)
-    packageReceived = pyqtSignal()
-    packageLost = pyqtSignal()
-
-    def __init__(self, shifts, sequence_repetitions, samples_per_sequence, length, port=9090, ip_address='192.168.1.1'):
-        QThread.__init__(self)
-
-        self.ip = ip_address
-        self.port = port
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 2 ** 18)
-
-        self.shifts = shifts
-        self.s_reps = sequence_repetitions
-        self.sps = samples_per_sequence
-        self.mes_len = length
-        self.set_len = self.shifts * self.s_reps * self.sps
-
-        self.stop_receive = False
-
-        self.t0 = 0
-
-    def connect(self):
-        try:
-            self.st_connecting.emit()
-            self.sock.bind((self.ip, self.port))
-            self.st_connected.emit()
-        except OSError as err:
-            if err.errno == 10048:
-                self.st_connect_failed.emit('os_exists')
-            else:
-                self.st_connect_failed.emit('os_unknown')
-        except TypeError:
-            self.st_connect_failed.emit('type')
-
-    def run(self):
-        handler = Handler(self.sock, shifts=ceil(self.shifts/80)*80, sequence_reps=self.s_reps,
-                          samples_per_sequence=self.sps)
-        g = handler.assembler_2()
-        self.t0 = time.time()
-        while not self.stop_receive:
-            r = next(g)
-            if not r:
-                self.packageLost.emit()
-            else:
-                self.packageReceived.emit()
-                time_stamp = round(time.time() - self.t0, 10)
-                y_mes_data = np.frombuffer(r, dtype=np.int32)[:self.set_len] * 8.192 / pow(2, 18)
-                x_mes_data = np.linspace(0, self.mes_len / self.sps * 2e-10 * self.set_len, self.set_len)
-                self.measurement_ready.emit((x_mes_data, y_mes_data, time_stamp))
-                y_irf_data = averager(y_mes_data, self.shifts, self.sps, self.s_reps)
-                y_irf_data -= np.average(y_irf_data[-100:])
-                x_irf_data = np.arange(1, self.shifts + 1) / 4.975e+09
-                self.irf_measurement_ready.emit((x_irf_data, y_irf_data, time_stamp))
-        self.sock.close()
-
-    def stop(self):
-        self.stop_receive = True
-        # self.quit()
-        # self.wait()
-
-
-class SecondData(QObject):
-
-    # Signals for SecondData
-    if True:
-        measurement_ready = pyqtSignal(tuple)
-        irf_measurement_ready = pyqtSignal(tuple)
-        distance_ready = pyqtSignal(tuple)
-        irf_interp_ready = pyqtSignal(tuple)
-        unconnect_receiver_from_y_ref = pyqtSignal()
-
-    def __init__(self, samples_per_sequence: int, shifts: int, sequence_reps: int, length: int,
-                 cable_length_constant: float, norm_measurement_start: float, norm_measurement_end: float,
-                 calibration_start: float, calibration_end: float, distance_limit: int, x_data_request: str):
-
-        QObject.__init__(self)
-
-        self.sps = samples_per_sequence
-        self.shifts = shifts
-        self.sr = sequence_reps
-        self.mes_len = length
-
-        self.cable_constant = cable_length_constant
-
-        self.lim_distance = distance_limit
-
-        self.calibration_start = calibration_start
-        self.calibration_end = calibration_end
-
-        self.mes_start = norm_measurement_start
-        self.mes_end = norm_measurement_end
-
-        self.x_data_request = x_data_request
-
-        self.YRefPos = np.array([])
-
-        self.idx_start, self.idx_stop = None, None
-
-        self.block_norm_signals = False
-        
-    def raw_data(self, data):
-        match self.x_data_request:
-            case 'time':
-                self.measurement_ready.emit((data[0], data[1]))
-            case 'distance':
-                self.measurement_ready.emit((data[0]*speed_of_light/2, data[1]))
-            case 'value no.':
-                self.measurement_ready.emit((np.arange(len(data[1])), data[1]))
-    
-    def irf_data(self, data):
-        match self.x_data_request:
-            case 'time':
-                self.irf_measurement_ready.emit((data[0], data[1]))
-            case 'distance':
-                self.irf_measurement_ready.emit((data[0]*speed_of_light/2, data[1]))
-            case 'value no.':
-                self.irf_measurement_ready.emit((np.arange(len(data[1])), data[1]))
-
-    def distance(self, data):
-        t = data[2]
-        data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts)
-        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), True, self.cable_constant)
-        match self.x_data_request:
-            case 'duration':
-                self.distance_ready.emit((t, exact_max[0], exact_max[1]))
-            case 'time' | 'value no.':
-                logging.warning(f'when y-data is \"distance\" x-data cannot be {self.x_data_request}')
-
-    def irf_interp(self, data):
-        match self.x_data_request:
-            case 'time':
-                data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts)
-            case 'value no.':
-                data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts, t_data_returned=2)
-            case 'distance':
-                data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts, t_data_returned=1)
-        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), False)
-        self.irf_interp_ready.emit((data[0], data[1], exact_max))
-
-    def irf_interp_norm(self, data):
-        if not self.block_norm_signals:
-            match self.x_data_request:
-                case 'time':
-                    data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos, 0)
-                    idx_start = np.argwhere(data[0] > self.mes_start/speed_of_light*2)[0][0]
-                    idx_stop = np.argwhere(data[0] > self.mes_end/speed_of_light*2)[0][0]
-                case 'distance':
-                    data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos, 1)
-                    idx_start = np.argwhere(data[0] > self.mes_start)[0][0]
-                    idx_stop = np.argwhere(data[0] > self.mes_end)[0][0]
-                case 'value no.':
-                    data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos, 1)
-                    idx_start = np.argwhere(data[0] > self.mes_start)[0][0]
-                    idx_stop = np.argwhere(data[0] > self.mes_end)[0][0]
-                    data = (np.arange(len(data[1])), data[1])
-            exact_max = exact_polynom_interp_max(data[0],
-                                                 np.absolute(data[1]),
-                                                 get_y=True,
-                                                 interval=slice(idx_start, idx_stop))
-            self.irf_interp_ready.emit((data[0], data[1], exact_max[0], exact_max[1]))
-
-    def distance_norm(self, data):
-        if not self.block_norm_signals:
-            t = data[2]
-            data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
-            idx_start = np.argwhere(data[0] > self.mes_start/speed_of_light*2)[0][0]
-            idx_stop = np.argwhere(data[0] > self.mes_end/speed_of_light*2)[0][0]
-            exact_max = exact_polynom_interp_max(data[0],
-                                                 np.absolute(data[1]),
-                                                 get_distance=True,
-                                                 get_y=True,
-                                                 interval=slice(idx_start, idx_stop),
-                                                 negative_constant=self.mes_start)
-
-            logging.info(f'idx_start: {idx_start}, idx_stop: {idx_stop}')
-            if exact_max[1] < self.lim_distance:
-                self.distance_ready.emit((t, 0))
-            else:
-                self.distance_ready.emit((t, exact_max[0]))
-
-    def return_functions(self):
-        return self.raw_data, self.irf_data, self.distance, self.irf_interp,  self.irf_interp_norm, self.distance_norm
-
-    def refresh_y_ref(self, data):
-        self.unconnect_receiver_from_y_ref.emit()
-        self.refresh_idx_lim(data)
-        yData = data[1]
-        tData = data[0]
-        cal_start = np.argwhere(tData > self.calibration_start/speed_of_light*2)[0][0]
-        cal_end = np.argwhere(tData > self.calibration_end/speed_of_light*2)[0][0]
-        yData[:cal_start] = 0
-        yData[cal_start-11:cal_start] = np.linspace(0, yData[cal_start], 11)
-        yData[cal_end:cal_end+11] = np.linspace(yData[cal_start], 0, 11)
-        yData[cal_end+11:] = 0
-        Ly = len(yData)
-        YRefTemp = fft(yData, Ly) / Ly
-        self.YRefPos = YRefTemp[0:trunc(Ly / 2) + 1]
-        self.block_norm_signals = False
-
-    def refresh_idx_lim(self, data):
-        self.idx_start = np.argwhere(data[0] > self.mes_start/speed_of_light*2)[0][0]
-        self.idx_stop = np.argwhere(data[0] > self.mes_end/speed_of_light*2)[0][0]
-        logging.info(f'idx_start: {self.idx_start}, idx_stop: {self.idx_stop}')
 
 
 class UI(QMainWindow):
@@ -522,6 +311,8 @@ class UI(QMainWindow):
 
             self.refresh_sound_values_button.clicked.connect(self.refresh_sound_values)
             self.magic_finder_button.clicked.connect(self.magic_sound_values_refresh)
+
+            self.audio_player_running = False
 
         # Setting up the distance plot calculation
         if True:
@@ -825,6 +616,8 @@ class UI(QMainWindow):
             self.plot_starter(1)
 
     def start_audio_player(self):
+        self.audio_player_running = True
+
         self.start_sound_button.setEnabled(False)
         self.plot_breaker(plot=1)
         self.refresh_norm_values(1)
@@ -842,6 +635,8 @@ class UI(QMainWindow):
         unconnect(self.second_data_classes[1][0].distance_ready, self.set_audio_frequency)
         self.start_sound_button.setEnabled(True)
 
+        self.audio_player_running = False
+
     def refresh_sound_values(self):
         self.sound_range_start = self.sound_bar_start_box.value()
         self.sound_range_stop = self.sound_bar_end_box.value()
@@ -851,7 +646,14 @@ class UI(QMainWindow):
         self.sound_button_span = self.sound_range_length / (self.sound_button_number - 1)
 
     def magic_sound_values_refresh(self):
-        pass
+        if not self.audio_player_running:
+            self.plot_breaker(plot=1)
+            self.refresh_norm_values(1)
+            self.receiver.irf_measurement_ready.connect(self.second_data_classes[1][0].distance_norm)
+        dialog = MagicValuesFinder(self, second_data=self.second_data_classes[1][0])
+        dialog.exec()
+        if not self.audio_player_running:
+            unconnect(self.receiver.irf_measurement_ready, self.second_data_classes[1][0].distance_norm)
 
     def set_audio_frequency(self, distance):
         dist = distance[1]

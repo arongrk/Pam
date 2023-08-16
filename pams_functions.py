@@ -1,10 +1,16 @@
 import ast
+import logging
 import pickle
+import socket
 import time
 import inspect
-import numpy as np
-from math import trunc
+from collections import deque
 
+import numpy as np
+from math import trunc, ceil
+
+from PyQt5 import uic
+from PyQt5.QtWidgets import QDialog
 from scipy.fft import fft, ifft
 from scipy.interpolate import BarycentricInterpolator as bary
 from scipy.constants import speed_of_light
@@ -12,7 +18,7 @@ from scipy.signal.windows import hann
 from scipy.signal import argrelmax
 
 import PyQt5
-from PyQt5.QtCore import QPointF
+from PyQt5.QtCore import QPointF, QSizeF, QTimer, pyqtSignal, QObject, QThread
 from pyqtgraph import AxisItem
 
 
@@ -92,6 +98,217 @@ class Handler:
             else:
                 # no marker found, simply advance the pointer
                 pointer += byte_pack_len
+
+
+class SecondData(QObject):
+
+    # Signals for SecondData
+    if True:
+        measurement_ready = pyqtSignal(tuple)
+        irf_measurement_ready = pyqtSignal(tuple)
+        distance_ready = pyqtSignal(tuple)
+        irf_interp_ready = pyqtSignal(tuple)
+        unconnect_receiver_from_y_ref = pyqtSignal()
+
+    def __init__(self, samples_per_sequence: int, shifts: int, sequence_reps: int, length: int,
+                 cable_length_constant: float, norm_measurement_start: float, norm_measurement_end: float,
+                 calibration_start: float, calibration_end: float, distance_limit: int, x_data_request: str):
+
+        QObject.__init__(self)
+
+        self.sps = samples_per_sequence
+        self.shifts = shifts
+        self.sr = sequence_reps
+        self.mes_len = length
+
+        self.cable_constant = cable_length_constant
+
+        self.lim_distance = distance_limit
+
+        self.calibration_start = calibration_start
+        self.calibration_end = calibration_end
+
+        self.mes_start = norm_measurement_start
+        self.mes_end = norm_measurement_end
+
+        self.x_data_request = x_data_request
+
+        self.YRefPos = np.array([])
+
+        self.idx_start, self.idx_stop = None, None
+
+        self.block_norm_signals = False
+
+    def raw_data(self, data):
+        match self.x_data_request:
+            case 'time':
+                self.measurement_ready.emit((data[0], data[1]))
+            case 'distance':
+                self.measurement_ready.emit((data[0]*speed_of_light/2, data[1]))
+            case 'value no.':
+                self.measurement_ready.emit((np.arange(len(data[1])), data[1]))
+
+    def irf_data(self, data):
+        match self.x_data_request:
+            case 'time':
+                self.irf_measurement_ready.emit((data[0], data[1]))
+            case 'distance':
+                self.irf_measurement_ready.emit((data[0]*speed_of_light/2, data[1]))
+            case 'value no.':
+                self.irf_measurement_ready.emit((np.arange(len(data[1])), data[1]))
+
+    def distance(self, data):
+        t = data[2]
+        data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts)
+        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), True, self.cable_constant)
+        match self.x_data_request:
+            case 'duration':
+                self.distance_ready.emit((t, exact_max[0], exact_max[1]))
+            case 'time' | 'value no.':
+                logging.warning(f'when y-data is \"distance\" x-data cannot be {self.x_data_request}')
+
+    def irf_interp(self, data):
+        match self.x_data_request:
+            case 'time':
+                data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts)
+            case 'value no.':
+                data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts, t_data_returned=2)
+            case 'distance':
+                data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts, t_data_returned=1)
+        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), False)
+        self.irf_interp_ready.emit((data[0], data[1], exact_max))
+
+    def irf_interp_norm(self, data):
+        if not self.block_norm_signals:
+            match self.x_data_request:
+                case 'time':
+                    data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos, 0)
+                    idx_start = np.argwhere(data[0] > self.mes_start/speed_of_light*2)[0][0]
+                    idx_stop = np.argwhere(data[0] > self.mes_end/speed_of_light*2)[0][0]
+                case 'distance':
+                    data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos, 1)
+                    idx_start = np.argwhere(data[0] > self.mes_start)[0][0]
+                    idx_stop = np.argwhere(data[0] > self.mes_end)[0][0]
+                case 'value no.':
+                    data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos, 1)
+                    idx_start = np.argwhere(data[0] > self.mes_start)[0][0]
+                    idx_stop = np.argwhere(data[0] > self.mes_end)[0][0]
+                    data = (np.arange(len(data[1])), data[1])
+            exact_max = exact_polynom_interp_max(data[0],
+                                                 np.absolute(data[1]),
+                                                 get_y=True,
+                                                 interval=slice(idx_start, idx_stop))
+            self.irf_interp_ready.emit((data[0], data[1], exact_max[0], exact_max[1]))
+
+    def distance_norm(self, data):
+        if not self.block_norm_signals:
+            t = data[2]
+            data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
+            idx_start = np.argwhere(data[0] > self.mes_start/speed_of_light*2)[0][0]
+            idx_stop = np.argwhere(data[0] > self.mes_end/speed_of_light*2)[0][0]
+            exact_max = exact_polynom_interp_max(data[0],
+                                                 np.absolute(data[1]),
+                                                 get_distance=True,
+                                                 get_y=True,
+                                                 interval=slice(idx_start, idx_stop),
+                                                 negative_constant=self.mes_start)
+
+            logging.info(f'idx_start: {idx_start}, idx_stop: {idx_stop}')
+            if exact_max[1] < self.lim_distance:
+                self.distance_ready.emit((t, 0))
+            else:
+                self.distance_ready.emit((t, exact_max[0]))
+
+    def return_functions(self):
+        return self.raw_data, self.irf_data, self.distance, self.irf_interp,  self.irf_interp_norm, self.distance_norm
+
+    def refresh_y_ref(self, data):
+        self.unconnect_receiver_from_y_ref.emit()
+        self.refresh_idx_lim(data)
+        yData = data[1]
+        tData = data[0]
+        cal_start = np.argwhere(tData > self.calibration_start/speed_of_light*2)[0][0]
+        cal_end = np.argwhere(tData > self.calibration_end/speed_of_light*2)[0][0]
+        yData[:cal_start] = 0
+        yData[cal_start-11:cal_start] = np.linspace(0, yData[cal_start], 11)
+        yData[cal_end:cal_end+11] = np.linspace(yData[cal_start], 0, 11)
+        yData[cal_end+11:] = 0
+        Ly = len(yData)
+        YRefTemp = fft(yData, Ly) / Ly
+        self.YRefPos = YRefTemp[0:trunc(Ly / 2) + 1]
+        self.block_norm_signals = False
+
+    def refresh_idx_lim(self, data):
+        self.idx_start = np.argwhere(data[0] > self.mes_start/speed_of_light*2)[0][0]
+        self.idx_stop = np.argwhere(data[0] > self.mes_end/speed_of_light*2)[0][0]
+        logging.info(f'idx_start: {self.idx_start}, idx_stop: {self.idx_stop}')
+
+
+class Receiver(QThread):
+    measurement_ready = pyqtSignal(tuple)
+    irf_measurement_ready = pyqtSignal(tuple)
+    st_connecting = pyqtSignal()
+    st_connected = pyqtSignal()
+    st_connect_failed = pyqtSignal(str)
+    packageReceived = pyqtSignal()
+    packageLost = pyqtSignal()
+
+    def __init__(self, shifts, sequence_repetitions, samples_per_sequence, length, port=9090, ip_address='192.168.1.1'):
+        QThread.__init__(self)
+
+        self.ip = ip_address
+        self.port = port
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 2 ** 18)
+
+        self.shifts = shifts
+        self.s_reps = sequence_repetitions
+        self.sps = samples_per_sequence
+        self.mes_len = length
+        self.set_len = self.shifts * self.s_reps * self.sps
+
+        self.stop_receive = False
+
+        self.t0 = 0
+
+    def connect(self):
+        try:
+            self.st_connecting.emit()
+            self.sock.bind((self.ip, self.port))
+            self.st_connected.emit()
+        except OSError as err:
+            if err.errno == 10048:
+                self.st_connect_failed.emit('os_exists')
+            else:
+                self.st_connect_failed.emit('os_unknown')
+        except TypeError:
+            self.st_connect_failed.emit('type')
+
+    def run(self):
+        handler = Handler(self.sock, shifts=ceil(self.shifts/80)*80, sequence_reps=self.s_reps,
+                          samples_per_sequence=self.sps)
+        g = handler.assembler_2()
+        self.t0 = time.time()
+        while not self.stop_receive:
+            r = next(g)
+            if not r:
+                self.packageLost.emit()
+            else:
+                self.packageReceived.emit()
+                time_stamp = round(time.time() - self.t0, 10)
+                y_mes_data = np.frombuffer(r, dtype=np.int32)[:self.set_len] * 8.192 / pow(2, 18)
+                x_mes_data = np.linspace(0, self.mes_len / self.sps * 2e-10 * self.set_len, self.set_len)
+                self.measurement_ready.emit((x_mes_data, y_mes_data, time_stamp))
+                y_irf_data = averager(y_mes_data, self.shifts, self.sps, self.s_reps)
+                y_irf_data -= np.average(y_irf_data[-100:])
+                x_irf_data = np.arange(1, self.shifts + 1) / 4.975e+09
+                self.irf_measurement_ready.emit((x_irf_data, y_irf_data, time_stamp))
+        self.sock.close()
+
+    def stop(self):
+        self.stop_receive = True
+        # self.quit()
+        # self.wait()
 
 
 def averager(data_set, shifts, samples_per_sequence, sequence_reps):
@@ -325,6 +542,130 @@ def check_args(func, arg, return_other_args=False, removable_item=None):
         return (True, args) if return_other_args else True
     except ValueError:
         return (False, None) if return_other_args else False
+
+
+class MagicValuesFinder(QDialog):
+    timer_ready = pyqtSignal()
+
+    def __init__(self, parent=None, second_data: SecondData = None):
+        super().__init__(parent)
+        uic.loadUi('resources/magic_finder_dialogue.ui', self)
+
+        self.step = 0
+        self.maximum_page = 0
+
+        self.timer = QTimer()
+        self.remaining_time = 0
+        self.timer.timeout.connect(self.update_timer)
+
+        self.next_button.clicked.connect(self.next_page)
+        self.previous_button.clicked.connect(self.previous_page)
+        self.start_button.clicked.connect(self.start)
+        self.start_next_button1.clicked.connect(self.start2)
+
+        self.second_data = second_data
+        self.data_array = deque()
+
+        self.start_value = 0
+        self.end_value = 0
+        self.buttons = 0
+        self.button0 = 0
+
+    def collect_data(self, data):
+        self.data_array.append(data[1])
+
+    def start(self):
+        print('start')
+        self.stacked_widget.setCurrentIndex(1)
+        self.maximum_page = 1
+
+        self.remaining_time = 3
+        self.timer.start(1000)
+        p1_label2_settext = lambda: self.p1_label2.setText(str(self.remaining_time))
+        self.timer.timeout.connect(p1_label2_settext)
+        self.timer_ready.connect(lambda: unconnect(self.timer.timeout, p1_label2_settext))
+        self.timer_ready.connect(self.mes_start)
+
+    def mes_start(self):
+        print('mes_start')
+        unconnect(self.timer_ready, self.mes_start)
+        self.p1_label1.setText('')
+        self.p1_label2.setText('Hold!')
+
+        self.second_data.distance_ready.connect(self.collect_data)
+
+        self.remaining_time = 1
+        self.timer.start(1000)
+        self.timer_ready.connect(self.mes_start_end)
+
+    def mes_start_end(self):
+        print('mes_start_end')
+        unconnect(self.second_data.distance_ready, self.collect_data)
+        unconnect(self.timer_ready, self.mes_start_end)
+        array = np.array(self.data_array)
+        self.data_array.clear()
+
+        self.stacked_widget.setCurrentIndex(2)
+        self.start_value = np.average(np.average(array))
+        self.start_value_box.setValue(self.start_value)
+
+    def start2(self):
+        print('start2')
+        self.stacked_widget.setCurrentIndex(3)
+        self.maximum_page = 3
+
+        self.remaining_time = 3
+        self.timer.start(1000)
+        p2_label2_settext = lambda: self.p3_label2.setText(str(self.remaining_time))
+        self.timer.timeout.connect(p2_label2_settext)
+        self.timer_ready.connect(lambda: unconnect(self.timer.timeout, p2_label2_settext))
+        self.timer_ready.connect(self.mes_end)
+
+    def mes_end(self):
+        print('mes_end')
+        unconnect(self.timer_ready, self.mes_end)
+        self.p3_label1.setText('')
+        self.p3_label2.setText('Hold!')
+
+        self.second_data.distance_ready.connect(self.collect_data)
+
+        self.remaining_time = 1
+        self.timer.start(1000)
+        self.timer_ready.connect(self.mes_end_end)
+
+    def mes_end_end(self):
+        print('mes_end_end')
+        unconnect(self.second_data.distance_ready, self.collect_data)
+        unconnect(self.timer_ready, self.mes_end_end)
+        array = np.array(self.data_array)
+        print(len(array))
+        self.data_array.clear()
+
+        self.stacked_widget.setCurrentIndex(4)
+        self.end_value = np.average(np.average(array))
+        self.end_value_box.setValue(self.end_value)
+
+    def next_page(self):
+        self.stacked_widget.setCurrentIndex(self.stacked_widget.currentIndex() + 1)
+        self.previous_button.setEnabled(True)
+        if self.stacked_widget.currentIndex() in (self.stacked_widget.count()-1, self.maximum_page):
+            self.next_button.setEnabled(False)
+
+    def previous_page(self):
+        self.stacked_widget.setCurrentIndex(self.stacked_widget.currentIndex() - 1)
+        self.next_button.setEnabled(True)
+        if self.stacked_widget.currentIndex() == 0:
+            self.previous_button.setEnabled(False)
+
+    def update_timer(self):
+        self.remaining_time -= 1
+        if self.remaining_time == 0:
+            self.timer.stop()
+            self.timer_ready.emit()
+
+    def close(self):
+        super().close()
+        return 'the values are here to come'
 
 
 class CustomAxis(AxisItem):
