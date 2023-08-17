@@ -293,7 +293,7 @@ class UI(QMainWindow):
 
         # Setting up the Audio Emitter:
         if True:
-            self.sinSender = SineAudioEmitter(44100, 10, self.freq_number.intValue(), self.volume_slider.value())
+            self.sinSender = SineAudioEmitter(44100, 100, self.freq_number.intValue(), self.volume_slider.value())
             # self.start_sound_button.clicked.connect(self.sinSender.start)
             self.start_sound_button.clicked.connect(self.start_audio_player)
             self.volume_slider.valueChanged.connect(self.sinSender.set_volume)
@@ -685,8 +685,8 @@ class UI(QMainWindow):
         self.volume_slider.setValue(int(vol))
 
     def set_distance_bar(self, distance):
-        distance_span = self.norm_mes_end_box1.value() - self.norm_mes_start_box1.value()
-        self.distance_bar.setValue(int(distance[1] / distance_span * 10000))
+        distance_span = self.sound_range_stop - self.sound_range_start
+        self.distance_bar.setValue(int((distance[1] - self.sound_range_start) / distance_span * 10000))
 
     def copy_norm_config(self, plot):
         print(plot)

@@ -48,18 +48,21 @@ class MainWindow(QMainWindow):
             vol = self.VOLUME
             wave = np.sin(np.arange(int(self.SAMPLE_RATE/freq))/self.SAMPLE_RATE*np.pi*2*freq)*vol
             pen = mkPen(color=(0, 0, 0), width=1)
+            self.line = self.sine_plot.plot(np.arange(10), pen=pen)
             self.sine_plot.setBackground('w')
-            self.sine_plot.disableAutoRange()
-            self.sine_plot.setYRange(-1, 1)
-            self.sine_plot.setXRange(0, self.SAMPLE_RATE/100)
+            # self.sine_plot.disableAutoRange()
+            # self.sine_plot.setYRange(-1, 1)
+            # self.sine_plot.setXRange(0, self.SAMPLE_RATE/100)
 
-        if True: # SineAudioEmitter class setup
-            self.sinSender = SineAudioEmitter(self.SAMPLE_RATE, 10)
+        # SineAudioEmitter class setup
+        if True:
+            self.sinSender = SineAudioEmitter(self.SAMPLE_RATE, 100)
             self.start_button.clicked.connect(self.sinSender.start)
             self.stop_button.clicked.connect(self.sinSender.stop)
             # self.sinSender.sin_ready.connect(self.change_plot)
             self.freq_slider.valueChanged.connect(self.sinSender.set_frequency)
             self.volume_slider.valueChanged.connect(self.sinSender.set_volume)
+            self.sinSender.sin_ready.connect(self.change_plot)
 
         if True: # Device choose setup
             # print(self.sinSender.p.get_device_info_by_index(1))
@@ -85,8 +88,7 @@ class MainWindow(QMainWindow):
         self.sinSender.DEVICE = 1
 
     def change_plot(self, data: tuple):
-        self.line.setData(np.arange(data[1]), data[0])
-        self.sine_plot.setXRange(0, data[1])
+        self.line.setData(data[1], data[0])
 
     def close_button_hover(self, event):
         self.close_button.setIcon(self.clos_ic_white)
