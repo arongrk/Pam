@@ -709,7 +709,6 @@ class UI(QMainWindow):
         self.start_sine_plot_button.setEnabled(True)
 
     def only_changes_sine_refresher(self):
-        logging.info('only_changes_sine_refresher')
         if self.only_changes_sine_box.isChecked():
             self.sinSender.plot_mode = 1
         else:

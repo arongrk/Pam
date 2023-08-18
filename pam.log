@@ -6,12 +6,79 @@ INFO:root:Button clicked: connect_button
 INFO:root:
 INFO:root:Button clicked: start_receive
 INFO:root:
+INFO:root:Button clicked: start_plot1
+INFO:root:plot_starter on plot: 0
+INFO:root:data connector on plot: 0, requests[0] = 1
+INFO:root:plot_connector on plot: 0, requests[0] = 1
+INFO:root:
+INFO:root:ComboBox y_data_box1 changed to: IRF
+INFO:root:plot_breaker on plot: 0
+INFO:root:plot_disconnector on plot: 0
+INFO:root:data_disconnector on plot: 0, requests[0] = 0
+INFO:root:plot_starter on plot: 0
+INFO:root:data connector on plot: 0, requests[0] = 2
+INFO:root:plot_connector on plot: 0, requests[0] = 2
+INFO:root:autoRange requested on plot: 0, autoRanging now
+INFO:root:
+INFO:root:ComboBox y_data_box1 changed to: IRF Interpolated Norm
+INFO:root:plot_breaker on plot: 0
+INFO:root:plot_disconnector on plot: 0
+INFO:root:data_disconnector on plot: 0, requests[0] = 0
+INFO:root:plot_starter on plot: 0
+INFO:root:data connector on plot: 0, requests[0] = 6
+INFO:root:plot_connector on plot: 0, requests[0] = 6
+INFO:root:idx_start: 3, idx_stop: 59
+INFO:root:autoRange requested on plot: 0, autoRanging now
+INFO:root:
+INFO:root:ComboBox y_data_box2 changed to: Distance Norm
+INFO:root:
+INFO:root:Button clicked: enable_auto_x2
+INFO:root:
+INFO:root:Button clicked: enable_auto_y2
+INFO:root:
+INFO:root:Button clicked: start_plot2
+INFO:root:plot_starter on plot: 1
+INFO:root:data connector on plot: 1, requests[1] = 4
+INFO:root:plot_connector on plot: 1, requests[1] = 4
+INFO:root:idx_start: 3, idx_stop: 59
+INFO:root:
+INFO:root:Button clicked: stop_plot2
+INFO:root:plot_breaker on plot: 1
+INFO:root:plot_disconnector on plot: 1
+INFO:root:data_disconnector on plot: 1, requests[1] = 0
+INFO:root:
 INFO:root:Button clicked: start_sound_button
 INFO:root:plot_breaker on plot: 1
 INFO:root:plot_disconnector on plot: 1
 INFO:root:data_disconnector on plot: 1, requests[1] = 0
 INFO:root:idx_start: 3, idx_stop: 59
 INFO:root:
+INFO:root:ComboBox y_data_box1 changed to: Distance Norm
+INFO:root:plot_breaker on plot: 0
+INFO:root:plot_disconnector on plot: 0
+INFO:root:data_disconnector on plot: 0, requests[0] = 0
+INFO:root:plot_starter on plot: 0
+INFO:root:data connector on plot: 0, requests[0] = 4
+INFO:root:plot_connector on plot: 0, requests[0] = 4
+INFO:root:idx_start: 3, idx_stop: 59
+INFO:root:autoRange requested on plot: 0, autoRanging now
+INFO:root:
+INFO:root:Button clicked: enable_auto_x1
+INFO:root:
+INFO:root:Button clicked: refresh_sound_values_button
+INFO:root:
+INFO:root:Button clicked: stop_sound_button
+INFO:root:
+INFO:root:Button clicked: start_sound_button
+INFO:root:plot_breaker on plot: 1
+INFO:root:plot_disconnector on plot: 1
+INFO:root:data_disconnector on plot: 1, requests[1] = 0
+INFO:root:idx_start: 3, idx_stop: 59
+INFO:root:
+INFO:root:Button clicked: magic_finder_button
+INFO:root:Magic finder values: 
+start: 0.06948116874845799, end: 1.6111464472050112, buttons: 18, button0: 41
+INFO:root:
+INFO:root:Button clicked: refresh_sound_values_button
+INFO:root:
 INFO:root:Button clicked: start_sine_plot_button
-INFO:root:only_changes_sine_refresher
-INFO:root:only_changes_sine_refresher
