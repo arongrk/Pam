@@ -508,6 +508,7 @@ class UI(QMainWindow):
                 self.x_data_boxes[plot].addItems(['time', 'distance', 'value no.'])
                 self.tare_distance_buttons[plot].setEnabled(False)
                 self.distance_const_boxes[plot].setEnabled(False)
+                self.plot_home_requests[plot] = True
             case 'Distance' | 'Distance Norm':
                 self.x_data_boxes[plot].addItems(['duration'])
                 self.tare_distance_buttons[plot].setEnabled(True)
@@ -518,7 +519,6 @@ class UI(QMainWindow):
         if self.stop_plot_buttons[plot].isEnabled():
             self.plot_breaker(plot=plot)
             self.plot_starter(plot=plot)
-            self.plot_home_requests[plot] = True
 
     def x_data_refresher(self, item, plot):
         logging.info(f'x_data_refresher on plot {plot}')
