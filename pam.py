@@ -293,7 +293,8 @@ class UI(QMainWindow):
 
         # Setting up the Audio Emitter:
         if True:
-            self.sinSender = SineAudioEmitter(44100, 100, self.freq_number.intValue(), self.volume_slider.value())
+            self.sinSender = SineAudioEmitter(44100, 10, self.freq_number.intValue(), self.volume_slider.value(),
+                                              plot_sine_wave=True, plot_mode='')
             # self.start_sound_button.clicked.connect(self.sinSender.start)
             self.start_sound_button.clicked.connect(self.start_audio_player)
             self.volume_slider.valueChanged.connect(self.sinSender.set_volume)
@@ -312,6 +313,12 @@ class UI(QMainWindow):
             self.audio_player_running = False
 
             self.signal_filter = 1
+
+            self.sine_line = self.graph_sine.plot(np.arange(10), np.zeros(10), pen=pen)
+            self.graph_sine.setBackground('w')
+            self.start_sine_plot_button.clicked.connect(self.sine_plot_starter)
+            self.stop_sine_plot_button.clicked.connect(self.sine_plot_breaker)
+            self.only_changes_sine_box.stateChanged.connect(self.only_changes_sine_refresher)
 
         # Setting up the distance plot calculation
         if True:
@@ -686,7 +693,27 @@ class UI(QMainWindow):
 
     def set_distance_bar(self, distance):
         distance_span = self.sound_range_stop - self.sound_range_start
-        self.distance_bar.setValue(int((distance[1] - self.sound_range_start) / distance_span * 10000))
+        self.distance_bar.setValue(int((distance[1]) / distance_span * 10000))
+
+    def plot_sine(self, data):
+        self.sine_line.setData(data[1], data[0])
+
+    def sine_plot_starter(self):
+        self.start_sine_plot_button.setEnabled(False)
+        self.sinSender.sin_ready.connect(self.plot_sine)
+        self.stop_sine_plot_button.setEnabled(True)
+
+    def sine_plot_breaker(self):
+        self.stop_sine_plot_button.setEnabled(False)
+        unconnect(self.sinSender.sin_ready, self.plot_sine)
+        self.start_sine_plot_button.setEnabled(True)
+
+    def only_changes_sine_refresher(self):
+        logging.info('only_changes_sine_refresher')
+        if self.only_changes_sine_box.isChecked():
+            self.sinSender.plot_mode = 1
+        else:
+            self.sinSender.plot_mode = 0
 
     def copy_norm_config(self, plot):
         print(plot)
@@ -841,6 +868,7 @@ class UI(QMainWindow):
         return False
 
     def close(self):
+        self.only_changes_sine_box.setChecked(True)
         if True:
             for i in self.findChildren(QSpinBox):
                 self.settings.setValue(i.objectName(), i.value())

@@ -213,7 +213,6 @@ class SecondData(QObject):
                                                  interval=slice(idx_start, idx_stop),
                                                  negative_constant=self.mes_start)
 
-            logging.info(f'idx_start: {idx_start}, idx_stop: {idx_stop}')
             if exact_max[1] < self.lim_distance:
                 self.distance_ready.emit((t, 0))
             else:
