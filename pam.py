@@ -1,28 +1,21 @@
 import os
-import socket
-import pickle
 import sys
 import numpy as np
 import time
-from math import ceil
 import psutil
-from math import trunc
-from scipy.fft import fft, ifft
-from scipy.constants import speed_of_light
 import logging
 from collections import deque
 
 from PyQt5.QtCore import *
 from PyQt5.QtSvg import QSvgWidget
-from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QSizePolicy, QSplashScreen, QHBoxLayout, QPushButton, \
-    QBoxLayout, QCheckBox, QLabel, QLineEdit, QComboBox, QSpinBox, QGroupBox, QDoubleSpinBox, QDialog
-from PyQt5.QtGui import QIcon, QPixmap, QColor, QFontDatabase, QFont
+from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QSplashScreen, QPushButton, QCheckBox, QLabel,\
+    QLineEdit, QComboBox, QSpinBox, QGroupBox, QDoubleSpinBox
+from PyQt5.QtGui import QIcon, QPixmap, QFontDatabase, QFont
 from PyQt5 import uic
-from pyqtgraph import mkPen, PlotWidget, InfiniteLine, ViewBox
+from pyqtgraph import mkPen, InfiniteLine, ViewBox
 
 import definitions
-from pams_functions import Handler, averager, exact_polynom_interp_max, unconnect, zero_padding, \
-    CustomAxis, compare_sender, check_args, MagicValuesFinder, SecondData, Receiver
+from pams_functions import SecondData, Receiver, unconnect, CustomAxis, check_args, MagicValuesFinder
 from Audioslider import SineAudioEmitter
 
 
@@ -31,25 +24,27 @@ class UI(QMainWindow):
     def __init__(self):
         super(UI, self).__init__()
 
-        # Load the ui file
+        # Load the ui file made with qt-designer
         uic.loadUi('resources/Mainwindow.ui', self)
 
         # Loading the values and getting the parameters for data interpreting
         if True:
             self.settings = QSettings('RUB', 'pam')
-            a = self.settings.allKeys(), [self.settings.value(i) for i in self.settings.allKeys()]
-            print(a)
+            for setting in [f'{i}: {self.settings.value(i)}' for i in self.settings.allKeys()]:
+                logging.info(setting)
 
+            # This block finds all the children of the ui_file of the given kind and looks for their values in QSettings
             for i in self.findChildren(QSpinBox):
                 i.setValue(self.settings.value(i.objectName(), type=int))
             for i in self.findChildren(QDoubleSpinBox):
                 i.setValue(self.settings.value(i.objectName(), type=float))
             for i in self.findChildren(QLineEdit):
-                if i.objectName() != 'qt_spinbox_lineedit':
+                if i.objectName() != 'qt_spinbox_lineedit':     # This excludes QSpinboxes as they are also found
                     i.setText(self.settings.value(i.objectName(), type=str))
             for i in self.findChildren(QCheckBox):
                 i.setChecked(self.settings.value(i.objectName(), type=bool))
 
+            # Loading the values into the parameter if needed
             self.samples_per_sequence = int(self.sps_edit.text())
             self.sequence_reps = int(self.sr_edit.text())
             self.shifts = int(self.shifts_edit.text())
@@ -61,13 +56,17 @@ class UI(QMainWindow):
             self.xData2 = np.arange(0, 1280) / 5 * 10 ** 9
             self.plot_count = 2
 
-        # Setting up double widget lists, used for simplifying by calling
-        # ...[plot]
-        # instead of
-        # ...1
-        # ...2
-        # everytime
         if True:
+            '''
+            Setting up double widget lists, used for simplifying by calling
+            self.objectName[plot]
+            instead of
+            self.objectName1
+            self.objectName2
+            everytime
+            
+            This could be automated if needed, for example when many new features are added
+            '''
             self.last_n_values_boxes = [self.last_values1, self.last_values2]
             self.log_y_boxes = [self.log_y_box1, self.log_y_box2]
             self.enableAutoX_buttons = [self.enable_auto_x1, self.enable_auto_x2]
@@ -97,6 +96,8 @@ class UI(QMainWindow):
                 i.clicked.connect(self.button_clicked_log)
             for i in self.findChildren(QComboBox):
                 i.currentTextChanged.connect(self.combobox_changed_log)
+            for i in self.findChildren(QLineEdit):
+                i.editingFinished.connect(self.lineedit_changed_log)
 
         # Configuring both plot-widgets
         if True:
@@ -328,11 +329,13 @@ class UI(QMainWindow):
             # refresh_distance_button
             self.refresh_distance_button.clicked.connect(self.refresh_distance_array)
 
+            self.distance_value_number = 0
+
         # Setting up the copy to plot x buttons
         for plot in range(self.plot_count):
             self.copy_norm_config_buttons[plot].pressed.connect(self.copy_norm_config_slots[plot])
 
-        # Setting up the animations for QTabWidget
+        # Setting up the animations for the QTabWidget of the MainWindow, should also work if another tab is added
         if True:
             self.tabWidget.tabBar().installEventFilter(self)
             self.tabBar = self.tabWidget.tabBar()
@@ -364,7 +367,7 @@ class UI(QMainWindow):
 
                 self.old_tab_index = None
 
-        # Setting up the fonts
+        # Setting up the fonts for the interface
         if True:
             for file in os.listdir('resources/RUB-Corporate-Design-Fonts'):
                 QFontDatabase.addApplicationFont(file)
@@ -390,7 +393,14 @@ class UI(QMainWindow):
             self.plot_home1.setIcon(QIcon('resources/icons8-home.svg'))
             self.plot_home2.setIcon(QIcon('resources/icons8-home.svg'))
 
-    def plot_signal(self, data, plot):
+    def plot_signal(self, data, plot: int):
+        """
+        plots the given data on the given plot
+
+        :param data: a 2-axis set of data
+        :param plot: 0 or 1
+        :return: an image on the given plot
+        """
         if self.log_y_boxes[plot].isChecked():
             self.lines[plot].setData(data[0], np.log10(np.absolute(data[1])))
         else:
@@ -405,7 +415,18 @@ class UI(QMainWindow):
             self.graphs[plot].autoRange()
             self.plot_home_requests[plot] = False
 
-    def plot_starter(self, _=None, plot=None):
+    def plot_starter(self, _=None, plot: int = None):
+        """
+        called by the start_plot buttons or to refresh settings of the given plot like this:
+        
+        self.plot_breaker(plot)
+        
+        self.plot_starter(plot)
+
+        :param _: unused argument used to intercept the argument of the QPushButton.clicked(bool) signal
+        :param plot: 0 or 1
+        :return: no return
+        """
         logging.info(f'plot_starter on plot: {plot}')
         self.start_plot_buttons[plot].setEnabled(False)
         box = self.y_data_boxes[plot].currentText()
@@ -425,6 +446,7 @@ class UI(QMainWindow):
                 self.log_y_boxes[plot].setChecked(False)
             case 'Distance':
                 self.requests[plot] = 3
+                self.distance_value_number = 0
                 self.graphs[plot].setTitle('Distance')
                 self.inf_line_boxes[plot].setEnabled(False)
                 self.inf_line_boxes[plot].setChecked(False)
@@ -432,6 +454,7 @@ class UI(QMainWindow):
                 self.graphs[plot].enableAutoRange()
             case 'Distance Norm':
                 self.requests[plot] = 4
+                self.distance_value_number = 0
                 self.refresh_norm_values(plot)
                 self.graphs[plot].enableAutoRange()
                 self.inf_line_boxes[plot].setEnabled(False)
@@ -447,7 +470,18 @@ class UI(QMainWindow):
         self.plot_connector(self.requests[plot], plot)
         self.stop_plot_buttons[plot].setEnabled(True)
 
-    def plot_breaker(self, _=None, plot: tuple or int = None):
+    def plot_breaker(self, _=None, plot: int = None):
+        """
+        called by the stop_plot buttons or to refresh settings of the given plot like this:
+        
+        self.plot_breaker(plot)
+        
+        self.plot_starter(plot)
+
+        :param _: unused argument used to intercept the argument of the QPushButton.clicked(bool) signal
+        :param plot: 0 or 1
+        :return: no return
+        """
         logging.info(f'plot_breaker on plot: {plot}')
         self.stop_plot_buttons[plot].setEnabled(False)
         self.requests[plot] = 0
@@ -455,7 +489,14 @@ class UI(QMainWindow):
         self.data_disconnector(plot)
         self.start_plot_buttons[plot].setEnabled(True)
 
-    def data_connector(self, plot):
+    def data_connector(self, plot: int):
+        """
+        connects the raw data or the irf data sets of the receiver-class to the requested
+        signal processing method of the second data class 
+        
+        :param plot: 0 or 1
+        :return: no return
+        """
         logging.info(f'data connector on plot: {plot}, requests[{plot}] = {self.requests[plot]}')
         match self.requests[plot]:
             case 1:
@@ -471,12 +512,27 @@ class UI(QMainWindow):
             case 6:
                 self.receiver.irf_measurement_ready.connect(self.second_data_classes[plot][0].irf_interp_norm)
 
-    def data_disconnector(self, plot):
+    def data_disconnector(self, plot: int):
+        """
+        disconnects the signals of the receiver class from all the slots of the given second_data class to make sure
+        there is no double connections as they significantly reduce the speed of the program
+        
+        :param plot: 0 or 1
+        :return: no return
+        """
         logging.info(f'data_disconnector on plot: {plot}, requests[{plot}] = {self.requests[plot]}')
         for i in self.second_data_classes[plot][0].return_functions():
             unconnect(self.receiver.irf_measurement_ready, i)
 
-    def plot_connector(self, request, plot):
+    def plot_connector(self, request, plot: int):
+        """
+        connects the requested signal of the given second_data class to the given plot. Calls unconnect before to make
+        sure there is no double connections. Usually called after self.data_connector()
+        
+        :param request: requested plot option
+        :param plot: 0 or 1
+        :return: 
+        """
         logging.info(f'plot_connector on plot: {plot}, requests[{plot}] = {self.requests[plot]}')
         match request:
             case 1:
@@ -492,14 +548,28 @@ class UI(QMainWindow):
                 unconnect(self.second_data_classes[plot][0].irf_interp_ready, self.plot_signal_slots[plot])
                 self.second_data_classes[plot][0].irf_interp_ready.connect(self.plot_signal_slots[plot])
 
-    def plot_disconnector(self, plot):
+    def plot_disconnector(self, plot: int):
+        """
+        disconnects every possible signal from the plot_signal method to make sure no connection slips through
+
+        :param plot: 0 or 1
+        :return: no return
+        """
         logging.info(f'plot_disconnector on plot: {plot}')
         unconnect(self.second_data_classes[plot][0].measurement_ready, self.plot_signal_slots[plot])
         unconnect(self.second_data_classes[plot][0].irf_measurement_ready, self.plot_signal_slots[plot])
         unconnect(self.second_data_classes[plot][0].distance_ready, self.plot_signal_slots[plot])
         unconnect(self.second_data_classes[plot][0].irf_interp_ready, self.plot_signal_slots[plot])
 
-    def y_data_refresher(self, item, plot):
+    def y_data_refresher(self, item, plot: int):
+        """
+        Called when one of the y_data boxes is changed whether plot is running or not.
+        Refreshes the options for the x_data box and restarts the given plot if running.
+
+        :param item: provided by the signal QComboBox.currentTextChanged()
+        :param plot: 0 or 1
+        :return: no return
+        """
         unconnect(self.x_data_boxes[plot].currentTextChanged, self.x_data_refresher_slots[plot])
         unconnect(self.x_data_boxes[plot].currentTextChanged, self.combobox_changed_log)
         self.x_data_boxes[plot].clear()
@@ -510,50 +580,106 @@ class UI(QMainWindow):
                 self.distance_const_boxes[plot].setEnabled(False)
                 self.plot_home_requests[plot] = True
             case 'Distance' | 'Distance Norm':
-                self.x_data_boxes[plot].addItems(['duration'])
+                self.x_data_boxes[plot].addItems(['duration', 'value no.'])
                 self.tare_distance_buttons[plot].setEnabled(True)
                 self.distance_const_boxes[plot].setEnabled(True)
         self.x_data_boxes[plot].setCurrentIndex(0)
+        self.second_data_classes[plot][0].x_data_request = self.x_data_boxes[plot].currentText()
         self.x_data_boxes[plot].currentTextChanged.connect(self.x_data_refresher_slots[plot])
         self.x_data_boxes[plot].currentTextChanged.connect(self.combobox_changed_log)
         if self.stop_plot_buttons[plot].isEnabled():
             self.plot_breaker(plot=plot)
             self.plot_starter(plot=plot)
 
-    def x_data_refresher(self, item, plot):
+    def x_data_refresher(self, item, plot: int):
+        """
+        Called when one of the x_data boxes is changed whether the plot is running or not.
+        Refreshes the x_data_request parameter of the given second_data instance and restarts the plot if running.
+
+        :param item: provided by the signal QComboBox.currentTextChanged()
+        :param plot: 0 or 1
+        :return:
+        """
         logging.info(f'x_data_refresher on plot {plot}')
         self.second_data_classes[plot][0].x_data_request = item
         if self.stop_plot_buttons[plot].isEnabled():
             self.plot_breaker(plot=plot)
             self.plot_starter(plot=plot)
-            self.plot_home_requests[plot] = True
+            # if True:
+            if self.requests[plot] not in (3, 4):
+                self.plot_home_requests[plot] = True
+            else:
+                self.refresh_distance_array()
 
-    def inf_line_refresher(self, state, plot):
+    def inf_line_refresher(self, state, plot: int):
+        """
+        refreshes the red vertical line that cuts through the maximum delivered as second argument of some data-signals
+        of the second_data class
+
+        :param state: delivered by the signal QCheckBox.stateChanged()
+        :param plot: 0 or 1
+        :return: no return
+        """
         if state == 2:
             self.graphs[plot].addItem(self.inf_lines[plot])
         else:
             self.graphs[plot].removeItem(self.inf_lines[plot])
 
-    def cable_constant_refresher(self, plot):
+    def cable_constant_refresher(self, plot: int):
+        """
+        Automatically sets a new cable constant as the average of the last 20 values.
+
+        Should only be used when the adjustable short is connected
+
+        :param plot: 0 or 1
+        :return: no return
+        """
         self.second_data_classes[plot][0].cable_constant += np.average(np.array(self.distance_values)[-20:])
         if plot == 0:
             self.distance_const_box_1.setValue(self.second_data_classes[plot][0].cable_constant)
         else:
             self.distance_const_box_2.setValue(self.second_data_classes[plot][0].cable_constant)
 
-    def make_distance_array(self, data, plot):
+    def make_distance_array(self, data, plot: int):
+        """
+        Called by the signal SecondData.distance_ready()
+        Makes the distance arrays ready for plotting and receives its data from the given second_data instance.
+        Only method that calls self.plot_signal() not via a signal
+
+        :param data: provided by the signal SecondData.distance_ready()
+        :param plot: 0 or 1
+        :return: no return
+        """
         self.distance_values.append(data[1])
-        self.distance_time_values.append(data[0])
+        match self.x_data_boxes[plot].currentText():
+            case 'duration':
+                self.distance_time_values.append(data[0])
+            case 'value no.':
+                self.distance_value_number += 1
+                self.distance_time_values.append(self.distance_value_number)
         l_v = self.last_n_values_boxes[plot].value()
         if self.requests[plot] in (3, 4):
             self.plot_signal((np.array(self.distance_time_values)[-l_v:], np.array(self.distance_values)[-l_v:]), plot)
 
     def refresh_distance_array(self):
-        self.distance_values = deque()
-        self.distance_time_values = deque()
+        """
+        Called by the refresh_distance button. Clears out the distance arrays and resets Receiver.t0 to zero.
+
+        :return: no return
+        """
+        self.distance_values.clear()
+        self.distance_time_values.clear()
         self.receiver.t0 = time.time()
 
-    def refresh_norm_values(self, plot):
+    def refresh_norm_values(self, plot: int):
+        """
+        Called by the normation_refresh button. Refreshes the necessary parameters of the given SecondData instance by
+        the one provided in the boxes in the interface. Then connects exactly one irf_measurement to
+        SecondData.refresh_y_ref to make or renew the norm array.
+
+        :param plot: 0 or 1
+        :return: no return
+        """
         self.second_data_classes[plot][0].calibration_start = self.calibration_start_boxes[plot].value()
         self.second_data_classes[plot][0].calibration_end = self.calibration_end_boxes[plot].value()
         self.second_data_classes[plot][0].mes_start = self.norm_mes_start_boxes[plot].value()
@@ -566,6 +692,11 @@ class UI(QMainWindow):
         self.second_data_classes[plot][0].block_norm_signals = True
 
     def start_receiver(self):
+        """
+        starts the udp-package receiver of the Receiver class instance and enables the buttons.
+
+        :return: no return
+        """
         self.receiver.start()
         self.receiver.packageLost.connect(self.lost_counter)
         self.receiver.packageReceived.connect(self.received_counter)
@@ -577,6 +708,12 @@ class UI(QMainWindow):
         self.label_11.setText('Receiving data')
 
     def reconnect_receiver(self):
+        """
+        Called by stop_receive and will be needed when fpga-programming is added.
+        Closes and resets the instance of the receiver class.
+
+        :return: no return
+        """
         self.plot_breaker(None, 0)
         self.plot_breaker(None, 1)
         self.receiver.stop()
@@ -597,6 +734,11 @@ class UI(QMainWindow):
         self.label_11.setStyleSheet('color: black')
 
     def refresh_connect(self):
+        """
+        Refresh the ip and port values and labels in case they are changed.
+
+        :return: no return
+        """
         self.ip = self.ip1.text() + '.' + self.ip2.text() + '.' + self.ip3.text() + '.' + self.ip4.text()
         self.port = int(self.recport.text())
         self.sender_port = int(self.senport.text())
@@ -605,6 +747,12 @@ class UI(QMainWindow):
         self.reconnect_receiver()
 
     def refresh_configuration(self):
+        """
+        Called when refresh_config button is clicked. Refreshes the configuration of both the Receiver and the
+        SecondData instances
+
+        :return: no return
+        """
         self.plot_breaker(None, 0)
         self.plot_breaker(None, 1)
         self.samples_per_sequence = int(self.sps_edit.text())
@@ -622,6 +770,15 @@ class UI(QMainWindow):
             self.plot_starter(1)
 
     def start_audio_player(self):
+        """
+        Called by the start_sound_button.
+
+        Starts the sound in the SinSender instance.
+        Connects irf_measurement_ready of the Receiver instance to distance_norm of the second SecondData instance.
+        Connects the distance signal to self.set_distance_bar and self.set_audio_frequency.
+
+        :return: no return
+        """
         self.audio_player_running = True
 
         self.start_sound_button.setEnabled(False)
@@ -634,6 +791,13 @@ class UI(QMainWindow):
         self.stop_sound_button.setEnabled(True)
 
     def stop_audio_player(self):
+        """
+        Called by the stop_sound_button.
+
+        Stops the sound and unconnects the connections from start_audio_player.
+
+        :return: no return
+        """
         self.stop_sound_button.setEnabled(False)
         self.sinSender.stop()
         unconnect(self.receiver.irf_measurement_ready, self.second_data_classes[1][0].distance_norm)
@@ -644,6 +808,11 @@ class UI(QMainWindow):
         self.audio_player_running = False
 
     def refresh_sound_values(self):
+        """
+        refreshes the values for the distanceToFrequency calculation in self.set_audio_frequency.
+
+        :return: no return
+        """
         self.sound_range_start = self.sound_bar_start_box.value()
         self.sound_range_stop = self.sound_bar_end_box.value()
         self.sound_button_number = self.button_number_box.value()
@@ -652,6 +821,16 @@ class UI(QMainWindow):
         self.sound_button_span = self.sound_range_length / (self.sound_button_number - 1)
 
     def magic_sound_values_refresh(self):
+        """
+        Called by the magic_finder button.
+
+        Opens a dialog window with help of another UI file.
+        Helps the user through the steps of determining the different sound options to program a piano keyboard.
+
+        For more see class MagicValuesFinder in pams_functions.py
+
+        :return: no return
+        """
         if not self.audio_player_running:
             self.plot_breaker(plot=1)
             self.refresh_norm_values(1)
@@ -677,6 +856,20 @@ class UI(QMainWindow):
             unconnect(self.receiver.irf_measurement_ready, self.second_data_classes[1][0].distance_norm)
 
     def set_audio_frequency(self, distance):
+        """
+        Called by signal distance_ready of second SecondData instance.
+
+        Calculates the piano key frequency using the following function:
+
+        https://en.wikipedia.org/wiki/Piano_key_frequencies
+
+        n is determined using the function n = (distance - distanceKey0) / distanceBetweenKeys + keyNumber0.
+
+        self.signal_filter is used so that the frequency is not changed too often.
+
+        :param distance: provided by the signal SecondData.distance_ready()
+        :return: no return
+        """
         self.signal_filter += 1
         if self.signal_filter == 5:
             dist = distance[1]
@@ -687,35 +880,73 @@ class UI(QMainWindow):
             self.dist_number.display(dist)
             self.signal_filter = 0
 
-    def set_audio_volume(self, data):
-        vol = 0 if data[2] - 25 < 0 else 1
-        self.volume_slider.setValue(int(vol))
-
     def set_distance_bar(self, distance):
+        """
+        Called by signal SecondData.distanceReady()
+
+        Sets the values of the distance bar in the audio tab
+
+        :param distance: provided by signal SecondData.distanceReady()
+        :return: no return
+        """
         distance_span = self.sound_range_stop - self.sound_range_start
         self.distance_bar.setValue(int((distance[1]) / distance_span * 10000))
 
     def plot_sine(self, data):
+        """
+        Called by signal SineAudioEmitter.sin_ready().
+
+        Sets the sine_wave plot to the sine graph of the audio tab if it is requested.
+
+        :param data: provided by signal SineAudioEmitter.sin_ready()
+        :return: no return
+        """
         self.sine_line.setData(data[1], data[0])
 
     def sine_plot_starter(self):
+        """
+        Called by start_sine_plot_button.
+
+        Refreshes the start and stop buttons and connects signal SineAudioEmitter.sin_ready() to plot.
+        :return: no return
+        """
         self.start_sine_plot_button.setEnabled(False)
         self.sinSender.sin_ready.connect(self.plot_sine)
         self.stop_sine_plot_button.setEnabled(True)
 
     def sine_plot_breaker(self):
+        """
+        Called by stop_sine_plot_button.
+
+        Refreshes the start and stop buttons and disconnects signal SineAudioEmitter.sin_ready() from plot.
+        :return: no return
+        """
         self.stop_sine_plot_button.setEnabled(False)
         unconnect(self.sinSender.sin_ready, self.plot_sine)
         self.start_sine_plot_button.setEnabled(True)
 
     def only_changes_sine_refresher(self):
+        """
+        Called by only_changes_sine_box.
+
+        Refreshes the requested plot mode of SineAudioEmitter
+        :return: no return
+        """
         if self.only_changes_sine_box.isChecked():
             self.sinSender.plot_mode = 1
         else:
             self.sinSender.plot_mode = 0
 
     def copy_norm_config(self, plot):
-        print(plot)
+        """
+        Called by one of the copy_norm_config buttons.
+
+        Copies the configuration for normalization to the other plot.
+
+        ~plot & 1 makes zero out of one and one out of zero
+        :param plot: 0 or 1
+        :return: no return
+        """
         self.norm_mes_start_boxes[~plot & 1].setValue(self.norm_mes_start_boxes[plot].value())
         self.norm_mes_end_boxes[~plot & 1].setValue(self.norm_mes_end_boxes[plot].value())
         self.calibration_start_boxes[~plot & 1].setValue(self.calibration_start_boxes[plot].value())
@@ -760,6 +991,13 @@ class UI(QMainWindow):
         combobox_new_text = combobox.currentText()
         logging.info('')
         logging.info(f'ComboBox {combobox_name} changed to: {combobox_new_text}')
+
+    def lineedit_changed_log(self):
+        if self.sender().objectName() != 'qt_spinbox_lineedit':
+            line_edit = self.sender()
+            info = line_edit.objectName(), line_edit.text()
+            logging.info('')
+            logging.info(f'QLineEdit {info[0]} changed to: {info[1]}')
 
     def lost_counter(self):
         self.counter_lost += 1

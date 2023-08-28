@@ -159,12 +159,12 @@ class SecondData(QObject):
 
     def distance(self, data):
         t = data[2]
-        data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts)
-        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), True, self.cable_constant)
+        data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts)
+        exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), True, True, self.cable_constant)
         match self.x_data_request:
-            case 'duration':
+            case 'duration' | 'value no.':
                 self.distance_ready.emit((t, exact_max[0], exact_max[1]))
-            case 'time' | 'value no.':
+            case 'time':
                 logging.warning(f'when y-data is \"distance\" x-data cannot be {self.x_data_request}')
 
     def irf_interp(self, data):
@@ -398,7 +398,7 @@ def exact_polynom_interp_max(t_data,
                              y_data,
                              get_distance: bool = False,
                              get_y: bool = False,
-                             cable_constant=0,
+                             cable_constant: float = 0.0,
                              interval: slice = None,
                              negative_constant: float = 0):
 
