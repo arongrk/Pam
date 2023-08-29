@@ -455,7 +455,7 @@ class UI(QMainWindow):
             case 'Distance Norm':
                 self.requests[plot] = 4
                 self.distance_value_number = 0
-                self.refresh_norm_values(plot)
+                self.refresh_norm_values(plot=plot)
                 self.graphs[plot].enableAutoRange()
                 self.inf_line_boxes[plot].setEnabled(False)
                 self.inf_line_boxes[plot].setChecked(False)
@@ -465,7 +465,7 @@ class UI(QMainWindow):
             case 'IRF Interpolated Norm':
                 self.requests[plot] = 6
                 self.inf_line_boxes[plot].setEnabled(True)
-                self.refresh_norm_values(plot)
+                self.refresh_norm_values(plot=plot)
         self.data_connector(plot)
         self.plot_connector(self.requests[plot], plot)
         self.stop_plot_buttons[plot].setEnabled(True)
@@ -671,15 +671,17 @@ class UI(QMainWindow):
         self.distance_time_values.clear()
         self.receiver.t0 = time.time()
 
-    def refresh_norm_values(self, plot: int):
+    def refresh_norm_values(self,_=None , plot: int = None):
         """
-        Called by the normation_refresh button. Refreshes the necessary parameters of the given SecondData instance by
+        Called by the normation_refresh. Refreshes the necessary parameters of the given SecondData instance by
         the one provided in the boxes in the interface. Then connects exactly one irf_measurement to
         SecondData.refresh_y_ref to make or renew the norm array.
 
+        :param _: intercepts
         :param plot: 0 or 1
         :return: no return
         """
+        logging.info(f'refresh_norm_values on plot: {plot}')
         self.second_data_classes[plot][0].calibration_start = self.calibration_start_boxes[plot].value()
         self.second_data_classes[plot][0].calibration_end = self.calibration_end_boxes[plot].value()
         self.second_data_classes[plot][0].mes_start = self.norm_mes_start_boxes[plot].value()
@@ -783,7 +785,7 @@ class UI(QMainWindow):
 
         self.start_sound_button.setEnabled(False)
         self.plot_breaker(plot=1)
-        self.refresh_norm_values(1)
+        self.refresh_norm_values(plot=1)
         self.receiver.irf_measurement_ready.connect(self.second_data_classes[1][0].distance_norm)
         self.second_data_classes[1][0].distance_ready.connect(self.set_distance_bar)
         self.second_data_classes[1][0].distance_ready.connect(self.set_audio_frequency)
@@ -833,7 +835,7 @@ class UI(QMainWindow):
         """
         if not self.audio_player_running:
             self.plot_breaker(plot=1)
-            self.refresh_norm_values(1)
+            self.refresh_norm_values(plot=1)
             self.receiver.irf_measurement_ready.connect(self.second_data_classes[1][0].distance_norm)
         dialog = MagicValuesFinder(self, second_data=self.second_data_classes[1][0])
         dialog.exec()
