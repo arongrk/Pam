@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>915</width>
+    <width>952</width>
     <height>820</height>
    </rect>
   </property>
@@ -264,6 +264,9 @@ border-top: 1px solid #122b4a;</string>
                 <bold>false</bold>
                </font>
               </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Plot 2&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
               <property name="styleSheet">
                <string notr="true">QWidget {
 	border: 2px solid #8dae10;
@@ -295,6 +298,9 @@ border-top: 1px solid #122b4a;</string>
                     <bold>false</bold>
                    </font>
                   </property>
+                  <property name="toolTip">
+                   <string>Stop plotting the selected data on Plot 2</string>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true"/>
                   </property>
@@ -322,6 +328,9 @@ border-top: 1px solid #122b4a;</string>
                     <bold>false</bold>
                    </font>
                   </property>
+                  <property name="toolTip">
+                   <string>Start plotting the selected data on Plot 2</string>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true"/>
                   </property>
@@ -343,6 +352,9 @@ border-top: 1px solid #122b4a;</string>
                     <weight>50</weight>
                     <bold>false</bold>
                    </font>
+                  </property>
+                  <property name="toolTip">
+                   <string>Data option for Plot 2</string>
                   </property>
                   <item>
                    <property name="text">
@@ -392,6 +404,9 @@ border-top: 1px solid #122b4a;</string>
                 </item>
                 <item row="1" column="1">
                  <widget class="QComboBox" name="x_data_box2">
+                  <property name="toolTip">
+                   <string>X-Axis options for Plot 2</string>
+                  </property>
                   <property name="currentIndex">
                    <number>0</number>
                   </property>
@@ -400,12 +415,17 @@ border-top: 1px solid #122b4a;</string>
                   </property>
                   <item>
                    <property name="text">
-                    <string>time (ms)</string>
+                    <string>time</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>time/Tcode (a.u.)</string>
+                    <string>value no.</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>distance</string>
                    </property>
                   </item>
                  </widget>
@@ -499,12 +519,25 @@ border-top: 1px solid #122b4a;</string>
                  </widget>
                 </item>
                 <item>
+                 <widget class="QPushButton" name="refresh_distance_button_2">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Refreshes the distance arrays for Plot 2.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>refresh distance</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_13">
                   <property name="spacing">
                    <number>6</number>
                   </property>
                   <item>
                    <widget class="QPushButton" name="tare_distance_button_2">
+                    <property name="toolTip">
+                     <string>Tare distance to zero</string>
+                    </property>
                     <property name="text">
                      <string>tare</string>
                     </property>
@@ -523,6 +556,9 @@ border-top: 1px solid #122b4a;</string>
                       <bold>false</bold>
                      </font>
                     </property>
+                    <property name="toolTip">
+                     <string>Distance constant to equal out the length of the cable</string>
+                    </property>
                    </widget>
                   </item>
                  </layout>
@@ -531,6 +567,9 @@ border-top: 1px solid #122b4a;</string>
               </item>
               <item row="1" column="0">
                <widget class="QLabel" name="plot_rate_2">
+                <property name="toolTip">
+                 <string>Plotting rate in plots per second</string>
+                </property>
                 <property name="text">
                  <string>plot_2_rate</string>
                 </property>
@@ -593,6 +632,9 @@ border-top: 1px solid #122b4a;</string>
                   <bold>false</bold>
                  </font>
                 </property>
+                <property name="toolTip">
+                 <string>Toggles logarithmic scaling along the y-axis of Plot 1.</string>
+                </property>
                 <property name="layoutDirection">
                  <enum>Qt::RightToLeft</enum>
                 </property>
@@ -613,6 +655,9 @@ border-top: 1px solid #122b4a;</string>
                   <weight>50</weight>
                   <bold>false</bold>
                  </font>
+                </property>
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggles the vertical line through the detected maximum for Plot 1.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="layoutDirection">
                  <enum>Qt::RightToLeft</enum>
@@ -644,6 +689,9 @@ border-top: 1px solid #122b4a;</string>
                   <height>20</height>
                  </size>
                 </property>
+                <property name="toolTip">
+                 <string>Enable auto ranging on the x-axis of Plot 1.</string>
+                </property>
                 <property name="text">
                  <string>on</string>
                 </property>
@@ -656,6 +704,9 @@ border-top: 1px solid #122b4a;</string>
                   <width>30</width>
                   <height>20</height>
                  </size>
+                </property>
+                <property name="toolTip">
+                 <string>Disable auto ranging on the x-axis of Plot 1.</string>
                 </property>
                 <property name="text">
                  <string>off</string>
@@ -684,6 +735,9 @@ border-top: 1px solid #122b4a;</string>
                   <height>20</height>
                  </size>
                 </property>
+                <property name="toolTip">
+                 <string>Enable auto ranging on the y-axis of Plot 1.</string>
+                </property>
                 <property name="text">
                  <string>on</string>
                 </property>
@@ -702,6 +756,9 @@ border-top: 1px solid #122b4a;</string>
                   <width>30</width>
                   <height>20</height>
                  </size>
+                </property>
+                <property name="toolTip">
+                 <string>Disable auto ranging on the y-axis of Plot 1.</string>
                 </property>
                 <property name="text">
                  <string>off</string>
@@ -723,6 +780,9 @@ border-top: 1px solid #122b4a;</string>
                   <height>20</height>
                  </size>
                 </property>
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Autorange Plot 1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
                 <property name="styleSheet">
                  <string notr="true"/>
                 </property>
@@ -741,6 +801,9 @@ border-top: 1px solid #122b4a;</string>
              <layout class="QVBoxLayout" name="verticalLayout_8">
               <item>
                <widget class="QLabel" name="plot_rate_1">
+                <property name="toolTip">
+                 <string>Plotting rate in plots per second</string>
+                </property>
                 <property name="text">
                  <string>plot_1_rate</string>
                 </property>
@@ -772,12 +835,25 @@ border-top: 1px solid #122b4a;</string>
                  </widget>
                 </item>
                 <item>
+                 <widget class="QPushButton" name="refresh_distance_button_1">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Refreshes the distance arrays for Plot 1.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>refresh distance</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_12">
                   <property name="spacing">
                    <number>6</number>
                   </property>
                   <item>
                    <widget class="QPushButton" name="tare_distance_button_1">
+                    <property name="toolTip">
+                     <string>Tare distance to zero</string>
+                    </property>
                     <property name="text">
                      <string>tare</string>
                     </property>
@@ -795,6 +871,9 @@ border-top: 1px solid #122b4a;</string>
                       <weight>50</weight>
                       <bold>false</bold>
                      </font>
+                    </property>
+                    <property name="toolTip">
+                     <string notr="true">Distance constant to equal out the length of the cable</string>
                     </property>
                    </widget>
                   </item>
@@ -875,6 +954,9 @@ border-top: 1px solid #122b4a;</string>
                     <bold>false</bold>
                    </font>
                   </property>
+                  <property name="toolTip">
+                   <string>Data option for Plot 1</string>
+                  </property>
                   <item>
                    <property name="text">
                     <string>Raw data</string>
@@ -916,11 +998,14 @@ border-top: 1px solid #122b4a;</string>
                 </item>
                 <item row="1" column="1">
                  <widget class="QComboBox" name="x_data_box1">
+                  <property name="toolTip">
+                   <string>X-Axis options for Plot 1</string>
+                  </property>
                   <property name="editable">
                    <bool>false</bool>
                   </property>
                   <property name="currentIndex">
-                   <number>-1</number>
+                   <number>0</number>
                   </property>
                   <property name="placeholderText">
                    <string>X-Axis Data</string>
@@ -928,6 +1013,11 @@ border-top: 1px solid #122b4a;</string>
                   <item>
                    <property name="text">
                     <string>time</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>distance</string>
                    </property>
                   </item>
                   <item>
@@ -973,6 +1063,9 @@ border-top: 1px solid #122b4a;</string>
                     <bold>false</bold>
                    </font>
                   </property>
+                  <property name="toolTip">
+                   <string>Stop plotting the selected data on Plot 1</string>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true"/>
                   </property>
@@ -999,6 +1092,9 @@ border-top: 1px solid #122b4a;</string>
                     <weight>50</weight>
                     <bold>false</bold>
                    </font>
+                  </property>
+                  <property name="toolTip">
+                   <string>Start plotting the selected data on Plot 1</string>
                   </property>
                   <property name="styleSheet">
                    <string notr="true"/>
@@ -1066,7 +1162,7 @@ border-top: 1px solid #122b4a;</string>
              </widget>
             </item>
             <item row="0" column="0">
-             <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0,0,0,0,0">
+             <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0,0,0,0">
               <item>
                <layout class="QVBoxLayout" name="verticalLayout">
                 <item>
@@ -1084,6 +1180,12 @@ border-top: 1px solid #122b4a;</string>
                     <weight>50</weight>
                     <bold>false</bold>
                    </font>
+                  </property>
+                  <property name="toolTip">
+                   <string>Connect the socket to the given IP-address and port.</string>
+                  </property>
+                  <property name="toolTipDuration">
+                   <number>-1</number>
                   </property>
                   <property name="styleSheet">
                    <string notr="true"/>
@@ -1109,6 +1211,9 @@ border-top: 1px solid #122b4a;</string>
                     <bold>false</bold>
                    </font>
                   </property>
+                  <property name="toolTip">
+                   <string>IP-address</string>
+                  </property>
                   <property name="text">
                    <string> IP:</string>
                   </property>
@@ -1129,6 +1234,9 @@ border-top: 1px solid #122b4a;</string>
                     <weight>50</weight>
                     <bold>false</bold>
                    </font>
+                  </property>
+                  <property name="toolTip">
+                   <string>Port</string>
                   </property>
                   <property name="text">
                    <string> Port:</string>
@@ -1162,6 +1270,9 @@ border-top: 1px solid #122b4a;</string>
                     <bold>false</bold>
                    </font>
                   </property>
+                  <property name="toolTip">
+                   <string>Connection status</string>
+                  </property>
                   <property name="text">
                    <string>Not connected</string>
                   </property>
@@ -1180,26 +1291,14 @@ border-top: 1px solid #122b4a;</string>
                     <bold>false</bold>
                    </font>
                   </property>
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Data receiving rate of the second ethernet port. &lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;(Might not work on a different computer).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true"/>
                   </property>
                   <property name="text">
                    <string>Ethernet 2: x MBit/s</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLabel" name="label_32">
-                  <property name="font">
-                   <font>
-                    <family>RubFlama</family>
-                    <pointsize>9</pointsize>
-                    <weight>50</weight>
-                    <bold>false</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>TextLabel</string>
                   </property>
                  </widget>
                 </item>
@@ -1209,13 +1308,6 @@ border-top: 1px solid #122b4a;</string>
                <widget class="Line" name="line_11">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="refresh_distance_button">
-                <property name="text">
-                 <string>refresh distance</string>
                 </property>
                </widget>
               </item>
@@ -1256,6 +1348,9 @@ border-top: 1px solid #122b4a;</string>
                     <bold>false</bold>
                    </font>
                   </property>
+                  <property name="toolTip">
+                   <string>Starts up the Receiver class and collects data of the ethernet port.</string>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true"/>
                   </property>
@@ -1280,6 +1375,9 @@ border-top: 1px solid #122b4a;</string>
                     <bold>false</bold>
                    </font>
                   </property>
+                  <property name="toolTip">
+                   <string>Stops the Receiver class.</string>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true"/>
                   </property>
@@ -1299,6 +1397,9 @@ border-top: 1px solid #122b4a;</string>
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Plot 1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="styleSheet">
                <string notr="true">QWidget {
@@ -1462,6 +1563,9 @@ border-top: 1px solid #122b4a;</string>
                   <bold>false</bold>
                  </font>
                 </property>
+                <property name="toolTip">
+                 <string>Toggles logarithmic scaling along the y-axis of Plot 2.</string>
+                </property>
                 <property name="layoutDirection">
                  <enum>Qt::RightToLeft</enum>
                 </property>
@@ -1482,6 +1586,9 @@ border-top: 1px solid #122b4a;</string>
                   <weight>50</weight>
                   <bold>false</bold>
                  </font>
+                </property>
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggles the vertical line through the detected maximum for Plot 2.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="layoutDirection">
                  <enum>Qt::RightToLeft</enum>
@@ -1513,6 +1620,9 @@ border-top: 1px solid #122b4a;</string>
                   <height>20</height>
                  </size>
                 </property>
+                <property name="toolTip">
+                 <string>Enable auto ranging on the x-axis of Plot 2.</string>
+                </property>
                 <property name="text">
                  <string>on</string>
                 </property>
@@ -1525,6 +1635,9 @@ border-top: 1px solid #122b4a;</string>
                   <width>30</width>
                   <height>20</height>
                  </size>
+                </property>
+                <property name="toolTip">
+                 <string>Disable auto ranging on the x-axis of Plot 2.</string>
                 </property>
                 <property name="text">
                  <string>off</string>
@@ -1553,6 +1666,9 @@ border-top: 1px solid #122b4a;</string>
                   <height>20</height>
                  </size>
                 </property>
+                <property name="toolTip">
+                 <string>Enable auto ranging on the y-axis of Plot 2.</string>
+                </property>
                 <property name="text">
                  <string>on</string>
                 </property>
@@ -1571,6 +1687,9 @@ border-top: 1px solid #122b4a;</string>
                   <width>30</width>
                   <height>20</height>
                  </size>
+                </property>
+                <property name="toolTip">
+                 <string>Disable auto ranging on the y-axis of Plot 2.</string>
                 </property>
                 <property name="text">
                  <string>off</string>
@@ -1591,6 +1710,9 @@ border-top: 1px solid #122b4a;</string>
                   <width>16777215</width>
                   <height>20</height>
                  </size>
+                </property>
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Autorange Plot 2&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="styleSheet">
                  <string notr="true"/>
@@ -1658,6 +1780,9 @@ border-top: 1px solid #122b4a;</string>
                      <verstretch>0</verstretch>
                     </sizepolicy>
                    </property>
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copies all the values from the fields above to Plot 2.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
                    <property name="styleSheet">
                     <string notr="true">QPushButton:enabled
  {
@@ -1686,6 +1811,9 @@ QPushButton:disabled
                    <property name="text">
                     <string>Measurement end (m):</string>
                    </property>
+                   <property name="buddy">
+                    <cstring>norm_mes_end_box1</cstring>
+                   </property>
                   </widget>
                  </item>
                  <item row="2" column="0">
@@ -1693,10 +1821,16 @@ QPushButton:disabled
                    <property name="text">
                     <string>Calibration start (m):</string>
                    </property>
+                   <property name="buddy">
+                    <cstring>calibration_start_box1</cstring>
+                   </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
                   <widget class="QDoubleSpinBox" name="norm_mes_start_box1">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The beginning of the intervall for distance measurement in the calibrated signal in meters for Plot 1.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
                    <property name="singleStep">
                     <double>0.100000000000000</double>
                    </property>
@@ -1717,6 +1851,9 @@ QPushButton:disabled
                  </item>
                  <item row="3" column="1">
                   <widget class="QDoubleSpinBox" name="calibration_end_box1">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Endpoint of the calibration in meters for Plot 1.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
                    <property name="singleStep">
                     <double>0.100000000000000</double>
                    </property>
@@ -1727,10 +1864,16 @@ QPushButton:disabled
                    <property name="text">
                     <string>Calibration end (m):</string>
                    </property>
+                   <property name="buddy">
+                    <cstring>calibration_end_box1</cstring>
+                   </property>
                   </widget>
                  </item>
                  <item row="1" column="1">
                   <widget class="QDoubleSpinBox" name="norm_mes_end_box1">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The end of the intervall for distance measurement in the calibrated signal in meters for Plot 1.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
                    <property name="singleStep">
                     <double>0.100000000000000</double>
                    </property>
@@ -1753,6 +1896,9 @@ QPushButton:disabled
                      <family>RubFlama</family>
                      <pointsize>10</pointsize>
                     </font>
+                   </property>
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Refreshes the norm-array with the given values for Plot 1.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                    </property>
                    <property name="styleSheet">
                     <string notr="true">QPushButton:enabled
@@ -1797,6 +1943,9 @@ QPushButton:disabled
                  </item>
                  <item row="2" column="1">
                   <widget class="QDoubleSpinBox" name="calibration_start_box1">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Startpoint of the calibration in meters for Plot 1.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
                    <property name="singleStep">
                     <double>0.100000000000000</double>
                    </property>
@@ -1807,17 +1956,26 @@ QPushButton:disabled
                    <property name="text">
                     <string>Measurement start (m):</string>
                    </property>
+                   <property name="buddy">
+                    <cstring>norm_mes_start_box1</cstring>
+                   </property>
                   </widget>
                  </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="label_50">
                    <property name="text">
-                    <string>Distance Limit:</string>
+                    <string>Pulse detection threshold:</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>lim_distance_box1</cstring>
                    </property>
                   </widget>
                  </item>
                  <item row="4" column="1">
                   <widget class="QSpinBox" name="lim_distance_box1">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The critical height that a pulse needs to exceed in order to be detected as an object for Plot 2.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
                    <property name="maximum">
                     <number>100</number>
                    </property>
@@ -1829,6 +1987,9 @@ QPushButton:disabled
                 <layout class="QGridLayout" name="gridLayout_11">
                  <item row="1" column="1">
                   <widget class="QDoubleSpinBox" name="norm_mes_end_box2">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The end of the intervall for distance measurement in the calibrated signal in meters for Plot 2.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
                    <property name="value">
                     <double>2.000000000000000</double>
                    </property>
@@ -1841,6 +2002,9 @@ QPushButton:disabled
                      <family>RubFlama</family>
                      <pointsize>10</pointsize>
                     </font>
+                   </property>
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Refreshes the norm-array with the given values for Plot 2.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                    </property>
                    <property name="styleSheet">
                     <string notr="true">QPushButton:enabled
@@ -1898,7 +2062,11 @@ QPushButton:disabled
                   </widget>
                  </item>
                  <item row="0" column="1">
-                  <widget class="QDoubleSpinBox" name="norm_mes_start_box2"/>
+                  <widget class="QDoubleSpinBox" name="norm_mes_start_box2">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The beginning of the intervall for distance measurement in the calibrated signal in meters for Plot 2.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                  </widget>
                  </item>
                  <item row="3" column="0">
                   <widget class="QLabel" name="label_49">
@@ -1915,7 +2083,11 @@ QPushButton:disabled
                   </widget>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QDoubleSpinBox" name="calibration_end_box2"/>
+                  <widget class="QDoubleSpinBox" name="calibration_end_box2">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Endpoint of the calibration in meters for Plot 2.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                  </widget>
                  </item>
                  <item row="7" column="0">
                   <widget class="QLabel" name="label_46">
@@ -1925,7 +2097,11 @@ QPushButton:disabled
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QDoubleSpinBox" name="calibration_start_box2"/>
+                  <widget class="QDoubleSpinBox" name="calibration_start_box2">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Startpoint of the calibration in meters for Plot 2.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                  </widget>
                  </item>
                  <item row="5" column="1">
                   <widget class="QPushButton" name="copy_norm_config_2">
@@ -1934,6 +2110,9 @@ QPushButton:disabled
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
+                   </property>
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copies all the values from the fields above to Plot 1.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                    </property>
                    <property name="styleSheet">
                     <string notr="true">QPushButton:enabled
@@ -1972,12 +2151,16 @@ QPushButton:disabled
                   </spacer>
                  </item>
                  <item row="4" column="1">
-                  <widget class="QSpinBox" name="lim_distance_box2"/>
+                  <widget class="QSpinBox" name="lim_distance_box2">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The critical height that a pulse needs to exceed in order to be detected as an object for Plot 2.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                  </widget>
                  </item>
                  <item row="4" column="0">
                   <widget class="QLabel" name="label_51">
                    <property name="text">
-                    <string>Distance Limit</string>
+                    <string>Pulse detection threshold:</string>
                    </property>
                   </widget>
                  </item>
@@ -2071,6 +2254,9 @@ QPushButton:disabled
                <property name="text">
                 <string>Samples per sequence:</string>
                </property>
+               <property name="buddy">
+                <cstring>lineEdit_7</cstring>
+               </property>
               </widget>
              </item>
              <item row="1" column="1">
@@ -2093,6 +2279,9 @@ QPushButton:disabled
                </property>
                <property name="text">
                 <string>Sequence repititions:</string>
+               </property>
+               <property name="buddy">
+                <cstring>lineEdit_9</cstring>
                </property>
               </widget>
              </item>
@@ -2117,6 +2306,9 @@ QPushButton:disabled
                <property name="text">
                 <string>Shifts:</string>
                </property>
+               <property name="buddy">
+                <cstring>lineEdit_2</cstring>
+               </property>
               </widget>
              </item>
              <item row="3" column="1">
@@ -2139,6 +2331,9 @@ QPushButton:disabled
                </property>
                <property name="text">
                 <string>Offset:</string>
+               </property>
+               <property name="buddy">
+                <cstring>spinBox_2</cstring>
                </property>
               </widget>
              </item>
@@ -2226,6 +2421,9 @@ QPushButton:disabled
                </property>
                <property name="text">
                 <string>Interpolation</string>
+               </property>
+               <property name="buddy">
+                <cstring>interpolation_value</cstring>
                </property>
               </widget>
              </item>
@@ -2317,6 +2515,9 @@ QPushButton:disabled
                <property name="text">
                 <string>Length:</string>
                </property>
+               <property name="buddy">
+                <cstring>length_edit</cstring>
+               </property>
               </widget>
              </item>
              <item row="0" column="1">
@@ -2365,6 +2566,9 @@ QPushButton:disabled
                <property name="text">
                 <string>Shifts:</string>
                </property>
+               <property name="buddy">
+                <cstring>shifts_edit</cstring>
+               </property>
               </widget>
              </item>
              <item row="1" column="1">
@@ -2393,6 +2597,9 @@ QPushButton:disabled
                </property>
                <property name="text">
                 <string>Samples per sequence:</string>
+               </property>
+               <property name="buddy">
+                <cstring>sps_edit</cstring>
                </property>
               </widget>
              </item>
@@ -2423,6 +2630,9 @@ QPushButton:disabled
                <property name="text">
                 <string>Sequence repititions:</string>
                </property>
+               <property name="buddy">
+                <cstring>sr_edit</cstring>
+               </property>
               </widget>
              </item>
              <item row="3" column="1">
@@ -2451,6 +2661,9 @@ QPushButton:disabled
                </property>
                <property name="text">
                 <string>Offset:</string>
+               </property>
+               <property name="buddy">
+                <cstring>offset_edit</cstring>
                </property>
               </widget>
              </item>
@@ -2484,6 +2697,9 @@ QPushButton:disabled
                  <family>RubFlama</family>
                  <pointsize>10</pointsize>
                 </font>
+               </property>
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Refreshes configuration for data interpreting.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;This does &lt;span style=&quot; font-style:italic; text-decoration: underline;&quot;&gt;not&lt;/span&gt; change the FPGA!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton:enabled
@@ -2645,7 +2861,7 @@ QPushButton:disabled
              </palette>
             </property>
             <property name="title">
-             <string>GroupBox</string>
+             <string>Empty</string>
             </property>
             <property name="flat">
              <bool>false</bool>
@@ -2687,12 +2903,18 @@ QPushButton:disabled
              <property name="text">
               <string>IP-Address:</string>
              </property>
+             <property name="buddy">
+              <cstring>ip1</cstring>
+             </property>
             </widget>
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="label_2">
              <property name="text">
               <string>Receiving Port:</string>
+             </property>
+             <property name="buddy">
+              <cstring>recport</cstring>
              </property>
             </widget>
            </item>
@@ -2710,6 +2932,9 @@ QPushButton:disabled
             <widget class="QLabel" name="label_3">
              <property name="text">
               <string>Sending Port:</string>
+             </property>
+             <property name="buddy">
+              <cstring>senport</cstring>
              </property>
             </widget>
            </item>
@@ -2841,12 +3066,18 @@ QPushButton:disabled
                  <property name="text">
                   <string>Start Point:</string>
                  </property>
+                 <property name="buddy">
+                  <cstring>sound_bar_start_box</cstring>
+                 </property>
                 </widget>
                </item>
                <item row="1" column="0">
                 <widget class="QLabel" name="label_52">
                  <property name="text">
                   <string>End Point:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>sound_bar_end_box</cstring>
                  </property>
                 </widget>
                </item>
@@ -2855,12 +3086,18 @@ QPushButton:disabled
                  <property name="text">
                   <string>Buttons:</string>
                  </property>
+                 <property name="buddy">
+                  <cstring>button_number_box</cstring>
+                 </property>
                 </widget>
                </item>
                <item row="3" column="0">
                 <widget class="QLabel" name="label_54">
                  <property name="text">
                   <string>Button 0:</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>first_button_box</cstring>
                  </property>
                 </widget>
                </item>
@@ -2973,6 +3210,9 @@ QPushButton:disabled
             <property name="text">
              <string>Volume:</string>
             </property>
+            <property name="buddy">
+             <cstring>volume_slider</cstring>
+            </property>
            </widget>
           </item>
           <item row="5" column="0">
@@ -3081,26 +3321,9 @@ QPushButton:disabled
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>length_edit</tabstop>
-  <tabstop>shifts_edit</tabstop>
-  <tabstop>sps_edit</tabstop>
-  <tabstop>sr_edit</tabstop>
-  <tabstop>offset_edit</tabstop>
-  <tabstop>refresh_config</tabstop>
-  <tabstop>interpolation_value</tabstop>
-  <tabstop>interpolation_button</tabstop>
-  <tabstop>lineEdit_7</tabstop>
-  <tabstop>lineEdit_9</tabstop>
-  <tabstop>lineEdit_2</tabstop>
-  <tabstop>spinBox_2</tabstop>
-  <tabstop>pushButton_2</tabstop>
   <tabstop>connect_button</tabstop>
-  <tabstop>refresh_distance_button</tabstop>
   <tabstop>start_receive</tabstop>
   <tabstop>stop_receive</tabstop>
-  <tabstop>log_y_box1</tabstop>
-  <tabstop>inf_line_box1</tabstop>
-  <tabstop>plot_home1</tabstop>
   <tabstop>tare_distance_button_1</tabstop>
   <tabstop>distance_const_box_1</tabstop>
   <tabstop>last_values1</tabstop>
@@ -3108,6 +3331,13 @@ QPushButton:disabled
   <tabstop>x_data_box1</tabstop>
   <tabstop>stop_plot1</tabstop>
   <tabstop>start_plot1</tabstop>
+  <tabstop>log_y_box1</tabstop>
+  <tabstop>inf_line_box1</tabstop>
+  <tabstop>enable_auto_x1</tabstop>
+  <tabstop>disable_auto_x1</tabstop>
+  <tabstop>enable_auto_y1</tabstop>
+  <tabstop>disable_auto_y1</tabstop>
+  <tabstop>plot_home1</tabstop>
   <tabstop>tare_distance_button_2</tabstop>
   <tabstop>distance_const_box_2</tabstop>
   <tabstop>last_values2</tabstop>
@@ -3115,6 +3345,34 @@ QPushButton:disabled
   <tabstop>x_data_box2</tabstop>
   <tabstop>stop_plot2</tabstop>
   <tabstop>start_plot2</tabstop>
+  <tabstop>log_y_box2</tabstop>
+  <tabstop>inf_line_box2</tabstop>
+  <tabstop>enable_auto_x2</tabstop>
+  <tabstop>disable_auto_x2</tabstop>
+  <tabstop>enable_auto_y2</tabstop>
+  <tabstop>disable_auto_y2</tabstop>
+  <tabstop>plot_home2</tabstop>
+  <tabstop>length_edit</tabstop>
+  <tabstop>shifts_edit</tabstop>
+  <tabstop>sps_edit</tabstop>
+  <tabstop>sr_edit</tabstop>
+  <tabstop>offset_edit</tabstop>
+  <tabstop>refresh_config</tabstop>
+  <tabstop>plot_choose_box</tabstop>
+  <tabstop>norm_mes_start_box1</tabstop>
+  <tabstop>norm_mes_end_box1</tabstop>
+  <tabstop>calibration_start_box1</tabstop>
+  <tabstop>calibration_end_box1</tabstop>
+  <tabstop>lim_distance_box1</tabstop>
+  <tabstop>copy_norm_config_1</tabstop>
+  <tabstop>normation_refresh_button1</tabstop>
+  <tabstop>interpolation_value</tabstop>
+  <tabstop>interpolation_button</tabstop>
+  <tabstop>lineEdit_7</tabstop>
+  <tabstop>lineEdit_9</tabstop>
+  <tabstop>lineEdit_2</tabstop>
+  <tabstop>spinBox_2</tabstop>
+  <tabstop>pushButton_2</tabstop>
   <tabstop>ip1</tabstop>
   <tabstop>ip2</tabstop>
   <tabstop>ip3</tabstop>
@@ -3122,11 +3380,29 @@ QPushButton:disabled
   <tabstop>recport</tabstop>
   <tabstop>senport</tabstop>
   <tabstop>refresh</tabstop>
-  <tabstop>volume_slider</tabstop>
-  <tabstop>tabWidget</tabstop>
-  <tabstop>minimize_button</tabstop>
-  <tabstop>close_button</tabstop>
   <tabstop>maximize_button</tabstop>
+  <tabstop>start_sound_button</tabstop>
+  <tabstop>stop_sound_button</tabstop>
+  <tabstop>sound_bar_start_box</tabstop>
+  <tabstop>sound_bar_end_box</tabstop>
+  <tabstop>button_number_box</tabstop>
+  <tabstop>first_button_box</tabstop>
+  <tabstop>refresh_sound_values_button</tabstop>
+  <tabstop>magic_finder_button</tabstop>
+  <tabstop>only_changes_sine_box</tabstop>
+  <tabstop>start_sine_plot_button</tabstop>
+  <tabstop>stop_sine_plot_button</tabstop>
+  <tabstop>volume_slider</tabstop>
+  <tabstop>minimize_button</tabstop>
+  <tabstop>normation_refresh_button2</tabstop>
+  <tabstop>norm_mes_end_box2</tabstop>
+  <tabstop>norm_mes_start_box2</tabstop>
+  <tabstop>calibration_start_box2</tabstop>
+  <tabstop>calibration_end_box2</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>copy_norm_config_2</tabstop>
+  <tabstop>lim_distance_box2</tabstop>
+  <tabstop>close_button</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -3137,8 +3413,8 @@ QPushButton:disabled
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>750</x>
-     <y>25</y>
+     <x>940</x>
+     <y>36</y>
     </hint>
     <hint type="destinationlabel">
      <x>389</x>
@@ -3153,8 +3429,8 @@ QPushButton:disabled
    <slot>showMinimized()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>678</x>
-     <y>25</y>
+     <x>860</x>
+     <y>36</y>
     </hint>
     <hint type="destinationlabel">
      <x>389</x>
@@ -3169,8 +3445,8 @@ QPushButton:disabled
    <slot>setCurrentIndex(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>99</x>
-     <y>481</y>
+     <x>98</x>
+     <y>493</y>
     </hint>
     <hint type="destinationlabel">
      <x>163</x>

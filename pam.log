@@ -1,15 +1,15 @@
-INFO:root:button_number_box: 39
-INFO:root:button_number_box2: 41
-INFO:root:calibration_end_box1: 3.6
-INFO:root:calibration_end_box2: 3.6
+INFO:root:button_number_box: 2
+INFO:root:button_number_box2: 2
+INFO:root:calibration_end_box1: 4.8
+INFO:root:calibration_end_box2: 4.8
 INFO:root:calibration_start_box1: 0.4
 INFO:root:calibration_start_box2: 0.4
 INFO:root:distance_const_box_1: 1
 INFO:root:distance_const_box_2: 1
 INFO:root:doubleSpinBox: 0
-INFO:root:end_value_box: 1.61
-INFO:root:end_value_box2: 1.61
-INFO:root:first_button_box: 39
+INFO:root:end_value_box: 99.99
+INFO:root:end_value_box2: 99.99
+INFO:root:first_button_box: 2
 INFO:root:inf_line_box1: false
 INFO:root:inf_line_box2: false
 INFO:root:interpolation_value: 5
@@ -17,37 +17,34 @@ INFO:root:ip1: 192
 INFO:root:ip2: 168
 INFO:root:ip3: 1
 INFO:root:ip4: 1
-INFO:root:last_values1: 800
-INFO:root:last_values2: 400
-INFO:root:lim_distance_box1: 35
-INFO:root:lim_distance_box2: 35
+INFO:root:last_values1: 3100
+INFO:root:last_values2: 500
+INFO:root:lim_distance_box1: 26
+INFO:root:lim_distance_box2: 30
 INFO:root:lineEdit_2: 
 INFO:root:lineEdit_7: 
 INFO:root:lineEdit_9: 
 INFO:root:log_y_box1: false
 INFO:root:log_y_box2: false
-INFO:root:norm_mes_end_box1: 1.9
-INFO:root:norm_mes_end_box2: 1.9
+INFO:root:norm_mes_end_box1: 1.8
+INFO:root:norm_mes_end_box2: 1.8
 INFO:root:norm_mes_start_box1: 0.16
 INFO:root:norm_mes_start_box2: 0.16
-INFO:root:null_button_box: 18
-INFO:root:null_button_box2: 18
+INFO:root:null_button_box: 0
+INFO:root:null_button_box2: 0
 INFO:root:offset_edit: 0
 INFO:root:only_changes_sine_box: true
-INFO:root:qt_spinbox_lineedit: 800
+INFO:root:qt_spinbox_lineedit: 3100
 INFO:root:recport: 9090
 INFO:root:senport: 9091
 INFO:root:shifts_edit: 1280
-INFO:root:sound_bar_end_box: 1.61
-INFO:root:sound_bar_start_box: 0.07
+INFO:root:sound_bar_end_box: 99.99
+INFO:root:sound_bar_start_box: 99.99
 INFO:root:spinBox_2: 0
 INFO:root:sps_edit: 16
 INFO:root:sr_edit: 2
-INFO:root:start_value_box: 0.07
-INFO:root:start_value_box2: 0.07
-INFO:root:
-INFO:root:ComboBox x_data_box1 changed to: time
-INFO:root:x_data_refresher on plot 0
+INFO:root:start_value_box: 99.99
+INFO:root:start_value_box2: 99.99
 INFO:root:
 INFO:root:Button clicked: connect_button
 INFO:root:
@@ -58,29 +55,51 @@ INFO:root:plot_starter on plot: 0
 INFO:root:data connector on plot: 0, requests[0] = 1
 INFO:root:plot_connector on plot: 0, requests[0] = 1
 INFO:root:
-INFO:root:ComboBox y_data_box1 changed to: IRF Interpolated Norm
+INFO:root:ComboBox y_data_box1 changed to: IRF Interpolated
+INFO:root:y_data_refresher on plot: 0
+INFO:root:plot_breaker on plot: 0
+INFO:root:plot_disconnector on plot: 0
+INFO:root:data_disconnector on plot: 0, requests[0] = 0
+INFO:root:plot_starter on plot: 0
+INFO:root:data connector on plot: 0, requests[0] = 5
+INFO:root:plot_connector on plot: 0, requests[0] = 5
+INFO:root:autoRange requested on plot: 0, autoRanging now
+INFO:root:
+INFO:root:ComboBox y_data_box1 changed to: Distance Norm
+INFO:root:y_data_refresher on plot: 0
 INFO:root:plot_breaker on plot: 0
 INFO:root:plot_disconnector on plot: 0
 INFO:root:data_disconnector on plot: 0, requests[0] = 0
 INFO:root:plot_starter on plot: 0
 INFO:root:refresh_norm_values on plot: 0
-INFO:root:data connector on plot: 0, requests[0] = 6
-INFO:root:plot_connector on plot: 0, requests[0] = 6
-INFO:root:idx_start: 5, idx_stop: 63
-INFO:root:autoRange requested on plot: 0, autoRanging now
-INFO:root:
-INFO:root:ComboBox y_data_box2 changed to: IRF Interpolated Norm
+INFO:root:SecondData 0 values: cal_start: 0.4,cal_end: 4.8mes_start: 0.16mes_end: 1.8lim_distance: 26
+INFO:root:data connector on plot: 0, requests[0] = 4
+INFO:root:plot_connector on plot: 0, requests[0] = 4
+INFO:root:idx_start: 5, idx_stop: 59
 INFO:root:
 INFO:root:Button clicked: start_plot2
 INFO:root:plot_starter on plot: 1
-INFO:root:refresh_norm_values on plot: 1
-INFO:root:data connector on plot: 1, requests[1] = 6
-INFO:root:plot_connector on plot: 1, requests[1] = 6
-INFO:root:idx_start: 5, idx_stop: 63
-INFO:root:autoRange requested on plot: 1, autoRanging now
+INFO:root:data connector on plot: 1, requests[1] = 1
+INFO:root:plot_connector on plot: 1, requests[1] = 1
 INFO:root:
-INFO:root:ComboBox plot_choose_box changed to: 2
-INFO:root:
-INFO:root:Button clicked: normation_refresh_button2
+INFO:root:ComboBox y_data_box2 changed to: Distance Norm
+INFO:root:y_data_refresher on plot: 1
+INFO:root:plot_breaker on plot: 1
+INFO:root:plot_disconnector on plot: 1
+INFO:root:data_disconnector on plot: 1, requests[1] = 0
+INFO:root:plot_starter on plot: 1
 INFO:root:refresh_norm_values on plot: 1
-INFO:root:idx_start: 5, idx_stop: 63
+INFO:root:SecondData 1 values: cal_start: 0.4,cal_end: 4.8mes_start: 0.16mes_end: 1.8lim_distance: 30
+INFO:root:data connector on plot: 1, requests[1] = 4
+INFO:root:plot_connector on plot: 1, requests[1] = 4
+INFO:root:idx_start: 5, idx_stop: 59
+INFO:root:
+INFO:root:Button clicked: stop_plot2
+INFO:root:plot_breaker on plot: 1
+INFO:root:plot_disconnector on plot: 1
+INFO:root:data_disconnector on plot: 1, requests[1] = 0
+INFO:root:
+INFO:root:Button clicked: stop_plot1
+INFO:root:plot_breaker on plot: 0
+INFO:root:plot_disconnector on plot: 0
+INFO:root:data_disconnector on plot: 0, requests[0] = 0

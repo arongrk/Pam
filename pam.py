@@ -8,8 +8,8 @@ from collections import deque
 
 from PyQt5.QtCore import *
 from PyQt5.QtSvg import QSvgWidget
-from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QSplashScreen, QPushButton, QCheckBox, QLabel,\
-    QLineEdit, QComboBox, QSpinBox, QGroupBox, QDoubleSpinBox
+from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication, QSplashScreen, QPushButton, QCheckBox, QLabel, \
+    QLineEdit, QComboBox, QSpinBox, QGroupBox, QDoubleSpinBox, QToolTip
 from PyQt5.QtGui import QIcon, QPixmap, QFontDatabase, QFont
 from PyQt5 import uic
 from pyqtgraph import mkPen, InfiniteLine, ViewBox
@@ -89,6 +89,7 @@ class UI(QMainWindow):
             self.normalization_refresh_buttons = [self.normation_refresh_button1, self.normation_refresh_button2]
             self.copy_norm_config_buttons = [self.copy_norm_config_1, self.copy_norm_config_2]
             self.lim_distance_boxes = [self.lim_distance_box1, self.lim_distance_box2]
+            self.refresh_distance_buttons = [self.refresh_distance_button_1, self.refresh_distance_button_2]
 
         # Setting up the connections for the log file
         if True:
@@ -323,11 +324,12 @@ class UI(QMainWindow):
 
         # Setting up the distance plot calculation
         if True:
-            self.distance_values = deque()
-            self.distance_time_values = deque()
+            self.distance_value_arrays = [deque() for i in range(self.plot_count)]
+            self.distance_time_arrays = [deque() for i in range(self.plot_count)]
 
             # refresh_distance_button
-            self.refresh_distance_button.clicked.connect(self.refresh_distance_array)
+            for plot in range(self.plot_count):
+                self.refresh_distance_buttons[plot].clicked.connect(self.refresh_distance_arrays_slots[plot])
 
             self.distance_value_number = 0
 
@@ -395,7 +397,9 @@ class UI(QMainWindow):
 
     def plot_signal(self, data, plot: int):
         """
-        plots the given data on the given plot
+        Called by plot_ready signals or self.make_distance_array.
+
+        Plots the given data on the given plot.
 
         :param data: a 2-axis set of data
         :param plot: 0 or 1
@@ -417,7 +421,7 @@ class UI(QMainWindow):
 
     def plot_starter(self, _=None, plot: int = None):
         """
-        called by the start_plot buttons or to refresh settings of the given plot like this:
+        Called by the start_plot buttons or to refresh settings of the given plot like this:
         
         self.plot_breaker(plot)
         
@@ -452,6 +456,8 @@ class UI(QMainWindow):
                 self.inf_line_boxes[plot].setChecked(False)
                 self.log_y_boxes[plot].setChecked(False)
                 self.graphs[plot].enableAutoRange()
+                self.second_data_classes[plot][0].t0 = time.time()
+                self.refresh_distance_arrays(plot=plot)
             case 'Distance Norm':
                 self.requests[plot] = 4
                 self.distance_value_number = 0
@@ -459,6 +465,8 @@ class UI(QMainWindow):
                 self.graphs[plot].enableAutoRange()
                 self.inf_line_boxes[plot].setEnabled(False)
                 self.inf_line_boxes[plot].setChecked(False)
+                self.second_data_classes[plot][0].t0 = time.time()
+                self.refresh_distance_arrays(plot=plot)
             case 'IRF Interpolated':
                 self.requests[plot] = 5
                 self.inf_line_boxes[plot].setEnabled(True)
@@ -472,7 +480,7 @@ class UI(QMainWindow):
 
     def plot_breaker(self, _=None, plot: int = None):
         """
-        called by the stop_plot buttons or to refresh settings of the given plot like this:
+        Called by the stop_plot buttons or to refresh settings of the given plot like this:
         
         self.plot_breaker(plot)
         
@@ -491,6 +499,8 @@ class UI(QMainWindow):
 
     def data_connector(self, plot: int):
         """
+        Called by plot_starter.
+
         connects the raw data or the irf data sets of the receiver-class to the requested
         signal processing method of the second data class 
         
@@ -521,11 +531,14 @@ class UI(QMainWindow):
         :return: no return
         """
         logging.info(f'data_disconnector on plot: {plot}, requests[{plot}] = {self.requests[plot]}')
+        unconnect(self.receiver.measurement_ready, self.second_data_classes[plot][0].raw_data)
         for i in self.second_data_classes[plot][0].return_functions():
             unconnect(self.receiver.irf_measurement_ready, i)
 
     def plot_connector(self, request, plot: int):
         """
+        Called by plot_starter.
+
         connects the requested signal of the given second_data class to the given plot. Calls unconnect before to make
         sure there is no double connections. Usually called after self.data_connector()
         
@@ -570,6 +583,7 @@ class UI(QMainWindow):
         :param plot: 0 or 1
         :return: no return
         """
+        logging.info(f'y_data_refresher on plot: {plot}')
         unconnect(self.x_data_boxes[plot].currentTextChanged, self.x_data_refresher_slots[plot])
         unconnect(self.x_data_boxes[plot].currentTextChanged, self.combobox_changed_log)
         self.x_data_boxes[plot].clear()
@@ -609,7 +623,7 @@ class UI(QMainWindow):
             if self.requests[plot] not in (3, 4):
                 self.plot_home_requests[plot] = True
             else:
-                self.refresh_distance_array()
+                self.refresh_distance_arrays(plot=plot)
 
     def inf_line_refresher(self, state, plot: int):
         """
@@ -620,6 +634,7 @@ class UI(QMainWindow):
         :param plot: 0 or 1
         :return: no return
         """
+        logging.info(f'inf_line_refresher on plot: {plot}')
         if state == 2:
             self.graphs[plot].addItem(self.inf_lines[plot])
         else:
@@ -634,7 +649,7 @@ class UI(QMainWindow):
         :param plot: 0 or 1
         :return: no return
         """
-        self.second_data_classes[plot][0].cable_constant += np.average(np.array(self.distance_values)[-20:])
+        self.second_data_classes[plot][0].cable_constant += np.average(np.array(self.distance_value_arrays[plot])[-20:])
         if plot == 0:
             self.distance_const_box_1.setValue(self.second_data_classes[plot][0].cable_constant)
         else:
@@ -646,38 +661,41 @@ class UI(QMainWindow):
         Makes the distance arrays ready for plotting and receives its data from the given second_data instance.
         Only method that calls self.plot_signal() not via a signal
 
-        :param data: provided by the signal SecondData.distance_ready()
+        :param data: provided by signal SecondData.distance_ready()
         :param plot: 0 or 1
         :return: no return
         """
-        self.distance_values.append(data[1])
+        # print(plot)
+        self.distance_value_arrays[plot].append(data[1])
         match self.x_data_boxes[plot].currentText():
             case 'duration':
-                self.distance_time_values.append(data[0])
+                self.distance_time_arrays[plot].append(data[0])
             case 'value no.':
                 self.distance_value_number += 1
-                self.distance_time_values.append(self.distance_value_number)
+                self.distance_time_arrays[plot].append(self.distance_value_number)
         l_v = self.last_n_values_boxes[plot].value()
-        if self.requests[plot] in (3, 4):
-            self.plot_signal((np.array(self.distance_time_values)[-l_v:], np.array(self.distance_values)[-l_v:]), plot)
+        self.plot_signal((np.array(self.distance_time_arrays[plot])[-l_v:],
+                          np.array(self.distance_value_arrays[plot])[-l_v:]), plot)
 
-    def refresh_distance_array(self):
+    def refresh_distance_arrays(self, _=None, plot=None):
         """
         Called by the refresh_distance button. Clears out the distance arrays and resets Receiver.t0 to zero.
 
+        :param _: unused argument used to intercept the argument of the QPushButton.clicked(bool) signal
+        :param plot:
         :return: no return
         """
-        self.distance_values.clear()
-        self.distance_time_values.clear()
-        self.receiver.t0 = time.time()
+        self.distance_value_arrays[plot].clear()
+        self.distance_time_arrays[plot].clear()
+        self.second_data_classes[plot][0].t0 = time.time()
 
-    def refresh_norm_values(self,_=None , plot: int = None):
+    def refresh_norm_values(self, _=None, plot: int = None):
         """
         Called by the normation_refresh. Refreshes the necessary parameters of the given SecondData instance by
         the one provided in the boxes in the interface. Then connects exactly one irf_measurement to
         SecondData.refresh_y_ref to make or renew the norm array.
 
-        :param _: intercepts
+        :param _: unused argument used to intercept the argument of the QPushButton.clicked(bool) signal
         :param plot: 0 or 1
         :return: no return
         """
@@ -687,6 +705,13 @@ class UI(QMainWindow):
         self.second_data_classes[plot][0].mes_start = self.norm_mes_start_boxes[plot].value()
         self.second_data_classes[plot][0].mes_end = self.norm_mes_end_boxes[plot].value()
         self.second_data_classes[plot][0].lim_distance = self.lim_distance_boxes[plot].value()
+
+        logging.info(f'SecondData {plot} values: cal_start: {self.second_data_classes[plot][0].calibration_start},'
+                     f'cal_end: {self.second_data_classes[plot][0].calibration_end}'
+                     f'mes_start: {self.second_data_classes[plot][0].mes_start}'
+                     f'mes_end: {self.second_data_classes[plot][0].mes_end}'
+                     f'lim_distance: {self.second_data_classes[plot][0].lim_distance}')
+
         y_ref = lambda data: self.second_data_classes[plot][0].refresh_y_ref(data)
         self.second_data_classes[plot][0].unconnect_receiver_from_y_ref.connect(
             lambda: unconnect(self.receiver.irf_measurement_ready, y_ref))
@@ -966,6 +991,12 @@ class UI(QMainWindow):
         self.start_receive.setEnabled(True)
 
     def rec_failed(self, error):
+        """
+        Called by...
+
+        :param error: error message
+        :return: no return
+        """
         self.con_status.setStyleSheet('color: red')
         self.reconnect_receiver()
         if error == 'os_exists':

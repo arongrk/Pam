@@ -475,7 +475,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Number of buttons inbetween:</string>
+          <string>Number of buttons:</string>
          </property>
         </widget>
        </item>

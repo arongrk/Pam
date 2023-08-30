@@ -23,6 +23,10 @@ from pyqtgraph import AxisItem
 
 
 class Handler:
+    """
+    Not in Use
+
+    """
 
     def __init__(self, receive, package_length=350, shifts=1280,
                  samples_per_sequence=16, sequence_reps=2, marker=b'\xff\xff\xff\xaa'):
@@ -101,7 +105,6 @@ class Handler:
 
 
 class SecondData(QObject):
-
     # Signals for SecondData
     if True:
         measurement_ready = pyqtSignal(tuple)
@@ -113,6 +116,34 @@ class SecondData(QObject):
     def __init__(self, samples_per_sequence: int, shifts: int, sequence_reps: int, length: int,
                  cable_length_constant: float, norm_measurement_start: float, norm_measurement_end: float,
                  calibration_start: float, calibration_end: float, distance_limit: int, x_data_request: str):
+        """
+        This class is responsible for all further processing steps. An instance of second data can be called and the signal
+        irf_measurement_ready can be connected to its slots.
+
+        When calling SecondData, move it to its own QThread:
+
+
+        second_data = SecondData(...)
+
+        second_data_thread = QThread()
+
+        second_data.moveToThread(second_data_thread)
+
+        second_data_thread.start()
+
+
+        :param samples_per_sequence: Samples per sequence
+        :param shifts: Shifts
+        :param sequence_reps: Sequence repetitions
+        :param length: Length
+        :param cable_length_constant: Cable length constant for distance
+        :param norm_measurement_start: normalized distance measurement start
+        :param norm_measurement_end: normalized distance measurement end
+        :param calibration_start: calibration start
+        :param calibration_end: calibration end
+        :param distance_limit: distance limit
+        :param x_data_request: x data request
+        """
 
         QObject.__init__(self)
 
@@ -139,7 +170,17 @@ class SecondData(QObject):
 
         self.block_norm_signals = False
 
+        self.t0 = time.time()
+
     def raw_data(self, data):
+        """
+        Called by signal measurement_ready of Receiver class.
+
+        re-emits the raw data with requested x data.
+        :
+        :param data: provided by signal Receiver.measurement_ready()
+        :return: tuple(xData, yData)
+        """
         match self.x_data_request:
             case 'time':
                 self.measurement_ready.emit((data[0], data[1]))
@@ -149,6 +190,14 @@ class SecondData(QObject):
                 self.measurement_ready.emit((np.arange(len(data[1])), data[1]))
 
     def irf_data(self, data):
+        """
+        Called by signal irf_measurement_ready() of Receiver class.
+
+        Re-emits the irf data with requested x data
+
+        :param data: provided by signal Receiver.irf_measurement_ready()
+        :return: tuple(xData, yData)
+        """
         match self.x_data_request:
             case 'time':
                 self.irf_measurement_ready.emit((data[0], data[1]))
@@ -158,7 +207,15 @@ class SecondData(QObject):
                 self.irf_measurement_ready.emit((np.arange(len(data[1])), data[1]))
 
     def distance(self, data):
-        t = data[2]
+        """
+        Called by signal irf_measurement_ready() of Receiver class.
+
+        Emits an x and y value of the distance and a time stamp
+
+        :param data: provided by signal Receiver.irf_measurement_ready()
+        :return: tuple(time, distance, height)
+        """
+        t = round(data[2] - self.t0, 3)
         data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts)
         exact_max = exact_polynom_interp_max(data[0], np.absolute(data[1]), True, True, self.cable_constant)
         match self.x_data_request:
@@ -168,6 +225,14 @@ class SecondData(QObject):
                 logging.warning(f'when y-data is \"distance\" x-data cannot be {self.x_data_request}')
 
     def irf_interp(self, data):
+        """
+        Called by signal irf_measurement_ready() of Receiver class.
+
+        Emits the interpolated irf signal, using zero_padding.
+
+        :param data: provided by signal Receiver.irf_measurement_ready()
+        :return: tuple(xData, yData)
+        """
         match self.x_data_request:
             case 'time':
                 data = zero_padding(data[0], data[1], 2.5e+09, 2**5*self.shifts)
@@ -179,6 +244,15 @@ class SecondData(QObject):
         self.irf_interp_ready.emit((data[0], data[1], exact_max))
 
     def irf_interp_norm(self, data):
+        """
+        Called by signal irf_measurement_ready() of Receiver class.
+
+        Emits a normalized interpolated irf signal and an exact maximum point, using the zero_padding and
+        exact_polynom_interp functions.
+
+        :param data: provided by signal Receiver.irf_measurement_ready()
+        :return: tuple(xData, yData, X, Y)
+        """
         if not self.block_norm_signals:
             match self.x_data_request:
                 case 'time':
@@ -201,11 +275,22 @@ class SecondData(QObject):
             self.irf_interp_ready.emit((data[0], data[1], exact_max[0], exact_max[1]))
 
     def distance_norm(self, data):
+        """
+        Called by signal irf_measurement_ready() of Receiver class.
+
+        Emits a distance via the normalized interpolated irf signal.
+
+        :param data: provided by signal Receiver.irf_measurement_ready()
+        :return: tuple(time, distance)
+        """
+        t = round(data[2] - self.t0, 3)
         if not self.block_norm_signals:
-            t = data[2]
             data = zero_padding(data[0], data[1], 2.5e+09, 2 ** 5 * self.shifts, True, self.YRefPos)
+
+            # Determining where exact_polynom_interp_max should look for the maximum
             idx_start = np.argwhere(data[0] > self.mes_start/speed_of_light*2)[0][0]
             idx_stop = np.argwhere(data[0] > self.mes_end/speed_of_light*2)[0][0]
+
             exact_max = exact_polynom_interp_max(data[0],
                                                  np.absolute(data[1]),
                                                  get_distance=True,
@@ -268,8 +353,6 @@ class Receiver(QThread):
 
         self.stop_receive = False
 
-        self.t0 = 0
-
     def connect(self):
         try:
             self.st_connecting.emit()
@@ -294,7 +377,7 @@ class Receiver(QThread):
                 self.packageLost.emit()
             else:
                 self.packageReceived.emit()
-                time_stamp = round(time.time() - self.t0, 10)
+                time_stamp = time.time()
                 y_mes_data = np.frombuffer(r, dtype=np.int32)[:self.set_len] * 8.192 / pow(2, 18)
                 x_mes_data = np.linspace(0, self.mes_len / self.sps * 2e-10 * self.set_len, self.set_len)
                 self.measurement_ready.emit((x_mes_data, y_mes_data, time_stamp))
@@ -650,7 +733,7 @@ class MagicValuesFinder(QDialog):
 
         self.start_value_box2.setValue(self.start_value_box.value())
         self.end_value_box2.setValue(self.end_value_box.value())
-        self.button_number_box2.setValue(self.button_number_box.value()+2)
+        self.button_number_box2.setValue(self.button_number_box.value())
         self.null_button_box2.setValue(self.null_button_box.value())
 
         self.stacked_widget.setCurrentIndex(7)
@@ -661,8 +744,8 @@ class MagicValuesFinder(QDialog):
             self.start_value = self.start_value_box2.value()
         if round(self.end_value, 2) != self.end_value_box2.value():
             self.end_value = self.end_value_box2.value()
-        self.buttons = self.null_button_box2.value()
-        self.button0 = self.button_number_box2.value()
+        self.button0 = self.null_button_box2.value()
+        self.buttons = self.button_number_box2.value()
         self.accept()
         # self.close()
 
