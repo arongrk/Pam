@@ -105,8 +105,9 @@ class Handler:
 
 
 class SecondData(QObject):
-    # Signals for SecondData
     if True:
+        # The signals are used to emit the data when a signal from the Receiver class has been directed to the correct
+        # slot and should now be sent to the main class for plotting or further processing.
         measurement_ready = pyqtSignal(tuple)
         irf_measurement_ready = pyqtSignal(tuple)
         distance_ready = pyqtSignal(tuple)
@@ -158,15 +159,16 @@ class SecondData(QObject):
 
         self.calibration_start = calibration_start
         self.calibration_end = calibration_end
+        self.cal_idx_start, self.cal_idx_end = None, None
 
         self.mes_start = norm_measurement_start
         self.mes_end = norm_measurement_end
+        self.idx_start, self.idx_stop = None, None
 
         self.x_data_request = x_data_request
 
         self.YRefPos = np.array([])
 
-        self.idx_start, self.idx_stop = None, None
 
         self.block_norm_signals = False
 
@@ -304,40 +306,99 @@ class SecondData(QObject):
                 self.distance_ready.emit((t, exact_max[0]))
 
     def return_functions(self):
+        """
+        Called in the MainWindow class and used to disconnect the Receiver class signals from all the functions of the
+        SecondData class.
+
+        :return: All signal processing functions
+        """
         return self.raw_data, self.irf_data, self.distance, self.irf_interp,  self.irf_interp_norm, self.distance_norm
 
     def refresh_y_ref(self, data):
+        """
+        Called by signal irf_measurement_ready of Receiver class.
+
+        Emits a signal that has to be connected to a lambda function which disconnects irf_measurement_ready from 
+        this function.
+
+        :param data:
+        :return:
+        """
+        
+        # Disconnect more data
         self.unconnect_receiver_from_y_ref.emit()
+
+        # Find the indices of the start and end values which are in meters
         self.refresh_idx_lim(data)
+        self.refresh_cal_idx_lim(data)
+
         yData = data[1]
-        tData = data[0]
-        cal_start = np.argwhere(tData > self.calibration_start/speed_of_light*2)[0][0]
-        cal_end = np.argwhere(tData > self.calibration_end/speed_of_light*2)[0][0]
-        yData[:cal_start] = 0
-        yData[cal_start-11:cal_start] = np.linspace(0, yData[cal_start], 11)
-        yData[cal_end:cal_end+11] = np.linspace(yData[cal_start], 0, 11)
-        yData[cal_end+11:] = 0
+        
+        # Fade in and fade out the part of yData needed, rest becomes zero
+        yData[:self.cal_idx_start] = 0
+        yData[self.cal_idx_start-11:self.cal_idx_start] = np.linspace(0, yData[self.cal_idx_start], 11)
+        yData[self.cal_idx_end:self.cal_idx_end+11] = np.linspace(yData[self.cal_idx_start], 0, 11)
+        yData[self.cal_idx_end+11:] = 0
+        
+        # Do a fft to make the normalized array "self.YRefPos"
         Ly = len(yData)
         YRefTemp = fft(yData, Ly) / Ly
         self.YRefPos = YRefTemp[0:trunc(Ly / 2) + 1]
+        
+        # Norm signals can go through again
         self.block_norm_signals = False
 
     def refresh_idx_lim(self, data):
+        """
+        Called by self.refresh_y_ref()
+
+        Finds the indices of the measurement start and end values which are in meters.
+
+        :param data: irf_interpolated array
+        :return: no return
+        """
         self.idx_start = np.argwhere(data[0] > self.mes_start/speed_of_light*2)[0][0]
         self.idx_stop = np.argwhere(data[0] > self.mes_end/speed_of_light*2)[0][0]
-        logging.info(f'idx_start: {self.idx_start}, idx_stop: {self.idx_stop}')
+        
+    def refresh_cal_idx_lim(self, data):
+        """
+        Called by self.refresh_y_ref()
 
+        Finds the indices of the calibration start and end values which are in meters.
+
+        :param data: irf_interpolated array
+        :return: no return
+        """
+        self.cal_idx_start = np.argwhere(data[0] > self.calibration_start/speed_of_light*2)[0][0]
+        self.cal_idx_end = np.argwhere(data[0] > self.calibration_end/speed_of_light*2)[0][0]
+        
 
 class Receiver(QThread):
-    measurement_ready = pyqtSignal(tuple)
-    irf_measurement_ready = pyqtSignal(tuple)
-    st_connecting = pyqtSignal()
-    st_connected = pyqtSignal()
-    st_connect_failed = pyqtSignal(str)
-    packageReceived = pyqtSignal()
-    packageLost = pyqtSignal()
+    if True:
+        # The ..._ready signals are emitted when a package has been received and they carry the package as well as a
+        # time array and a time stamp: tuple(X, Y, time_stamp)
+        measurement_ready = pyqtSignal(tuple)
+        irf_measurement_ready = pyqtSignal(tuple)
+        st_connecting = pyqtSignal()
+        st_connected = pyqtSignal()
+        st_connect_failed = pyqtSignal(str)
+        packageReceived = pyqtSignal()
+        packageLost = pyqtSignal()
 
     def __init__(self, shifts, sequence_repetitions, samples_per_sequence, length, port=9090, ip_address='192.168.1.1'):
+        """
+        The Receiver class connects to the ethernet port and receives the data of the FPGA. It searches for the marker
+        and assembles the packages. It also assembles the irf_measurement.
+
+        It runs in its own thread so that no packages are lost.
+
+        :param shifts: Shifts
+        :param sequence_repetitions: Sequence repitions
+        :param samples_per_sequence: Samples per sequence
+        :param length: Length (Not used)
+        :param port: Ethernet port
+        :param ip_address: Ethernet-IP
+        """
         QThread.__init__(self)
 
         self.ip = ip_address
@@ -353,7 +414,15 @@ class Receiver(QThread):
 
         self.stop_receive = False
 
+
     def connect(self):
+        """
+        Connects self.socket to the given IP and port.
+
+        Emits error messages when connect fails.
+
+        :return: no return
+        """
         try:
             self.st_connecting.emit()
             self.sock.bind((self.ip, self.port))
@@ -367,20 +436,31 @@ class Receiver(QThread):
             self.st_connect_failed.emit('type')
 
     def run(self):
+        """
+        Called by Receiver.start(). Overwrites run() method of QThread.
+
+        Uses Handler class to assemble the packages and keeps running until self.stop_receive is True.
+
+        :return: no return
+        """
         handler = Handler(self.sock, shifts=ceil(self.shifts/80)*80, sequence_reps=self.s_reps,
                           samples_per_sequence=self.sps)
         g = handler.assembler_2()
-        self.t0 = time.time()
         while not self.stop_receive:
             r = next(g)
             if not r:
                 self.packageLost.emit()
             else:
+                # Used to inform the main class for the received counter
                 self.packageReceived.emit()
                 time_stamp = time.time()
+
+                # Assemble end emit the raw data
                 y_mes_data = np.frombuffer(r, dtype=np.int32)[:self.set_len] * 8.192 / pow(2, 18)
                 x_mes_data = np.linspace(0, self.mes_len / self.sps * 2e-10 * self.set_len, self.set_len)
                 self.measurement_ready.emit((x_mes_data, y_mes_data, time_stamp))
+
+                # Assemble and emit the irf_data
                 y_irf_data = averager(y_mes_data, self.shifts, self.sps, self.s_reps)
                 y_irf_data -= np.average(y_irf_data[-100:])
                 x_irf_data = np.arange(1, self.shifts + 1) / 4.975e+09
@@ -389,11 +469,18 @@ class Receiver(QThread):
 
     def stop(self):
         self.stop_receive = True
-        # self.quit()
-        # self.wait()
 
 
 def averager(data_set, shifts, samples_per_sequence, sequence_reps):
+    """
+    Assembles the IRF_data package from raw data.
+
+    :param data_set: Data
+    :param shifts: Shifts
+    :param samples_per_sequence: Samples per sequence
+    :param sequence_reps: Sequence repitions
+    :return: IRF data
+    """
     s = shifts
     t = samples_per_sequence
     u = sequence_reps
@@ -403,10 +490,12 @@ def averager(data_set, shifts, samples_per_sequence, sequence_reps):
 
 def unconnect(signal, old_slot):
     '''
+    Used to safely disconnect a signal from a slot, by trying until failure.
 
-    :param signal:
-    :param old_slot:
-    :return:
+    Prevents error messages if a signal is not connected and also disconnects double connections
+    :param signal: The signal that is connected
+    :param old_slot: The slot it is connected to
+    :return: no return
     '''
     while True:
         try:
@@ -418,6 +507,7 @@ def unconnect(signal, old_slot):
 def zero_padding(t, y, fLim, NZP, norm=False, YRef=None, t_data_returned=0):
     '''
     parameters:
+    Interpolating the IRF_data by using zero_padding
 
     * t:        a t-data array
     * y:        a y-data array with len(t)
@@ -444,8 +534,6 @@ def zero_padding(t, y, fLim, NZP, norm=False, YRef=None, t_data_returned=0):
     LidxLim = sum(f<=fLim)
     idxLim = np.arange(0, LidxLim)
     fWindCal = f[idxLim]
-
-    # Tp = 1/(2*(LidxLim-1))/df
 
     Ytemp = fft(y, Ly)/Ly
     YPos = Ytemp[0:trunc(Ly/2)+1]

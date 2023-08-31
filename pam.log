@@ -17,7 +17,7 @@ INFO:root:ip1: 192
 INFO:root:ip2: 168
 INFO:root:ip3: 1
 INFO:root:ip4: 1
-INFO:root:last_values1: 3100
+INFO:root:last_values1: 1500
 INFO:root:last_values2: 500
 INFO:root:lim_distance_box1: 26
 INFO:root:lim_distance_box2: 30
@@ -34,7 +34,7 @@ INFO:root:null_button_box: 0
 INFO:root:null_button_box2: 0
 INFO:root:offset_edit: 0
 INFO:root:only_changes_sine_box: true
-INFO:root:qt_spinbox_lineedit: 3100
+INFO:root:qt_spinbox_lineedit: 1500
 INFO:root:recport: 9090
 INFO:root:senport: 9091
 INFO:root:shifts_edit: 1280
@@ -45,61 +45,3 @@ INFO:root:sps_edit: 16
 INFO:root:sr_edit: 2
 INFO:root:start_value_box: 99.99
 INFO:root:start_value_box2: 99.99
-INFO:root:
-INFO:root:Button clicked: connect_button
-INFO:root:
-INFO:root:Button clicked: start_receive
-INFO:root:
-INFO:root:Button clicked: start_plot1
-INFO:root:plot_starter on plot: 0
-INFO:root:data connector on plot: 0, requests[0] = 1
-INFO:root:plot_connector on plot: 0, requests[0] = 1
-INFO:root:
-INFO:root:ComboBox y_data_box1 changed to: IRF Interpolated
-INFO:root:y_data_refresher on plot: 0
-INFO:root:plot_breaker on plot: 0
-INFO:root:plot_disconnector on plot: 0
-INFO:root:data_disconnector on plot: 0, requests[0] = 0
-INFO:root:plot_starter on plot: 0
-INFO:root:data connector on plot: 0, requests[0] = 5
-INFO:root:plot_connector on plot: 0, requests[0] = 5
-INFO:root:autoRange requested on plot: 0, autoRanging now
-INFO:root:
-INFO:root:ComboBox y_data_box1 changed to: Distance Norm
-INFO:root:y_data_refresher on plot: 0
-INFO:root:plot_breaker on plot: 0
-INFO:root:plot_disconnector on plot: 0
-INFO:root:data_disconnector on plot: 0, requests[0] = 0
-INFO:root:plot_starter on plot: 0
-INFO:root:refresh_norm_values on plot: 0
-INFO:root:SecondData 0 values: cal_start: 0.4,cal_end: 4.8mes_start: 0.16mes_end: 1.8lim_distance: 26
-INFO:root:data connector on plot: 0, requests[0] = 4
-INFO:root:plot_connector on plot: 0, requests[0] = 4
-INFO:root:idx_start: 5, idx_stop: 59
-INFO:root:
-INFO:root:Button clicked: start_plot2
-INFO:root:plot_starter on plot: 1
-INFO:root:data connector on plot: 1, requests[1] = 1
-INFO:root:plot_connector on plot: 1, requests[1] = 1
-INFO:root:
-INFO:root:ComboBox y_data_box2 changed to: Distance Norm
-INFO:root:y_data_refresher on plot: 1
-INFO:root:plot_breaker on plot: 1
-INFO:root:plot_disconnector on plot: 1
-INFO:root:data_disconnector on plot: 1, requests[1] = 0
-INFO:root:plot_starter on plot: 1
-INFO:root:refresh_norm_values on plot: 1
-INFO:root:SecondData 1 values: cal_start: 0.4,cal_end: 4.8mes_start: 0.16mes_end: 1.8lim_distance: 30
-INFO:root:data connector on plot: 1, requests[1] = 4
-INFO:root:plot_connector on plot: 1, requests[1] = 4
-INFO:root:idx_start: 5, idx_stop: 59
-INFO:root:
-INFO:root:Button clicked: stop_plot2
-INFO:root:plot_breaker on plot: 1
-INFO:root:plot_disconnector on plot: 1
-INFO:root:data_disconnector on plot: 1, requests[1] = 0
-INFO:root:
-INFO:root:Button clicked: stop_plot1
-INFO:root:plot_breaker on plot: 0
-INFO:root:plot_disconnector on plot: 0
-INFO:root:data_disconnector on plot: 0, requests[0] = 0

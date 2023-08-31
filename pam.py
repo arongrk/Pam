@@ -712,11 +712,10 @@ class UI(QMainWindow):
                      f'mes_end: {self.second_data_classes[plot][0].mes_end}'
                      f'lim_distance: {self.second_data_classes[plot][0].lim_distance}')
 
-        y_ref = lambda data: self.second_data_classes[plot][0].refresh_y_ref(data)
-        self.second_data_classes[plot][0].unconnect_receiver_from_y_ref.connect(
-            lambda: unconnect(self.receiver.irf_measurement_ready, y_ref))
-        self.receiver.irf_measurement_ready.connect(y_ref)
         self.second_data_classes[plot][0].block_norm_signals = True
+        self.second_data_classes[plot][0].unconnect_receiver_from_y_ref.connect(
+            lambda: unconnect(self.receiver.irf_measurement_ready, self.second_data_classes[plot][0].refresh_y_ref))
+        self.receiver.irf_measurement_ready.connect(self.second_data_classes[plot][0].refresh_y_ref)
 
     def start_receiver(self):
         """
